@@ -1,0 +1,12 @@
+{"level":"info","message":"Hello world","timestamp":"18:43:55"}
+{"level":"warn","message":"Warning message","timestamp":"18:43:55"}
+{"level":"debug","message":"Debugging info","timestamp":"18:43:55"}
+{"level":"info","message":"Hello world","timestamp":"18:44:39"}
+{"level":"warn","message":"Warning message","timestamp":"18:44:39"}
+{"level":"debug","message":"Debugging info","timestamp":"18:44:39"}
+{"level":"info","message":"Hello world","timestamp":"18:46:07"}
+{"level":"warn","message":"Warning message","timestamp":"18:46:07"}
+{"level":"debug","message":"Debugging info","timestamp":"18:46:07"}
+{"level":"info","message":"Hello world","timestamp":"18:46:52"}
+{"level":"warn","message":"Warning message","timestamp":"18:46:52"}
+{"level":"debug","message":"Debugging info","timestamp":"18:46:52"}
