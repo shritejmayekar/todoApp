@@ -1,0 +1,78 @@
+<div layout="column" style="height:auto"  >
+  <div layout="row" style="width:100%;height:75px;background-color:yellow">
+    <div flex="10">
+      <md-fab-toolbar md-open="demo.isOpen" count="demo.count" md-direction="{{demo.selectedDirection}}">
+
+        <md-button aria-label="menu" ng-click="toggleLeft()">
+          <md-icon md-svg-src="bower_components/material-design-icons/action/svg/design/ic_line_weight_48px.svg"></md-icon>
+        </md-button>
+
+      </md-fab-toolbar>
+      <!--span style="font-size:30px;cursor:pointer"ng-click="openNav()">&#9776;open</span-->
+    </div>
+    <div flex="80">
+      <h2><b>Google</b> Keep</h2>
+    </div>
+    <div flex="10">
+      <md-button aria-label="menu">
+        <md-icon md-svg-src="bower_components/material-design-icons/action/svg/design/ic_view_stream_48px.svg"></md-icon>
+      </md-button>
+
+    </div>
+  </div>
+  <div layout="auto" id="main">
+    <div flex="30">
+
+<!--div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()">&times;</a>
+
+</div-->
+</div>
+    <div flex="40">
+    <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+      <md-input-container class="md-block" id="textboxsize" ><label>Title</label>
+        <input type="text" ng-model="title">
+        <div ng-messages="title.$error">
+        </div>
+      </md-input-container>
+      <md-input-container class="md-block" id="textboxsize"><label>Note</label>
+        <textarea name="note" rows="3" cols="4" ng-model="note"></textarea>
+        <div ng-messages="note.$error">
+        </div>
+      </md-input-container>
+      <md-card-actions layout="row" layout-align="end center">
+        <md-button ng-click="saveNote()"><b>Done</b></md-button>
+
+      </md-card-actions>
+    </md-card>
+  </div>
+  <div flex="30"></div>
+  </div>
+
+  <div  layout="row" layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto">
+    <div ng-repeat="note in listOfNotes  | orderBy:'note.date':true">
+      <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+        <md-card-title>
+          <md-card-title-text ng-click="editNote(note)">
+            <span class="md-headline">{{note.title}}</span>
+            <span class="md-subhead">{{note.note}}</span>
+            <span class="md-subhead">{{note.created_date}}</span>
+            <span class="md-subhead">{{note.edited}}</span>
+          </md-card-title-text>
+          <md-card-title-media ng-click="editNote(note)">
+            <div class="md-media-lg card-media"></div>
+          </md-card-title-media>
+        </md-card-title>
+        <md-card-actions layout="row" layout-align="end center">
+          <md-button ng-click="editNote(note)">Edit</md-button>
+          <!--md-button ng-click="copyNote(note)">Copy</md-button-->
+          <md-button ng-click="deleteNote(note)">Delete</md-button>
+          <md-button nd-click="labelAdd()">Add label</md-button>
+        </md-card-actions>
+      </md-card>
+      <div>
+      </div>
+    </div>
+  </div>
+
+</div>

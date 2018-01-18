@@ -10,6 +10,10 @@ var NoteSchema = new Schema({
     type: String,
     required: 'enter note'
   },
+  email:{
+    type:String,
+    required:'true'
+  },
   is_pinned: {
     type: Boolean,
     default: false
@@ -35,6 +39,9 @@ var NoteSchema = new Schema({
     default: Date.now
   },
   collaborator:{
+    type:String
+  },
+  edited:{
     type:String
   }
 });

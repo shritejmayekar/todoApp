@@ -1,0 +1,61 @@
+<style media="screen">
+  #demo {
+    align-self: center;
+    background-color: white;
+    margin: auto;
+    box-shadow: position: relative;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+    box-shadow: position: relative;
+    opacity: 0.8px;
+  }
+
+  #textboxsize {
+    width: 400pz;
+  }
+</style>
+<div layout="column" layout-align="space-between center" style="margin-top:50px">
+
+  <form name="loginForm" style="width:450px">
+
+
+    <md-content layout-padding id="demo">
+
+      <md-input-container class="md-block">
+        <h1 style="text-align:center">Login</h1>
+        <div id="flag"></div>
+      </md-input-container>
+      <md-input-container class="md-block" id="textboxsize"><label>Email</label>
+        <input required name="loginForm.email" type="email" ng-model="loginForm.email" ng-pattern: "/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/">
+        <div ng-messages="loginForm.email.$error">
+
+          <div ng-message="ng-pattern">email should be xyz@example.com</div>
+        </div>
+      </md-input-container>
+
+      <md-input-container class="md-block"><label>Password</label>
+        <input type="password" ng-model="loginForm.password" required minlength="8">
+        <div ng-messages="loginForm.password.$error">
+
+          <div ng-message="minlength">Password minimum length is 8</div>
+        </div>
+      </md-input-container>
+      <div layout="column">
+
+        <md-input-container style="float: left">
+          <a ui-sref="forgotPassword">Forgot password?</a>
+        </md-input-container>
+
+        <md-input-container style="float: left">
+          <a ui-sref="register">Create account</a>
+        </md-input-container>
+
+      </div>
+      <md-input-container style="float: right">
+        <md-button ng-click="login()" type="submit" class="md-raised md-primary">login</md-button>
+      </md-input-container>
+
+    </md-content>
+
+  </form>
+
+</div>

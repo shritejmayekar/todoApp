@@ -1,6 +1,11 @@
 'use strict';
+
 module.exports = function(app) {
   var todoApp = require('../controller/todoController');
+  app.get('/', function(req, res) {
+
+    res.sendFile(__dirname + "index.html");
+  });
 
   // todoApp register  Routes
   app.route('/register')
@@ -30,11 +35,31 @@ module.exports = function(app) {
     .put(todoApp.update_a_note)
     .delete(todoApp.delete_a_note);
 
+
   app.route('/listnote')
-    .get(todoApp.note_all_title);
+    .post(todoApp.note_all_title);
+
+  app.route('/update/user/:userId')
+    .put(todoApp.update_a_user);
+
+
 
   //token routes
   app.route('/auth/me')
     .get(todoApp.get_token);
+  app.route('/auth/user')
+    .post(todoApp.get_token_auth);
+
+  app.route('/auth/forgot_password')
+    .post(todoApp.forgot_password);
+  app.route('/auth/reset_password')
+    .get(todoApp.reset_get)
+    .post(todoApp.reset_password);
+  //  app.route('/auth/forgot_password')
+  //    .get(todoApp.render_forgot_password_template)
+  //    .post(todoApp.forgot_password);
+  //  app.route('/auth/reset_password')
+  //    .get(todoApp.render_reset_password_template)
+  //    .post(todoApp.reset_password);
 
 };

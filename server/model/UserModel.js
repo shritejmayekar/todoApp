@@ -11,18 +11,30 @@ var UserSchema = new Schema({
     required: 'enter email',
     unique: true
   },
+  reset_password_token:{
+    type:String
+  },
+  reset_password_expires:{
+    type:String
+  },
   password: {
     type: String,
     required: 'enter password'
   },
-  Created_date: {
+  recoveryEmail: {
+    type:String,
+  //  required:true
+  },
+  created_date: {
     type: Date,
     default: Date.now
   },
   status: {
 
-    type: String,
-    default: ['created']
+    type: Boolean
+  },
+  token :{
+    type:String
   }
 });
 
