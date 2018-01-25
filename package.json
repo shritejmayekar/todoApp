@@ -1,0 +1,39 @@
+{
+  "name": "todoApp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "shritej",
+  "license": "ISC",
+  "dependencies": {
+    "alarm": "^2.0.0",
+    "bcrypt": "^1.0.3",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.1.0",
+    "logger-winston": "0.0.9",
+    "mongoose": "^4.13.9",
+    "mongoose-findorcreate": "^2.0.0",
+    "morgan": "^1.9.0",
+    "node-mailer": "^0.1.1",
+    "nodemailer-express-handlebars": "^2.0.0",
+    "parse-reminder": "^1.2.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.0.0",
+    "passport-google-oauth2": "^0.1.6",
+    "passport-google-oauth20": "^1.0.0",
+    "socket.io": "^2.0.4",
+    "ui-router": "^1.0.0-alpha0",
+    "winston": "^2.4.0",
+    "winston-daily-rotate-file": "^1.7.2"
+  },
+  "devDependencies": {
+    "connect-history-api-fallback": "^1.5.0"
+  }
+}

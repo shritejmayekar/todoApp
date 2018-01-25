@@ -1,0 +1,62 @@
+
+<div layout="column" layout-align="space-between center">
+  <br>
+    <form name="registerForm"  style="margin:0 auto"  >
+
+      <md-content layout-padding id="demo">
+        <div id="flag"></div>
+        <div layout="row">
+        <md-input-container class="md-block"><label>First Name</label>
+          <input required name="registerForm.fname" type="text" ng-model="registerForm.fname">
+          <div ng-messages="registerForm.fname.$error">
+            <div ng-message="required">first name is required</div>
+          </div>
+        </md-input-container class="md-block">
+        <md-input-container class="md-block"><label>Last Name</label>
+          <input required name="registerForm.lname" type="text" ng-model="registerForm.lname">
+          <div ng-messages="registerForm.lname.$error">
+            <div ng-message="required">last name is required</div>
+          </div>
+        </md-input-container>
+      </div>
+        <md-input-container class="md-block"><label>Email</label>
+          <input required name="registerForm.email" type="email" ng-model="registerForm.email" ng-pattern: "/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/">
+          <div ng-messages="registerForm.email.$error">
+
+            <div ng-message="ng-pattern">email should be xyz@example.com</div>
+          </div>
+        </md-input-container >
+
+        <md-input-container class="md-block"><label>Password</label>
+          <input type="password" ng-model="registerForm.password" required minlength="8">
+          <div ng-messages="registerForm.password.$error">
+
+            <div ng-message="minlength">Password minimum length is 8</div>
+          </div>
+        </md-input-container>
+        <md-input-container class="md-block"><label>Confirm Password</label>
+          <input  type="password" ng-model="registerForm.confirmPassword" required minlength="8">
+          <div ng-messages="registerForm.password.$error">
+            <div ng-message="required">Please confirm Password</div>
+            <div ng-show="confirm">Please enter the same password</div>
+          </div>
+        </md-input-container>
+        <md-input-container class="md-block"><label>Recovery Email</label>
+          <input required name="registerForm.recoveryEmail" type="email" ng-model="registerForm.recoveryEmail" ng-pattern: "/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/">
+          <div ng-messages="registerForm.email.$error">
+
+            <div ng-message="ng-pattern">email should be xyz@example.com</div>
+          </div>
+        </md-input-container >
+
+        <md-input-container>
+          <md-button ng-click="register()" type="submit" class="md-raised md-primary">Register</md-button>
+        </md-input-container>
+        <md-input-container>
+          <md-button href="/" type="submit" class="md-raised md-primary">Login</md-button>
+        </md-input-container>
+
+      </md-content>
+
+    </form>
+</div>

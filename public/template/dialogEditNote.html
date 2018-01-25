@@ -1,0 +1,20 @@
+<md-dialog>
+  <div layout="row">
+  <form ng-cloak>
+    <md-dialog-content  layout="column" class="md-dialog-content">
+      <md-input-container class="md-block" style="word-break: break-word;">
+      <input ng-model="title" >
+      </md-input-container>
+      <md-input-container class="md-block" style="word-break: break-word;">
+      <input ng-model="note" style="word-break: break-word;">
+      </md-input-container>
+
+    </md-dialog-content>
+    <md-card-actions layout="row" layout-align="end center" >
+      <md-button style="float right" ng-click="answer({title:title,note:note})">
+       Done
+      </md-button>
+    </md-card-actions>
+  </form>
+</div>
+</md-dialog>

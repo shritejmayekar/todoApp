@@ -1,0 +1,19 @@
+
+{
+  "logging": {
+    "default": {
+      "console": {
+        "level": "debug",
+        "colorize": true,
+        "timestamp": true
+      }
+    },
+    "Server": {
+      "console": {
+        "level": "debug",
+        "colorize": false,
+        "timestamp": false
+      }
+    }
+  }
+}

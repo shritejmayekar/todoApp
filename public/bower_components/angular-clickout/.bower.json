@@ -1,0 +1,41 @@
+{
+  "name": "angular-clickout",
+  "main": "angular-clickout.js",
+  "version": "1.0.2",
+  "homepage": "https://github.com/neoziro/angular-clickout",
+  "authors": [
+    "Greg Bergé <neoziro@gmail.com>"
+  ],
+  "description": "AngularJS directive to handle a click outside an element.",
+  "keywords": [
+    "angular",
+    "directive",
+    "clickout",
+    "click",
+    "outside"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test.js",
+    "example"
+  ],
+  "dependencies": {
+    "angular": "~1.4.4"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.4.4"
+  },
+  "_release": "1.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.2",
+    "commit": "1d9a320913e8a52a870589a7164385322a86f451"
+  },
+  "_source": "https://github.com/neoziro/angular-clickout.git",
+  "_target": "^1.0.2",
+  "_originalSource": "angular-clickout",
+  "_direct": true
+}
