@@ -1,7 +1,9 @@
 
 var app = angular.module('todoApp')
-  .controller('logoutController',function($http,$state,$mdToast,httpService) {
-    if(localStorage.Token) {
+  .controller('logoutController',function($http,$auth,$state,$mdToast,httpService) {
+    $auth.logout();
+    $state.go('login')
+  /*  if(localStorage.Token) {
       var get_token = JSON.parse(localStorage.Token);
 
       console.log(Date(7000));
@@ -23,5 +25,5 @@ var app = angular.module('todoApp')
     }
 
 
-    }
+} */
   })

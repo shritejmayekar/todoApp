@@ -6,7 +6,20 @@ var app =angular.module('todoApp');
         'x-access-token': JSON.parse(localStorage.Token).token
       }
     }
+/*    getUserInfo();
 
+  function getUserInfo() {
+    $http.get('/user')
+      .then(function (response) {
+        $scope.user = response.data;
+        console.log(response.data);
+
+      })
+      .catch(function (response) {
+        console.log("getUserInfo error", response);
+      })
+  }
+  */
     $scope.toggleLeft = buildToggler('left');
     $scope.toggleRight = buildToggler('right');
     var count = 0;

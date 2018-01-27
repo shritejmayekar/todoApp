@@ -17,6 +17,7 @@
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.1.0",
+    "jwt-simple": "^0.5.1",
     "logger-winston": "0.0.9",
     "mongoose": "^4.13.9",
     "mongoose-findorcreate": "^2.0.0",

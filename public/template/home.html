@@ -20,16 +20,13 @@
 
     </div>
   </div>
-  <div layout="auto" click-out="hide()" ng-click="toggleLeft()">
+  <div layout="auto" id="main" click-out="hide()">
     <div flex="30">
 
-      <div id="mySidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" ng-click="toggleRight()">&times;</a>
-  <a href="#">About</a>
-  <a href="#">Services</a>
-  <a href="#">Clients</a>
-  <a href="#">Contact</a>
-</div>
+      <!--div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()">&times;</a>
+
+</div-->
     </div>
     <div flex="40">
       <div>
@@ -37,7 +34,7 @@
         <!--div class='editable' contentEditable="true" id = 'div1'>Click and edit the text</div-->
 
       </div>
-      <div  id="main" md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch layout="column">
+      <div md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch layout="column">
         <div class='editable' contentEditable="true" id='div1' style="width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
     box-shadow: 5px 10px #888888;
 " layout="column" ng-click="hide()">
@@ -46,7 +43,7 @@
         </div>
 
 
-        <div id="showDiv" id="main">
+        <div id="showDiv" >
           <div class='editable' contentEditable="true" id='title' style="width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
       box-shadow: 5px 10px #888888;
   " layout="column" placeholder="Title"></div>
@@ -68,7 +65,7 @@
     <div flex="30"></div>
   </div>
 
-  <div layout={{setView}} id="main" layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
+  <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
     <!--div layout="row" style="width:240px;height:105px;background-color:green;padding:5px" ng-repeat="note in listOfNotes "  >
 
         <div flex="90">

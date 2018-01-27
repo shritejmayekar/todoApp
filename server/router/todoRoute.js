@@ -2,6 +2,7 @@
 // all routes
 module.exports = function(app) {
   var passport = require('passport');
+  var jwt = require('jwt-simple');
 
 
   var todoApp = require('../controller/todoController');
@@ -16,13 +17,24 @@ module.exports = function(app) {
       if (err) {
         console.log(err); // handles error
       } else {
-        res.redirect('/');
+      res.json(req.user);
+      //res.redirect('/');
+  /*    var token = jwt.encode({
+        id: req.user._id
+      }, 'secret', {
+        expiresIn: 86400 // expires in 24 hours
+      });
+      res.json({
+        authenticate: true,
+        token: token,
+        message: 'Login success'
+      }); */
       }
     })
 
   });
   // route to check user is authenticated by social login
-  app.get('/check/auth',ensureAuthenticated,function(req,res) {
+  app.get('/auth/check',ensureAuthenticated,function(req,res) {
     console.log(req);
     var data = {
       user:req.user,
@@ -54,17 +66,26 @@ module.exports = function(app) {
     function(req, res) {});
 // route to get facebook callback
   app.get('/auth/facebook/callback',
-    passport.authenticate('facebook', {
-      failureRedirect: '/'
-    }),
-    function(req, res) {
-      res.redirect('/account');
+    //passport.authenticate('facebook', {
+      //failureRedirect: '/'
+    //}),
+    //function(req, res) {
+    //  res.redirect('/account');
+    passport.authenticate('facebook',
+    {session: false, failureRedirect: '/' }),
+       function(req, res, next) {
+           var token = jwt.encode(req.user, 'secret');
+           //res.redirect("/home/"+token);
+          res.json('fb'+token);
     });
   // route to logout a  user
   app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
   });
+  app.get('/',isLoggedIn, function(req, res) {
+          res.redirect('/#' + req.url);
+      });
 
   // test authentication
   function ensureAuthenticated(req, res, next) {
@@ -73,11 +94,21 @@ module.exports = function(app) {
     }
     res.redirect('/');
   }
+  function isLoggedIn(req,res,next) {
+    if(req.isAuthenticated()) {
+      return next();
+    } else {
+      res.writeHead(403);
+      res.end();
+    }
+  }
 
   // todoApp register  Routes
   app.route('/register')
     .get(todoApp.list_of_user)
     .post(todoApp.register_a_user);
+  app.route('/auth/signup')
+    .post(todoApp.register_a_user)
 
   app.route('/register/:userId')
     .get(todoApp.read_a_user)
@@ -87,6 +118,8 @@ module.exports = function(app) {
   // todoApp login routes
   app.route('/login')
     .post(todoApp.login_a_user);
+    app.route('/auth/login')
+      .post(todoApp.login_a_user);
   app.route('/logout')
     .get(todoApp.logout_a_user);
 
@@ -115,6 +148,8 @@ module.exports = function(app) {
   //token routes
   app.route('/auth/me')
     .get(todoApp.get_token);
+    app.route('/user')
+      .get(todoApp.get_token);
   app.route('/auth/user')
     .post(todoApp.get_token_auth);
 

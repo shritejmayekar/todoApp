@@ -1,7 +1,7 @@
 /**
  * Satellizer 0.15.5
- * (c) 2016 Sahat Yalkabov 
- * License: MIT 
+ * (c) 2016 Sahat Yalkabov
+ * License: MIT
  */
 
 (function (global, factory) {
@@ -28,7 +28,7 @@
                     name: 'facebook',
                     url: '/auth/facebook',
                     authorizationEndpoint: 'https://www.facebook.com/v2.5/dialog/oauth',
-                    redirectUri: window.location.origin + '/',
+                    redirectUri: window.location.origin + '/auth/facebook/callback',
                     requiredUrlParams: ['display', 'scope'],
                     scope: ['email'],
                     scopeDelimiter: ',',
@@ -40,7 +40,7 @@
                     name: 'google',
                     url: '/auth/google',
                     authorizationEndpoint: 'https://accounts.google.com/o/oauth2/auth',
-                    redirectUri: window.location.origin,
+                    redirectUri: window.location.origin+'/auth/google/callback',
                     requiredUrlParams: ['scope'],
                     optionalUrlParams: ['display', 'state'],
                     scope: ['profile', 'email'],

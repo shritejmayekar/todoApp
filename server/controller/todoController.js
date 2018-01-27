@@ -55,7 +55,8 @@ exports.register_a_user = function(req, res) {
 
 // get auth users
 exports.get_token = function(req, res) {
-  var token = req.headers['x-access-token'];
+  var token = req.headers.authorization;
+  token = token.replace('Bearer ', '')
   console.log(token);
   if (!token) return res.status(401).send({
     authenticate: false,
@@ -166,7 +167,8 @@ exports.login_a_user = function(req, res) {
     res.status(200).send({
       authenticate: true,
       token: token,
-      message: 'login success'
+      message: 'login success',
+      email:req.body.email
     });
   });
 
