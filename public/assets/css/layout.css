@@ -101,3 +101,52 @@
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
+.md-input-container label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+[contenteditable=true]:empty:before {
+  content: attr(placeholder);
+  display: block; /* For Firefox */
+
+}
+[contenteditable=true]:after {
+  content: "\00a0";
+ word-break: break-all;
+}
+.popover {
+    white-space: pre-line;
+}
+.md-button.md-small {
+    min-width: 1%;
+}.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+#demo {
+  align-self: center;
+  background-color: white;
+  margin: auto;
+  box-shadow: position: relative;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+  box-shadow: position: relative;
+  opacity: 0.8px;
+}
+
+#textboxsize {
+  width: 400pz;
+}
+body {
+	background-color: blanchedalmond;
+	background-repeat: repeat-x;
+}

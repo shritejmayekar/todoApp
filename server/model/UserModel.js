@@ -1,6 +1,7 @@
+// dependencies
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+// schema for todoApp  user
 var UserSchema = new Schema({
   name: {
     type: String,
@@ -23,7 +24,7 @@ var UserSchema = new Schema({
   },
   recoveryEmail: {
     type:String,
-  //  required:true
+   required:true
   },
   created_date: {
     type: Date,
@@ -34,6 +35,9 @@ var UserSchema = new Schema({
     type: Boolean
   },
   token :{
+    type:String
+  },
+  googleId:{
     type:String
   }
 });

@@ -1,0 +1,148 @@
+<html>
+
+<head>
+  <style media="screen">
+    #demo {
+      background-color: #e6ec8e;
+      width: webkit-flex;
+    }
+
+    #textboxsize {
+      width: 400px;
+    }
+
+    .space {
+      width: 663px;
+      height: 76.5px;
+      margin: auto;
+    }
+
+    .container {
+      width: 450px;
+      height: 500px;
+      align-self: center;
+      background-color: white;
+      margin: auto;
+      box-shadow: position: relative;
+      box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+      box-shadow: position: relative;
+    }
+
+    .leftSpace {
+      width: 150px;
+      height: 100px;
+      margin: auto;
+      -webkit-column-span: all;
+      /* Chrome, Safari, Opera */
+      column-span: all;
+    }
+
+    .text {
+      direction: ltr;
+      font-size: 16px;
+      margin: auto;
+      line-height: 1.4286;
+    }
+
+    .container-item {
+      width: 370px;
+      height: 24px;
+      margin: auto;
+    }
+
+    .container-item2 {
+      margin: auto;
+      width: 370px;
+      height: 37px;
+    }
+
+    .font {
+      direction: ltr;
+      font-size: 25px;
+      line-height: 1.4286;
+      margin: auto;
+    }
+
+    input .[type] {
+      border-bottom-color: blue;
+      width: 370px;
+      height: 111px;
+      margin: auto;
+      background-color: transparent;
+    }
+
+    input {
+      width: 370px;
+      height: 25px;
+      margin: auto;
+    }
+
+    input:FOCUS {
+      border-bottom-color: blue;
+    }
+
+    button {
+      background-color: #2196F3;
+      color: white;
+      margin: right;
+      width: 90px;
+      height: 36px;
+      padding: 2px;
+      font-family: monospace;
+      font-size: large;
+    }
+
+    button:HOVER {
+      background-color: #0b7dda;
+    }
+
+    #align-right {
+      margin-left: 600px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-page">
+    <div class="space"></div>
+
+    <form name="resetPasswordForm" method="post">
+
+
+      <div>
+
+        <div class="container">
+          <div class="container-item">
+            <div class="container-item2">
+
+              <div class="container-item">
+                <span align="center">
+                <h2>Welcome, </h2> <h3>Please Enter new Password</h3>
+              </span>
+                <div class="space"></div>
+
+                <input required name="newPassword" placeholder="newPassword" type="text">
+                <div class="space"></div>
+
+
+                <input required name="verifyPassword" placeholder="verifyPassword" type="text">
+                <div class="space"></div>
+
+                <div class="container-item2">
+                  <button type="submit" style="float: right;">Reset</button>
+                </div>
+
+              </div>
+
+
+            </div>
+          </div>
+
+
+        </div>
+    </form>
+
+    </div>
+</body>
+
+</html>

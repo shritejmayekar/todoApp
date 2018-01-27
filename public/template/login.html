@@ -1,20 +1,6 @@
-<style media="screen">
-  #demo {
-    align-self: center;
-    background-color: white;
-    margin: auto;
-    box-shadow: position: relative;
-    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
-    box-shadow: position: relative;
-    opacity: 0.8px;
-  }
 
-  #textboxsize {
-    width: 400pz;
-  }
-</style>
-<div layout="column" layout-align="space-between center" style="margin-top:50px">
-
+<div layout="column" layout-align="space-between center" >
+<br>
   <form name="loginForm" style="width:450px">
 
 
@@ -50,8 +36,14 @@
         </md-input-container>
 
       </div>
-      <md-input-container style="float: right">
+      <md-input-container style="float: center">
+        <md-button href="/auth/google" style="background-color:#dc483d">Sign in with Google</md-button>
+        <md-button href="/auth/facebook" style="background-color:#3b5898">Sign in with Facebook</md-button>
+
         <md-button ng-click="login()" type="submit" class="md-raised md-primary">login</md-button>
+
+
+
       </md-input-container>
 
     </md-content>

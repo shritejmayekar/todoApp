@@ -1,10 +1,16 @@
+// dependencies
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+// note schema for note in todoApp
 var NoteSchema = new Schema({
+  created_date: {
+    type: Date,
+    default: Date.now
+  },
   title: {
     type: String,
     required: 'enter title',
-    unique: true
+  //  unique: true
   },
   note: {
     type: String,
@@ -34,10 +40,7 @@ var NoteSchema = new Schema({
     type: Date,
     default: null
   },
-  created_date: {
-    type: Date,
-    default: Date.now
-  },
+
   collaborator:{
     type:String
   },

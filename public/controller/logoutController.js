@@ -1,16 +1,12 @@
 
 var app = angular.module('todoApp')
-  .controller('logoutController',function($http,$state,$mdToast) {
+  .controller('logoutController',function($http,$state,$mdToast,httpService) {
     if(localStorage.Token) {
       var get_token = JSON.parse(localStorage.Token);
 
       console.log(Date(7000));
     if(get_token.date) {
-      $http({
-        method:'GET',
-        url:'/logout'
-
-      }).then(function(res) {
+    httpService.httpServiceFunction('GET','/logout').then(function(res) {
         console.log(res);
         localStorage.Token = JSON.stringify({token:"",date:""});
         $mdToast.show(

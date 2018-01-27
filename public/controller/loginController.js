@@ -1,40 +1,57 @@
 var app = angular.module('todoApp')
-  .controller('loginController', function($scope, $mdToast, $http, $state, loginService) {
+  .controller('loginController', function($scope, $auth, $mdToast, $http, $state, httpService, loginService, authService) {
 
     if (localStorage.Token) {
       var get_token = JSON.parse(localStorage.Token);
       console.log(get_token.token);
       console.log(get_token.date);
       if (get_token.date) {
-        $http({
-          method: 'POST',
-          url: '/auth/user',
-          data: {
-            token: get_token.token,
-            date: Date()
-          }
-        }).then(function(res) {
+        authService.get_tokenFunction(get_token.token).then(function(res) {
           console.log(res);
           if (res.data.authenticate) {
             $state.go('home');
           }
-          if(res.data.authenticate == false) {
+          if (res.data.authenticate == false) {
             $state.go('login');
           }
 
         });
       }
-
-
     }
+    httpService.httpServiceFunction('GET','/check/auth').then(function(res) {
+        console.log(res.data.message);
+        console.log(res);
+        console.log(res.data.user);
+        if(res.data.message == 'user authenticated') {
+          localStorage.Token = JSON.stringify( {
+            token: res.data.token,
+            date: Date(),
+            email: res.data.user.name
+          })
+          $state.go('home');
+        }
+    })
+
+    $scope.authenticate = function(provider) {
+      if(provider='facebook')
+      $auth.authenticate(provider);
+    };
+
 
 
     $scope.login = function() {
       if ($scope.loginForm.email == "" || $scope.loginForm.email == null ||
         $scope.loginForm.password == "" || $scope.loginForm.password == null)
         return false;
-        var email = $scope.loginForm.email;
-      loginService.signinFunction($scope.loginForm.email, $scope.loginForm.password).then(function(res) {
+      var email = $scope.loginForm.email;
+      //  loginService.signinFunction($scope.loginForm.email, $scope.loginForm.password).then(function(res) {
+      var data = {
+        email: $scope.loginForm.email,
+        password: $scope.loginForm.password
+      }
+
+
+      httpService.httpServiceFunction('post', '/login', data).then(function(res) {
         console.log(res.data.authenticate);
         if (res.data.authenticate) {
           $mdToast.show(
@@ -47,7 +64,7 @@ var app = angular.module('todoApp')
           localStorage.Token = JSON.stringify({
             token: res.data.token,
             date: Date(),
-            email:email
+            email: email
           });
           $state.go('home');
         } else {

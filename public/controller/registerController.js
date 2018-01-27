@@ -1,9 +1,22 @@
 var app = angular.module('todoApp')
-  .controller('registerController', function($scope, $mdToast, $state, $http, registerService) {
+  .controller('registerController', function($scope, $mdToast,httpService, $state, $http) {
 
     $scope.register = function() {
-      registerService.registerFunction($scope.registerForm.fname, $scope.registerForm.email,
-        $scope.registerForm.password, $scope.registerForm.recoveryEmail).then(function(res) {
+      if($scope.registerForm.fname == "" || $scope.registerForm.email == "" ||
+    $scope.registerForm.password == "" ||$scope.registerForm.confirmPassword==""|| $scope.registerForm.recoveryEmail=="") {
+      return false;
+    }
+    if($scope.registerForm.password != $scope.registerForm.confirmPassword) {
+      return false;
+    }
+     var  data = {
+        name:$scope.registerForm.fname,
+        email:$scope.registerForm.email,
+        password:$scope.registerForm.password,
+        recoveryEmail:$scope.registerForm.recoveryEmail
+
+      }
+    httpService.httpServiceFunction('POST','/register',data).then(function(res) {
         if (res == 'There was a problem registering the user') {
           document.getElementById('flag').innerHTML = "<p style='color:red'>There was a problem registering the user</p>"
 
