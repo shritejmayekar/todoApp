@@ -150,7 +150,7 @@ exports.login_a_user = function(req, res) {
       token: null,
       message: 'login unsuccess'
     });
-    req.session.name = user.email;
+    //req.session.name = user.email;
     var token = jwt.sign({
       id: user._id,password:user.password
     }, 'secret', {
@@ -303,6 +303,7 @@ exports.delete_a_note = function(req, res) {
 };
 // note display all
 exports.note_all_title = function(req, res) {
+
   Note.find({
     email: req.body.email
   }, function(err, note) {
@@ -325,6 +326,7 @@ exports.forgot_password = function(req, res) {
         authenticate: false,
         token: null
       });
+
       var token = jwt.sign({
         id: user._id
       }, 'secret', {

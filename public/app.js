@@ -23,7 +23,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $auth
   */
   var skipIfLoggedIn = ['$q', '$auth', function($q, $auth) {
     var deferred = $q.defer();
-    if ($auth.isAuthenticated()) {
+    if ($auth.isAuthenticated() || $auth.isAuthenticated('facebook')) {
       deferred.reject();
     } else {
       deferred.resolve();
@@ -84,6 +84,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $auth
       templateUrl: '/template/resetPassword.html',
       controller: 'resetController'
     })
+
 
 
 

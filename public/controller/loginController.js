@@ -18,36 +18,32 @@ var app = angular.module('todoApp')
             });
           }
         }*/
-        httpService.httpServiceFunction('GET','/auth/check').then(function(res) {
-            console.log(res.data.message);
-            console.log(res);
-            console.log(res.data.user);
+       httpService.httpServiceFunction('GET','/auth/check').then(function(res) {
+          //  console.log(res.data.message);
+          //  console.log(res);
+          //  console.log(res.data.user);
             if(res.data.message == 'user authenticated') {
               localStorage.Token = JSON.stringify( {
                 token: res.data.token,
                 date: Date(),
                 email: res.data.user.name
               })
+
               $state.go('home');
+
             }
         })
 
-    /*  var loginStatus =  function() {
-        if($auth.isAuthenticated()) {
-          $state.go('home')
-        } else {
-          $state.go('/');
-        }
-      }
-      loginStatus();
-      */
-    //  $scope.isAuthenticated = function() {
-    //  return $auth.isAuthenticated();
-    //  };
+        console.log($auth.isAuthenticated());
     $scope.authenticate = function(provider) {
-     $auth.authenticate(provider);
+     $auth.authenticate(provider).then(function(){
+       console.log(provider);
+       $state.go('home');
+     })
+     .catch(function(res) {
+       console.log(res);
+     });
    };
-
 
 
     console.log($auth.isAuthenticated());
@@ -57,7 +53,6 @@ var app = angular.module('todoApp')
         $scope.loginForm.password == "" || $scope.loginForm.password == null)
         return false;
       var email = $scope.loginForm.email;
-      //  loginService.signinFunction($scope.loginForm.email, $scope.loginForm.password).then(function(res) {
       var data = {
         email: $scope.loginForm.email,
         password: $scope.loginForm.password

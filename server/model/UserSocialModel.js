@@ -6,7 +6,8 @@ var Schema = mongoose.Schema;
 var UserSocialSchema = new Schema({
   OauthID: String,
   name: String,
-  created: Date
+  created: Date,
+  token:String
 })
 var UserSocialModel = mongoose.model('UserSocial', UserSocialSchema);
 

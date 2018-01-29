@@ -7,18 +7,72 @@ module.exports = function(app) {
 
   var todoApp = require('../controller/todoController');
 
-  app.get('/', function(req, res) {
-
-    res.sendFile(__dirname + "index.html");
+  app.get('/auth/facebook',
+    passport.authenticate('facebook'),
+    function(req, res) {});
+// route to get facebook callback
+  app.get('/auth/facebook/callback',
+    //passport.authenticate('facebook', {
+      //failureRedirect: '/'
+    //}),
+    //function(req, res) {
+    //  res.redirect('/account');
+    passport.authenticate('facebook',
+    {session: false, failureRedirect: '/' }),
+       function(req, res, next) {
+           var token = jwt.encode(req.user, 'secret');
+           //res.redirect("/home/"+token);
+        //  res.json('fb'+token);
+        res.json(req.user);
+    });
+  // route to logout a  user
+  app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
   });
+  app.get('/',isLoggedIn, function(req, res) {
+          res.redirect('/#' + req.url);
+      });
+
+  // test authentication
+  function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect('/');
+  }
+
+  function isLoggedIn(req,res,next) {
+    if(req.isAuthenticated()) {
+      return next();
+    } else {
+      res.writeHead(403);
+      res.end();
+    }
+  }
+
+  // todoApp register  Routes
+  // app.use(tokenAuth);
+  app.route('/register')
+    .get(todoApp.list_of_user)
+    .post(todoApp.register_a_user);
+  app.route('/auth/signup')
+    .post(todoApp.register_a_user)
+
   // route for social login
+  app.get('/profile',
+  passport.authenticate('token', {session: false }),
+  function(req, res) {
+    res.json(req);
+  });
   app.get('/account', ensureAuthenticated, function(req, res) {
     User.findById(req.session.passport.user, function(err, user) {
       if (err) {
         console.log(err); // handles error
       } else {
-      res.json(req.user);
-      //res.redirect('/');
+        //res.send(req.user);
+        res.redirect('/');
+
   /*    var token = jwt.encode({
         id: req.user._id
       }, 'secret', {
@@ -58,57 +112,10 @@ module.exports = function(app) {
       failureRedirect: '/'
     }),
     function(req, res) {
-      res.redirect('/account');
+      //res.redirect('/account');
+      res.redirect('/profile')
     });
 // route to authenticate user by facebook login
-  app.get('/auth/facebook',
-    passport.authenticate('facebook'),
-    function(req, res) {});
-// route to get facebook callback
-  app.get('/auth/facebook/callback',
-    //passport.authenticate('facebook', {
-      //failureRedirect: '/'
-    //}),
-    //function(req, res) {
-    //  res.redirect('/account');
-    passport.authenticate('facebook',
-    {session: false, failureRedirect: '/' }),
-       function(req, res, next) {
-           var token = jwt.encode(req.user, 'secret');
-           //res.redirect("/home/"+token);
-          res.json('fb'+token);
-    });
-  // route to logout a  user
-  app.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
-  });
-  app.get('/',isLoggedIn, function(req, res) {
-          res.redirect('/#' + req.url);
-      });
-
-  // test authentication
-  function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    res.redirect('/');
-  }
-  function isLoggedIn(req,res,next) {
-    if(req.isAuthenticated()) {
-      return next();
-    } else {
-      res.writeHead(403);
-      res.end();
-    }
-  }
-
-  // todoApp register  Routes
-  app.route('/register')
-    .get(todoApp.list_of_user)
-    .post(todoApp.register_a_user);
-  app.route('/auth/signup')
-    .post(todoApp.register_a_user)
 
   app.route('/register/:userId')
     .get(todoApp.read_a_user)
@@ -118,7 +125,7 @@ module.exports = function(app) {
   // todoApp login routes
   app.route('/login')
     .post(todoApp.login_a_user);
-    app.route('/auth/login')
+    app.route('/auth/login',isLoggedIn)
       .post(todoApp.login_a_user);
   app.route('/logout')
     .get(todoApp.logout_a_user);

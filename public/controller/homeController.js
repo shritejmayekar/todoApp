@@ -20,8 +20,8 @@ var app =angular.module('todoApp');
       })
   }
   */
-    $scope.toggleLeft = buildToggler('left');
-    $scope.toggleRight = buildToggler('right');
+  //  $scope.toggleLeft = buildToggler('left');
+    //$scope.toggleRight = buildToggler('right');
     var count = 0;
     $scope.listGrid = function() {
       if (count % 2 == 0) {
@@ -31,6 +31,19 @@ var app =angular.module('todoApp');
       }
 
       count++;
+    }
+
+    var navCount = 0;
+    $scope.navClick = function() {
+      if (navCount % 2 == 0) {
+        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+      } else {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+      }
+
+      navCount++;
     }
     $scope.openNav = function() {
       document.getElementById("mySidenav").style.width = "250px";
@@ -68,15 +81,31 @@ var app =angular.module('todoApp');
       document.getElementById('div1').style.visibility = "visible";
       document.getElementById('showDiv').style.visibility = "hidden "
     }
+var   get_email;
+    function getUserInfo() {
+      $http.get('/user')
+        .then(function (response) {
+          $scope.user = response.data;
+          get_email=response.data.email;
+          console.log(response.data.email);
 
+        })
+        .catch(function (response) {
+          console.log("getUserInfo error", response);
+        })
+    }
 
-
-
+    getUserInfo();
     var noteFunction = function() {
-      var get_email = JSON.parse(localStorage.Token).email;
+    var token = JSON.parse(localStorage.Token).token;
+      console.log(token);
+      //var get_email = httpService.httpServiceFunction('/GET','/user').then(function(res) {
+
+    //  })
+
 
       $http({
-        method: 'POST',
+        method: 'GET',
         url: '/listnote',
         data: {
           email: get_email

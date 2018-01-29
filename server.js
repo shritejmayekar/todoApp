@@ -8,7 +8,7 @@
 // dependencies to server
 require('./server/config');
 var express = require('express');
-var session = require('express-session');
+//var session = require('express-session');
 var app = express();
 var http = require('http').Server(app);
 var mongoose = require('mongoose');
@@ -63,7 +63,7 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.use(session({
+/*app.use(session({
   secret: 'keyboard cat',
   cookie: {
     maxAge: 60000
@@ -71,10 +71,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-
+*/
 // passport initialize
 app.use(passport.initialize());
-app.use(passport.session());
+//app.use(passport.session());
 app.use(bodyParser.json());
 
 // Routes for todoApp
@@ -85,7 +85,7 @@ app.use(function(req, res) {
   })
 });
 
-// running server port 
+// running serverport
 app.listen(port);
 console.log("Rest api started on :" + port);
 module.exports = app;

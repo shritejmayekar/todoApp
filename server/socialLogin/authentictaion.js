@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var config = require('./oauth.js');
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var TokenStrategy = require('passport-token-auth').Strategy;
 var User = mongoose.model('UserSocial');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var User = require('../model/UserSocialModel.js');
@@ -77,5 +78,12 @@ module.exports = passport.use(new GoogleStrategy({
         })
       }
     })
+  }
+));
+module.exports =passport.use(new TokenStrategy(
+  function(token, done) {
+
+  console.log('token'+token);
+
   }
 ));
