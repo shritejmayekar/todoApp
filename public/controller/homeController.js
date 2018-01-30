@@ -9,17 +9,20 @@ var app =angular.module('todoApp');
 /*    getUserInfo();
 
   function getUserInfo() {
-    $http.get('/user')
-      .then(function (response) {
-        $scope.user = response.data;
-        console.log(response.data);
-
-      })
+$http({
+  url:'/note/create',
+  method:'GET',
+  data: {
+    'x-access-token':JSON.parse(localStorage.Token).token
+  }
+}).then(function(res) {
+  console.log(res);
+})
       .catch(function (response) {
         console.log("getUserInfo error", response);
       })
   }
-  */
+*/
   //  $scope.toggleLeft = buildToggler('left');
     //$scope.toggleRight = buildToggler('right');
     var count = 0;
@@ -81,32 +84,17 @@ var app =angular.module('todoApp');
       document.getElementById('div1').style.visibility = "visible";
       document.getElementById('showDiv').style.visibility = "hidden "
     }
-var   get_email;
-    function getUserInfo() {
-      $http.get('/user')
-        .then(function (response) {
-          $scope.user = response.data;
-          get_email=response.data.email;
-          console.log(response.data.email);
 
-        })
-        .catch(function (response) {
-          console.log("getUserInfo error", response);
-        })
-    }
 
-    getUserInfo();
+
+
     var noteFunction = function() {
-    var token = JSON.parse(localStorage.Token).token;
-      console.log(token);
-      //var get_email = httpService.httpServiceFunction('/GET','/user').then(function(res) {
-
-    //  })
+      var get_email = JSON.parse(localStorage.Token).email;
 
 
       $http({
-        method: 'GET',
-        url: '/listnote',
+        method: 'POST',
+        url: '/note/read',
         data: {
           email: get_email
         }
@@ -133,7 +121,12 @@ var   get_email;
 
       //note = $("<div/>").html(note).text()
       //postText = $("<div/>").html(postText).text()
-      saveNoteService.save(title, note, get_email).then(function(res) {
+      var data = {
+        title:title,
+        note:note,
+        email: get_email
+      }
+    httpService.httpServiceFunction('POST','/note/create',data).then(function(res) {
         console.log(res);
         console.log(get_email);
         noteFunction();
@@ -152,7 +145,12 @@ var   get_email;
       var get_email = JSON.parse(localStorage.Token).email;
       var new_note = note;
       console.log(new_note);
-      saveNoteService.save(new_note.title, new_note.note, get_email).then(function(res) {
+      var data  = {
+        title:new_note.title,
+        note: new_note.note,
+        email: get_email
+      }
+      httpService.httpServiceFunction('POST','/note/create',data).then(function(res) {
         console.log(res);
         console.log(get_email);
         noteFunction();

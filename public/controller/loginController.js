@@ -1,5 +1,5 @@
 var app = angular.module('todoApp')
-  .controller('loginController', function($scope, $auth, $mdToast, $http, $state, httpService, loginService, authService) {
+  .controller('loginController', function($scope, $auth, $mdToast, $http, $state, httpService, authService) {
     /*
         if (localStorage.Token) {
           var get_token = JSON.parse(localStorage.Token);
@@ -69,6 +69,7 @@ var app = angular.module('todoApp')
             .position('top right')
             .hideDelay(3000)
           )
+
           localStorage.Token = JSON.stringify({
             token: res.data.token,
             date: Date(),
@@ -77,14 +78,13 @@ var app = angular.module('todoApp')
           $state.go('home');
 
 
-        } else {
-
-          document.getElementById('flag').innerHTML = "<p style='color:red'>name or password is wrong</p>";
-
         }
-
+        else {
+          document.getElementById('flag').innerHTML = "<p style='color:red'>name or password is wrong</p>";
+        }
       }).catch(function(res) {
         console.log(res);
+        document.getElementById('flag').innerHTML = "<p style='color:red'>user not found</p>";
 
       })
 

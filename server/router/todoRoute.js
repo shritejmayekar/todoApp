@@ -73,16 +73,7 @@ module.exports = function(app) {
         //res.send(req.user);
         res.redirect('/');
 
-  /*    var token = jwt.encode({
-        id: req.user._id
-      }, 'secret', {
-        expiresIn: 86400 // expires in 24 hours
-      });
-      res.json({
-        authenticate: true,
-        token: token,
-        message: 'Login success'
-      }); */
+
       }
     })
 
@@ -125,7 +116,7 @@ module.exports = function(app) {
   // todoApp login routes
   app.route('/login')
     .post(todoApp.login_a_user);
-    app.route('/auth/login',isLoggedIn)
+    app.route('/auth/login')
       .post(todoApp.login_a_user);
   app.route('/logout')
     .get(todoApp.logout_a_user);
@@ -152,10 +143,11 @@ module.exports = function(app) {
 
 
 
+
   //token routes
   app.route('/auth/me')
     .get(todoApp.get_token);
-    app.route('/user')
+  app.route('/user')
       .get(todoApp.get_token);
   app.route('/auth/user')
     .post(todoApp.get_token_auth);

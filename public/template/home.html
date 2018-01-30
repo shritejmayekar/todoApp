@@ -43,7 +43,7 @@
 
         <!--div contenteditable="true" style="text-align:center" >Title</div-->
         <!--div class='editable' contentEditable="true" id = 'div1'>Click and edit the text</div-->
-        
+
 
       <div md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch layout="column">
         <div class='editable' contentEditable="true" id='div1' style="width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
@@ -93,7 +93,7 @@
 
 
 
-    <div  layout-wrap flex-gt-xs="30" ng-repeat="note in listOfNotes  | orderBy:'note.date':true ">
+    <div  layout-wrap flex-gt-xs="30" ng-repeat="note in listOfNotes   | orderBy:'note.date':true ">
       <md-card md-theme="{{ showDarkTheme ?'dark-grey' : 'default' }}" md-theme-watch  >
         <img ng-src="{{imagePath}}" class="md-card-image">
 

@@ -2,7 +2,8 @@
 var app = angular.module('todoApp')
   .controller('logoutController',function($http,$auth,$state,$mdToast,httpService) {
     $auth.logout();
-    $state.go('login')
+    localStorage.removeItem('Token');
+     $state.go('login')
   /*  if(localStorage.Token) {
       var get_token = JSON.parse(localStorage.Token);
 

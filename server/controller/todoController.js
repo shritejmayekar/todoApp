@@ -303,7 +303,6 @@ exports.delete_a_note = function(req, res) {
 };
 // note display all
 exports.note_all_title = function(req, res) {
-
   Note.find({
     email: req.body.email
   }, function(err, note) {

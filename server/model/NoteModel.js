@@ -7,6 +7,12 @@ var NoteSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  //user_id:[{
+  //  type:Schema.Types.ObjectId,ref:'UserData'
+  //}],
+  user_id:{
+    type:String,ref:'UserData'
+  },
   title: {
     type: String,
     required: 'enter title',
