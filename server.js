@@ -8,7 +8,7 @@
 // dependencies to server
 var dbConfig = require('./server/config');
 var express = require('express');
-//var session = require('express-session');
+var session = require('express-session');
 var app = express();
 var http = require('http').Server(app);
 var mongoose = require('mongoose');
@@ -23,8 +23,8 @@ const fs = require('fs');
 var User = require('./server/model/UserSocialModel.js');
 //var passport = require('./server/socialLogin/authentictaion.js');
 var passport = require('passport');
-var authRoutes = require('./server/router/routes.js');
-var noteRoutes = require('./server/router/routeNote.js');
+var authRoutes = require('./server/router/userRoutes.js');
+var noteRoutes = require('./server/router/noteRoutes.js');
 var expressJwt = require('express-jwt');
 
 // mongoose connect to database
@@ -48,12 +48,21 @@ app.use(bodyParser.urlencoded({
 
 app.use(passport.initialize());
 app.use(bodyParser.json());
-require('./server/config/passport')(passport);
-// Routes for todoApp
-//require('./server/router/todoRoute.js')(app);
+
+/*****************************
+* Routes for todoApp
+*****************************/
+
+/*******************************
+* auth routes for user
+*******************************/
 app.use('/auth',authRoutes);
+/*******************************
+* note routes for user notes
+*******************************/
 app.use('/note',expressJwt({secret:'secret'}),noteRoutes);
 
+// if any not found url send url not found
 app.use(function(req, res) {
   res.status(404).send({
     url: req.originalUrl + ' not found'

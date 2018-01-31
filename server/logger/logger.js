@@ -19,6 +19,7 @@ var logger = new winston.Logger({
             colorize: true
         })
     ],
+    
     exitOnError: false
 });
 

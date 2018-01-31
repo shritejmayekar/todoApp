@@ -10,14 +10,8 @@ var app = angular.module('todoApp')
       var data = {
         email: $scope.forgotPasswordForm.email
       }
-      httpService.httpServiceFunction('POST', '/auth/forgot_password', data)
+      httpService.httpServiceFunction('POST', '/auth/forgotPassword', data)
         .then(function(res) {
-          console.log(res.data.context.url);
-          localStorage.Token = JSON.stringify({
-            url: res.data.context.url
-          });
-          //localStorage.Token.url=res.data.context.url;
-          //$scope.url = res.data.context.url;
           if (res.data.messages == "message send to email") {
             document.getElementById('flag').innerHTML = "<h4 style='color:green'> " +
               "Message send to Email<br>Please Check your Email";

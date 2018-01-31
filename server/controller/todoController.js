@@ -3,9 +3,10 @@ var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var logger = require('../logger/logger.js');
-var nodemailer = require('nodemailer');
+
 //var passport = require('../socialLogin/authentictaion.js')
-User = mongoose.model('Users');
+//User = mongoose.model('Users');
+User = require('../model/UserModelPassport.js')
 Note = mongoose.model('Notes');
 var passport = require('passport');
 // display list of users
@@ -320,6 +321,7 @@ exports.forgot_password = function(req, res) {
       email: req.body.email
     },
     function(err, user) {
+      console.log('forgot');
       if (err) return res.send('Error on the server');
       if (user == null) return res.status(401).send({
         authenticate: false,

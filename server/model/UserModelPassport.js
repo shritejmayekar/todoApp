@@ -5,6 +5,9 @@ var userSchema = mongoose.Schema({
   local: {
     email: String,
     password: String,
+    reset_password_token:String,
+    reset_password_expires:String,
+
   },
 
   facebook: {
@@ -28,6 +31,7 @@ userSchema.methods.generateHash = function(password) {
 userSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.local.password);
 };
+
 // create model and exported for user
 var UserDataModel = mongoose.model('UserData', userSchema);
 

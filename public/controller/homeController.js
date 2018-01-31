@@ -1,28 +1,7 @@
 var app =angular.module('todoApp');
   app.controller('homeController', function($scope, $sce, $mdDialog, $state, $timeout,
-    $mdSidenav, $http, deleteNoteService, saveNoteService, updateNoteService, httpService) {
-    var data = {
-      headers: {
-        'x-access-token': JSON.parse(localStorage.Token).token
-      }
-    }
-/*    getUserInfo();
+    $mdSidenav, $http, httpService) {
 
-  function getUserInfo() {
-$http({
-  url:'/note/create',
-  method:'GET',
-  data: {
-    'x-access-token':JSON.parse(localStorage.Token).token
-  }
-}).then(function(res) {
-  console.log(res);
-})
-      .catch(function (response) {
-        console.log("getUserInfo error", response);
-      })
-  }
-*/
   //  $scope.toggleLeft = buildToggler('left');
     //$scope.toggleRight = buildToggler('right');
     var count = 0;
@@ -92,13 +71,7 @@ $http({
       var get_email = JSON.parse(localStorage.Token).email;
 
 
-      $http({
-        method: 'POST',
-        url: '/note/read',
-        data: {
-          email: get_email
-        }
-      }).then(function(res) {
+    httpService.httpServiceFunction('GET','/note/read').then(function(res) {
         console.log(res.data);
         var list_notes = res.data;
         $scope.listOfNotes = res.data;
@@ -136,7 +109,7 @@ $http({
     }
     $scope.deleteNote = function(note) {
       console.log(note._id);
-      deleteNoteService.save(note).then(function(res) {
+    httpService.httpServiceFunction('delete','/note/delete/'+note._id,null).then(function(res) {
         console.log(res);
         noteFunction();
       })
@@ -171,8 +144,7 @@ $http({
         })
         .then(function(answer) {
           console.log(answer);
-          updateNoteService.update(ev, answer).then(function(res) {
-            console.log(res);
+          httpService.httpServiceFunction('put','note/update/'+ev._id,answer).then(function(res){
             noteFunction();
           })
 
@@ -205,8 +177,8 @@ $http({
       //  };
     }
     $scope.archieveNote = function(note) {
-
-      archieveNoteService.update(note, 'true').then(function(res) {
+      httpService.httpServiceFunction('put','/note/update/'+note._id,'true').then(function(res) {
+    //  archieveNoteService.update(note, 'true').then(function(res) {
         console.log(res);
         noteFunction();
       })

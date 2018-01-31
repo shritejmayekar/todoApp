@@ -1,5 +1,5 @@
 var app = angular.module('todoApp')
-  .controller('loginController', function($scope, $auth, $mdToast, $http, $state, httpService, authService) {
+  .controller('loginController', function($scope, $auth, $mdToast, $http, $state, httpService) {
     /*
         if (localStorage.Token) {
           var get_token = JSON.parse(localStorage.Token);
@@ -18,7 +18,7 @@ var app = angular.module('todoApp')
             });
           }
         }*/
-       httpService.httpServiceFunction('GET','/auth/check').then(function(res) {
+      /* httpService.httpServiceFunction('GET','/auth/check').then(function(res) {
           //  console.log(res.data.message);
           //  console.log(res);
           //  console.log(res.data.user);
@@ -34,9 +34,9 @@ var app = angular.module('todoApp')
             }
         })
 
-        console.log($auth.isAuthenticated());
+       console.log($auth.isAuthenticated());*/
     $scope.authenticate = function(provider) {
-     $auth.authenticate(provider).then(function(){
+     $auth.authenticate(provider,'/auth/facebook').then(function(){
        console.log(provider);
        $state.go('home');
      })
@@ -62,7 +62,6 @@ var app = angular.module('todoApp')
         console.log(res.data.authenticate);
 
         if (res.data.authenticate) {
-
           $mdToast.show(
             $mdToast.simple()
             .textContent('Login success...')

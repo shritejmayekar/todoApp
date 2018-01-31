@@ -1,7 +1,7 @@
 <!-- nav bar -->
 <nav>
 
-<div  class="nav-wrapper" layout="row" style="width:100%;height:75px;background-color:#f3bb02;">
+<div  class="nav-wrapper" layout="row" style="overflow:hidden;position:fixed;z-index:5;width:100%;height:75px;background-color:#f3bb02;">
   <div flex="10">
     <md-fab-toolbar  md-open="demo.isOpen" count="demo.count" md-direction="{{demo.selectedDirection}}">
 
@@ -46,7 +46,7 @@
 
 
       <div md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch layout="column">
-        <div class='editable' contentEditable="true" id='div1' style="width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
+        <div class='editable' contentEditable="true" id='div1' style="margin-top:55px;width:600px;height:auto;background-color:#C8C8C8;padding: 10px;
     box-shadow: 5px 10px #888888;
 " layout="column" ng-click="hide()">
           <div flex="50"></div>
@@ -55,15 +55,15 @@
 
 
         <div id="showDiv" >
-          <div class='editable' contentEditable="true" id='title' style="width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
+          <div class='editable' contentEditable="true" id='title' style="width:600px;height:auto;background-color:#C8C8C8;padding: 10px;
       box-shadow: 5px 10px #888888;
   " layout="column" placeholder="Title"></div>
 
-          <div class='editable' contentEditable="true" id='note' style="width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
+          <div class='editable' contentEditable="true" id='note' style="width:600px;height:auto;background-color:#C8C8C8;padding: 10px;
   box-shadow: 5px 10px #888888;
 " layout="column" placeholder="Take a Note"   ></div>
           <div style="background-color:#C8C8C8;padding: 10px;
-  box-shadow: 5px 10px #888888;">
+  box-shadow: 5px 10px #888888;width:580px">
             <md-card-actions layout="row" layout-align="end center">
               <md-button ng-click="saveNote()" id="showButton"><b>Done</b></md-button>
             </md-card-actions>
@@ -132,10 +132,7 @@
       </md-card>
 
 
-      <div>
-      </div>
+
     </div>
 
   </div>
-
-</div>

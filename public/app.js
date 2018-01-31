@@ -23,7 +23,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $auth
   */
   var skipIfLoggedIn = ['$q', '$auth', function($q, $auth) {
     var deferred = $q.defer();
-    if ($auth.isAuthenticated() || $auth.isAuthenticated('facebook')) {
+    if ($auth.isAuthenticated() ) {
       deferred.reject();
     } else {
       deferred.resolve();
