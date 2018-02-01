@@ -21,7 +21,9 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $auth
   /**
     helper function
   */
+
   var skipIfLoggedIn = ['$q', '$auth', function($q, $auth) {
+
     var deferred = $q.defer();
     if ($auth.isAuthenticated() ) {
       deferred.reject();
@@ -57,7 +59,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $auth
       templateUrl: 'template/home.html',
       controller: 'homeController',
       resolve: {
-        loginRequired: loginRequired
+       loginRequired: loginRequired
       }
 
     })

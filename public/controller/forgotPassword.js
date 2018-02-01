@@ -4,6 +4,7 @@ var app = angular.module('todoApp')
     //forgotPassword function
     $scope.forgotPassword = function() {
       //checking value null or undefined
+      $scope.$emit('passwordReset','data');
       if ($scope.forgotPasswordForm.email == null || $scope.forgotPasswordForm.email == "")
         return false;
 

@@ -1,27 +1,27 @@
 <!-- nav bar -->
 <nav>
 
-<div  class="nav-wrapper" layout="row" style="overflow:hidden;position:fixed;z-index:5;width:100%;height:75px;background-color:#f3bb02;">
-  <div flex="10">
-    <md-fab-toolbar  md-open="demo.isOpen" count="demo.count" md-direction="{{demo.selectedDirection}}">
+  <div class="nav-wrapper" layout="row" style="overflow:hidden;position:fixed;z-index:5;width:100%;height:75px;background-color:#f3bb02;">
+    <div flex="10">
+      <md-fab-toolbar md-open="demo.isOpen" count="demo.count" md-direction="{{demo.selectedDirection}}">
 
-      <md-button aria-label="menu" ng-click="navClick()">
-        <i class="material-icons">view_headline</i>
+        <md-button aria-label="menu" ng-click="navClick()">
+          <i class="material-icons">view_headline</i>
+        </md-button>
+
+      </md-fab-toolbar>
+      <!--span style="font-size:30px;cursor:pointer"ng-click="openNav()">&#9776;open</span-->
+    </div>
+    <div flex="80">
+      <h2><b>Google</b> Keep</h2>
+    </div>
+    <div flex="10">
+      <md-button aria-label="menu" ng-click="listGrid()">
+        <i class="material-icons">view_quilt</i>
       </md-button>
 
-    </md-fab-toolbar>
-    <!--span style="font-size:30px;cursor:pointer"ng-click="openNav()">&#9776;open</span-->
+    </div>
   </div>
-  <div flex="80">
-    <h2><b>Google</b> Keep</h2>
-  </div>
-  <div flex="10">
-    <md-button aria-label="menu" ng-click="listGrid()">
-      <i class="material-icons">view_quilt</i>
-      </md-button>
-
-  </div>
-</div>
 </nav>
 
 
@@ -37,12 +37,12 @@
 
         <a ui-sref="home">Notes</a>
 
-    </div>
+      </div>
     </div>
     <div flex="40">
 
-        <!--div contenteditable="true" style="text-align:center" >Title</div-->
-        <!--div class='editable' contentEditable="true" id = 'div1'>Click and edit the text</div-->
+      <!--div contenteditable="true" style="text-align:center" >Title</div-->
+      <!--div class='editable' contentEditable="true" id = 'div1'>Click and edit the text</div-->
 
 
       <div md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch layout="column">
@@ -54,14 +54,14 @@
         </div>
 
 
-        <div id="showDiv" >
+        <div id="showDiv">
           <div class='editable' contentEditable="true" id='title' style="width:600px;height:auto;background-color:#C8C8C8;padding: 10px;
       box-shadow: 5px 10px #888888;
   " layout="column" placeholder="Title"></div>
 
           <div class='editable' contentEditable="true" id='note' style="width:600px;height:auto;background-color:#C8C8C8;padding: 10px;
   box-shadow: 5px 10px #888888;
-" layout="column" placeholder="Take a Note"   ></div>
+" layout="column" placeholder="Take a Note"></div>
           <div style="background-color:#C8C8C8;padding: 10px;
   box-shadow: 5px 10px #888888;width:580px">
             <md-card-actions layout="row" layout-align="end center">
@@ -75,7 +75,7 @@
     </div>
   </div>
 
-  <div  layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
+  <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
     <!--div layout="row" style="width:240px;height:105px;background-color:green;padding:5px" ng-repeat="note in listOfNotes "  >
 
         <div flex="90">
@@ -93,8 +93,8 @@
 
 
 
-    <div  layout-wrap flex-gt-xs="30" ng-repeat="note in listOfNotes   | orderBy:'note.date':true ">
-      <md-card md-theme="{{ showDarkTheme ?'dark-grey' : 'default' }}" md-theme-watch  >
+    <div layout-wrap flex-gt-xs="30" ng-repeat="note in listOfNotes   | orderBy:'note.date':true ">
+      <md-card md-theme="{{ showDarkTheme ?'dark-grey' : 'default' }}" md-theme-watch>
         <img ng-src="{{imagePath}}" class="md-card-image">
 
         <md-card-title>
@@ -104,9 +104,9 @@
           </md-card-title-text>
         </md-card-title>
         <md-card-content ng-click="editNote(note)">
-          <div  style="word-break: break-word;" ng-bind-html="note.note |html "></div>
+          <div style="word-break: break-word;" ng-bind-html="note.note |html "></div>
           <!--div >{{note.created_date}}</div-->
-          <div >{{note.edited}}</div>
+          <div>{{note.edited}}</div>
         </md-card-content>
 
         <md-card-actions layout="row" layout-align="end center">
@@ -119,13 +119,40 @@
           <md-button ng-click="deleteNote(note)" class="md-icon-button" aria-label="delete">
             <i class="material-icons">delete</i>
           </md-button>
+          <!--div flex-gt-xs>
+        <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"></md-datepicker>
+      </div-->
           <!--md-button nd-click="labelAdd()" class="md-icon-button">
             <i class="material-icons">label</i>
           </md-button-->
-          <md-button nd-click="archieveNote(note)" class="md-icon-button" aria-label="archieve">
+          <md-menu-bar class="md-icon-button" aria-label="menu">
+            <md-menu>
+              <md-button ng-click="$mdMenu.open()" class="md-icon-button" aria-label="menu">
+                <i class="material-icons">more_vert</i>
+              </md-button>
+              <md-menu-content>
+                <md-menu-item>
+                  <md-button ng-click="deleteNote(note)" aria-label: 'delete'>
+                    Delete a note
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="copyNote(note)" aria-label: 'copy'>
+                    Copy a note
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="ctrl.sampleAction('Open', $event)" aria-label="center">
+                    Add a label
+                  </md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+
+              <!--md-button nd-click="archieveNote(note)" class="md-icon-button" aria-label="archieve">
             <i class="material-icons">archive</i>
 
-          </md-button>
+          </md-button-->
 
         </md-card-actions>
 

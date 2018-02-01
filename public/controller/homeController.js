@@ -1,7 +1,7 @@
 var app =angular.module('todoApp');
   app.controller('homeController', function($scope, $sce, $mdDialog, $state, $timeout,
     $mdSidenav, $http, httpService) {
-
+      
   //  $scope.toggleLeft = buildToggler('left');
     //$scope.toggleRight = buildToggler('right');
     var count = 0;

@@ -90,7 +90,25 @@ module.exports = function(passport) {
       console.log('In the passport watch');
       console.log(accessToken+'\n'+refreshToken+'\n');
       console.log(profile);
-      done(null,profile);
+      process.nextTick(function(res) {
+        User.findOne({'facebook.id':profile.id},function(err,user) {
+          if(err) return done(err);
+          if(user) {
+            return done(null,user);
+          } else {
+            var newUser = new User();
+
+            newUser.facebook.id = profile.id;
+            newUser.facebook.token = accessToken;
+            newUser.facebook.name = profile.displayName;
+            newUser.save(function(err) {
+              if(err) throw err;
+              return done(null,newUser);
+            })
+          }
+        })
+      })
+    //  done(null,profile);
     }
   ));
   return passport;

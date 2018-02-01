@@ -27,10 +27,21 @@ var authRoutes = require('./server/router/userRoutes.js');
 var noteRoutes = require('./server/router/noteRoutes.js');
 var expressJwt = require('express-jwt');
 
+const redis = require('redis');
+//const cache = redis.createClient(process.env.PORT);
+
+
+var cache = new redis.createClient( process.env.PORT);
+
+
+cache.get('Key',function(err,value) {
+  console.log(value);
+});
 // mongoose connect to database
 //mongoose.connect('mongodb://localhost/passport-login',{
 //  useMongoClient:true
 //})
+
 
 
 

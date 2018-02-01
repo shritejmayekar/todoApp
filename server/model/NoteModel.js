@@ -10,6 +10,9 @@ var NoteSchema = new Schema({
   //user_id:[{
   //  type:Schema.Types.ObjectId,ref:'UserData'
   //}],
+  reminder : {
+    type:Date,
+  },
   user_id:{
     type:String,ref:'UserData'
   },

@@ -1,5 +1,5 @@
 var app = angular.module('todoApp')
-  .controller('loginController', function($scope, $auth, $mdToast, $http, $state, httpService) {
+  .controller('loginController', function($scope,$location, $auth, $mdToast, $http, $state, httpService) {
     /*
         if (localStorage.Token) {
           var get_token = JSON.parse(localStorage.Token);
@@ -18,25 +18,25 @@ var app = angular.module('todoApp')
             });
           }
         }*/
-      /* httpService.httpServiceFunction('GET','/auth/check').then(function(res) {
-          //  console.log(res.data.message);
-          //  console.log(res);
-          //  console.log(res.data.user);
-            if(res.data.message == 'user authenticated') {
-              localStorage.Token = JSON.stringify( {
-                token: res.data.token,
-                date: Date(),
-                email: res.data.user.name
-              })
+     // httpService.httpServiceFunction('GET','/auth/facebook/callback'+$location.absUrl().split('?token=')[1]).then(function(res) {
+     //      //  console.log(res.data.message);
+     //        console.log(res);
+     //      //  console.log(res.data.user);
+     //      /*  if(res.data.message == 'user authenticated') {
+     //          localStorage.Token = JSON.stringify( {
+     //            token: res.data.token,
+     //            date: Date(),
+     //            email: res.data.user.name
+     //          })
+     //
+     //          $state.go('home');
+     //
+     //        }*/
+     //    })
 
-              $state.go('home');
-
-            }
-        })
-
-       console.log($auth.isAuthenticated());*/
+       console.log($auth.isAuthenticated());
     $scope.authenticate = function(provider) {
-     $auth.authenticate(provider,'/auth/facebook').then(function(){
+     $auth.authenticate(provider).then(function(){
        console.log(provider);
        $state.go('home');
      })

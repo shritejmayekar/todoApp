@@ -8,6 +8,7 @@ router.get('/read',noteController.readNote);
 router.put('/update/:noteId',noteController.update);
 // deleate notes of user
 router.delete('/delete/:noteId',noteController.delete);
-
+//set reminder
+router.post('/reminder',noteController.reminder);
 
 module.exports = router;

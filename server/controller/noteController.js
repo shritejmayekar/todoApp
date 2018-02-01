@@ -2,6 +2,14 @@
 var jwt = require('jsonwebtoken');
 var Note = require('../model/NoteModel.js');
 var User = require('../model/UserModelPassport.js')
+
+
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
+var myEventHandler =function() {
+  console.log('listening');
+}
+eventEmitter.on('passwordReset', myEventHandler);
 /******************************
 * CRUD operation of Notes
 ******************************/
@@ -58,3 +66,9 @@ exports.delete = function(req, res) {
     });
   });
 };
+// reminder controller to reminde
+exports.reminder = function(req,res) {
+  Note.findOne({user_id:req.user.id},function(err,res) {
+    res.json('');
+  } )
+}
