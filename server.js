@@ -6,6 +6,8 @@
  *
  **/
 // dependencies to server
+
+
 var dbConfig = require('./server/config');
 var express = require('express');
 var session = require('express-session');

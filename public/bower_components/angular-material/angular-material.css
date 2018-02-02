@@ -1091,7 +1091,7 @@ md-card {
           margin-right: auto;
           margin-left: 0; }
     md-card .md-actions:not(.layout-column) .md-button.md-icon-button, md-card md-card-actions:not(.layout-column) .md-button.md-icon-button {
-      margin-left: 6px;
+      margin-left: 2px;
       margin-right: 6px; }
       md-card .md-actions:not(.layout-column) .md-button.md-icon-button:first-of-type, md-card md-card-actions:not(.layout-column) .md-button.md-icon-button:first-of-type {
         margin-left: : 0px; }
@@ -3138,7 +3138,7 @@ md-toolbar.md-has-open-menu {
   z-index: 100; }
 
 md-menu-bar {
-  padding: 0 20px;
+  padding: 0 8px;
   display: block;
   position: relative;
   z-index: 2; }

@@ -33,6 +33,7 @@ var app = angular.module('todoApp')
      //
      //        }*/
      //    })
+  
 
        console.log($auth.isAuthenticated());
     $scope.authenticate = function(provider) {

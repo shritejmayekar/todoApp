@@ -2,15 +2,25 @@
   <div layout="row">
   <form ng-cloak>
     <md-dialog-content  layout="column" class="md-dialog-content">
-      <md-input-container class="md-block" style="word-break: break-word;">
-      <input ng-model="title" >
-      </md-input-container>
-      <md-input-container class="md-block" style="word-break: break-word;">
-      <input ng-model="note" style="word-break: break-word;">
+      <textarea  rows="1" cols="50" style="box-shadow: none;resize: none;" ng-model="title " aria-label="title"></textarea>
+      <md-divider md-inset>
+      <textarea rows='10' cols="50" style="box-shadow: none;resize: none;" aria-label="note" ng-model="note">
+
+      </textarea>
+      </md-divider>
+      <md-input-container class="md-block" style="float:right">
+        Edited :{{noteObject.edited | date:'MMM dd h:mm a'}}
       </md-input-container>
 
     </md-dialog-content>
-    <md-card-actions layout="row" layout-align="end center" >
+
+    <md-card-actions layout="5" layout-align="end center" >
+      <md-button ng-click="copyNote(note)" class="md-icon-button" aria-label="copy">
+        <i class="material-icons">content_copy</i>
+      </md-button>
+      <md-button ng-click="deleteNote(note)" class="md-icon-button" aria-label="delete">
+        <i class="material-icons">delete</i>
+      </md-button>
       <md-button style="float right" ng-click="answer({title:title,note:note})">
        Done
       </md-button>

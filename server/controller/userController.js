@@ -30,7 +30,7 @@ exports.login = function(req, res) {
       console.log(user);
 
       var token = jwt.sign({
-        id: user._id,                       // payload              
+        id: user._id,                       // payload
         password: user.local.password
       }, 'secret', {
         expiresIn: 43200 // expires in 12 hours
@@ -84,6 +84,8 @@ exports.authenticate = function(req, res) {
 
   }
 }
+
+
 /******************************
  * Password reset
  *******************************/

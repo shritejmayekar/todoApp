@@ -104,14 +104,14 @@
           </md-card-title-text>
         </md-card-title>
         <md-card-content ng-click="editNote(note)">
-          <div style="word-break: break-word;" ng-bind-html="note.note |html "></div>
+          <div  style="word-break: break-word;" ng-bind-html="note.note |html "></div>
           <!--div >{{note.created_date}}</div-->
-          <div>{{note.edited}}</div>
         </md-card-content>
 
         <md-card-actions layout="row" layout-align="end center">
           <md-button ng-click="editNote(note)" class="md-icon-button" aria-label="edit">
             <i class="material-icons">mode_edit</i>
+
           </md-button>
           <md-button ng-click="copyNote(note)" class="md-icon-button" aria-label="copy">
             <i class="material-icons">content_copy</i>
@@ -119,6 +119,32 @@
           <md-button ng-click="deleteNote(note)" class="md-icon-button" aria-label="delete">
             <i class="material-icons">delete</i>
           </md-button>
+
+          <md-menu-bar class="md-icon-button" aria-label="menu">
+            <md-menu>
+              <md-button ng-click="$mdMenu.open()" class="md-icon-button" aria-label="menu">
+                <i class="material-icons">add_alert</i>
+              </md-button>
+              <md-menu-content>
+                <md-menu-item>
+                  <input kendo-date-time-picker  ng-model="obj" style="width: 75%;" />
+                  <md-button ng-click="reminderNote(note,obj)" class="md-icon-button" aria-label="delete">
+                    SET
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="copyNote(note)" aria-label: 'copy'>
+                    Copy a note
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="ctrl.sampleAction('Open', $event)" aria-label="center">
+                    Add a label
+                  </md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </md-menu-bar>
           <!--div flex-gt-xs>
         <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"></md-datepicker>
       </div-->
@@ -148,7 +174,7 @@
                 </md-menu-item>
               </md-menu-content>
             </md-menu>
-
+          </md-menu-bar>
               <!--md-button nd-click="archieveNote(note)" class="md-icon-button" aria-label="archieve">
             <i class="material-icons">archive</i>
 
