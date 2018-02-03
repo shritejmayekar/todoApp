@@ -1091,8 +1091,8 @@ md-card {
           margin-right: auto;
           margin-left: 0; }
     md-card .md-actions:not(.layout-column) .md-button.md-icon-button, md-card md-card-actions:not(.layout-column) .md-button.md-icon-button {
-      margin-left: 2px;
-      margin-right: 6px; }
+      margin-left: -8px;
+      margin-right: 10px; }
       md-card .md-actions:not(.layout-column) .md-button.md-icon-button:first-of-type, md-card md-card-actions:not(.layout-column) .md-button.md-icon-button:first-of-type {
         margin-left: : 0px; }
         [dir=rtl] md-card .md-actions:not(.layout-column) .md-button.md-icon-button:first-of-type, [dir=rtl] md-card md-card-actions:not(.layout-column) .md-button.md-icon-button:first-of-type {

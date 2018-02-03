@@ -28,6 +28,7 @@ var passport = require('passport');
 var authRoutes = require('./server/router/userRoutes.js');
 var noteRoutes = require('./server/router/noteRoutes.js');
 var expressJwt = require('express-jwt');
+var cors = require('cors')
 
 const redis = require('redis');
 //const cache = redis.createClient(process.env.PORT);
@@ -39,13 +40,6 @@ var cache = new redis.createClient( process.env.PORT);
 cache.get('Key',function(err,value) {
   console.log(value);
 });
-// mongoose connect to database
-//mongoose.connect('mongodb://localhost/passport-login',{
-//  useMongoClient:true
-//})
-
-
-
 
 
 // winston logger to keep logs
@@ -61,6 +55,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(passport.initialize());
 app.use(bodyParser.json());
+app.use(cors());
 
 /*****************************
 * Routes for todoApp
@@ -74,7 +69,6 @@ app.use('/auth',authRoutes);
 * note routes for user notes
 *******************************/
 app.use('/note',expressJwt({secret:'secret'}),noteRoutes);
-
 // if any not found url send url not found
 app.use(function(req, res) {
   res.status(404).send({

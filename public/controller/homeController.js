@@ -1,9 +1,15 @@
 var app = angular.module('todoApp');
 app.controller('homeController', function($scope, $sce, $mdDialog, $state, $timeout,
-  $mdSidenav, $http, httpService, $interval) {
+  $mdSidenav, $http, $mdToast, httpService, $interval, $filter) {
 
   //  $scope.toggleLeft = buildToggler('left');
   //$scope.toggleRight = buildToggler('right');
+
+
+
+  /************************************
+   * List View / Grid View
+   ************************************/
   var count = 0;
   $scope.listGrid = function() {
     if (count % 2 == 0) {
@@ -14,12 +20,14 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
 
     count++;
   }
-
+  /*************************************
+   * Nav bar
+   *************************************/
   var navCount = 0;
   $scope.navClick = function() {
     if (navCount % 2 == 0) {
-      document.getElementById("mySidenav").style.width = "250px";
-      document.getElementById("main").style.marginLeft = "250px";
+      document.getElementById("mySidenav").style.width = "225px";
+      document.getElementById("main").style.marginLeft = "225px";
     } else {
       document.getElementById("mySidenav").style.width = "0";
       document.getElementById("main").style.marginLeft = "0";
@@ -50,36 +58,43 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       $mdSidenav(componentId).toggle();
     };
   }
-
+  /***********************************
+   * Take a Note div  show / hide
+   ***********************************/
   document.getElementById('showDiv').style.visibility = "hidden";
   $scope.hide = function() {
     document.getElementById('div1').style.visibility = "hidden";
 
     document.getElementById('showDiv').style.visibility = "visible"
   }
+
   var show = function() {
     document.getElementById('title').innerHTML = "";
     document.getElementById('note').innerHTML = ""
     document.getElementById('div1').style.visibility = "visible";
     document.getElementById('showDiv').style.visibility = "hidden "
   }
-
-
-
-
+  /**************************************
+   * noteFunction to GET / READ all Notes
+   ***************************************/
   var noteFunction = function() {
     var get_email = JSON.parse(localStorage.Token).email;
-
-
     httpService.httpServiceFunction('GET', '/note/read').then(function(res) {
       console.log(res.data);
       var list_notes = res.data;
       $scope.listOfNotes = res.data;
+      remind();
     });
   }
+
   noteFunction();
+
+  /***************************************
+   * saveNote function to CREATE / SAVE Notes
+   ****************************************/
   $scope.saveNote = function() {
     var get_email = JSON.parse(localStorage.Token).email;
+    $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     console.log(document.getElementById('div1').innerHTML);
     var title = document.getElementById('title').innerHTML;
     var note = document.getElementById('note').innerHTML;
@@ -96,6 +111,9 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
 
     })
   }
+  /***********************************
+   *Delete note function to DELETE notes
+   ************************************/
   $scope.deleteNote = function(note) {
     console.log(note._id);
     httpService.httpServiceFunction('delete', '/note/delete/' + note._id, null).then(function(res) {
@@ -103,6 +121,10 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       noteFunction();
     })
   }
+  /*************************************
+   * copyNote function to copy existing as
+   *  new Note
+   *************************************/
   $scope.copyNote = function(note) {
     var get_email = JSON.parse(localStorage.Token).email;
     var new_note = note;
@@ -112,53 +134,65 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       note: new_note.note,
       email: get_email
     }
+    console.log(get_email);
     httpService.httpServiceFunction('POST', '/note/create', data).then(function(res) {
       console.log(res);
-      console.log(get_email);
       noteFunction();
 
     })
   }
-  // reminder
-
-
+  /*************************************
+   * reminderNote function set the Reminder
+   *************************************/
   $scope.reminderNote = function(note, time) {
-
-
     console.log(time);
     var data = {
       reminder: time
     }
-    httpService.httpServiceFunction('put', 'note/update/' + note._id, data).then(function(res) {
+    httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
       noteFunction();
     })
-
-    remainderCheck(note);
   }
-/*
-  var myInterval = setInterval(function() {
-    myTimer()
-  }, 10);
-
-  function myTimer() {
-    $scope.theTime = new Date("dd MMM yyyy HH:mm a");
-    console.log($scope.theTime);
-    if ($scope.theTime == note.reminder) {
-      alert('hello');
-      clearInterval(myVar);
+  /******************************
+   * remind function take call to
+   * check all Notes reminder
+   *******************************/
+  var remind = function() {
+    console.log($scope.listOfNotes);
+    for (var i = 0; i < $scope.listOfNotes.length; i++) {
+      remainderCheck($scope.listOfNotes[i]);
     }
   }
-  */
+  /*******************************
+   * Check the Each Note Reminder
+   ********************************/
   var remainderCheck = function(note) {
-    var date = new Date();
-    $scope.theTime = new Date("dd MMM yyyy HH:mm a");
-    console.log($scope.theTime + '\n' + note.reminder);
-    alert('reminder')
-
-
+    $interval(function() {
+        date = new Date();
+        //console.log($filter('date')(note.reminder, "short") + '\n' +
+        //$filter('date')(date, "short"));
+        if ($filter('date')(note.reminder, "short") == $filter('date')(date, "short")) {
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('Reminder success...')
+            .position('center')
+            .hideDelay(6000)
+          )
+          note.reminder = null;
+          var data = {
+            reminder: null
+          }
+          httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
+            noteFunction();
+          })
+        }
+      },
+      1000);
   }
   // color check
-
+  /*****************************************
+  * editNote function Edited / UPDATE Notes
+  *****************************************/
   var noteObj;
   $scope.editNote = function(ev) {
     noteObj = ev;
@@ -173,32 +207,27 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       .then(function(answer) {
         answer.edited = new Date();
         console.log(answer);
-        httpService.httpServiceFunction('put', 'note/update/' + ev._id, answer).then(function(res) {
+        httpService.httpServiceFunction('put', '/note/update/' + ev._id, answer).then(function(res) {
           noteFunction();
         })
-
       }, function() {
         $scope.status = 'You cancelled the dialog.';
       });
   };
-
   function DialogController($scope, $rootScope, $mdDialog, $sce) {
     $scope.title = noteObj.title;
     //$scope.getNote = noteObj;
     $scope.note = noteObj.note;
     $scope.noteObject = noteObj;
-
     //$scope.note = $("<div/>").html(noteObj.note).text()
     //  $scope.note =  $sce.trustAsHtml(noteObj.note);
     console.log($scope.title);
     $scope.hide = function() {
       $mdDialog.hide();
     };
-
     $scope.cancel = function() {
       $mdDialog.cancel();
     };
-
     $scope.answer = function(answer) {
 
       $mdDialog.hide(answer);
@@ -209,12 +238,14 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     //  };
   }
   $scope.archieveNote = function(note) {
-    httpService.httpServiceFunction('put', '/note/update/' + note._id, 'true').then(function(res) {
+    var data = {
+      is_archieved:note.is_archieved?'false':'true'
+    }
+    httpService.httpServiceFunction('put', 'note/update/' + note._id,data).then(function(res) {
       //  archieveNoteService.update(note, 'true').then(function(res) {
       console.log(res);
       noteFunction();
     })
 
   };
-
 })

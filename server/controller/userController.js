@@ -52,7 +52,8 @@ exports.login = function(req, res) {
 }
 // authenticate user by using token
 exports.authenticate = function(req, res) {
-  var token = req.headers['x-access-token'];
+var token = req.headers['x-access-token']
+//var token =  req.headers['Authorization'];
   token = token.replace('Bearer ', '')
   if (!token) return res.status(401).send({
     authenticate: false,
@@ -84,6 +85,27 @@ exports.authenticate = function(req, res) {
 
   }
 }
+exports.authenticateFB = function(req, res) {
+  //res.json(req.user)
+  console.log('user', req.user._id);
+  var token = jwt.sign({
+    id: req.user._id
+  }, 'secret', {
+    expiresIn: '43200'
+  });
+  res.redirect('/#!/dummyPage/'+token);
+}
+exports.authenticateGoogle = function(req,res) {
+  console.log('user', req.user._id);
+  var token = jwt.sign({
+    id: req.user._id
+  }, 'secret', {
+    expiresIn: '43200'
+  });
+  res.redirect('/#!/dummyPage/'+token);
+
+}
+
 
 
 /******************************

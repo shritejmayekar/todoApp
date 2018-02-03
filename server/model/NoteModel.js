@@ -46,7 +46,7 @@ var NoteSchema = new Schema({
     default: null
   },
   reminder: {
-    type: String,
+    type: Date,
     default: null
   },
 

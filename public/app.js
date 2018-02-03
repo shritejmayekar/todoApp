@@ -86,6 +86,10 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $auth
       templateUrl: '/template/resetPassword.html',
       controller: 'resetController'
     })
+    .state('dummyPage', {
+      url:'/dummyPage/:t',
+      controller:'dummyController'
+    })
 
 
 

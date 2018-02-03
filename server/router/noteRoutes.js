@@ -1,5 +1,7 @@
 var router = require('express').Router();
 var noteController = require('../controller/noteController')
+var userController = require('../controller/userController');
+
 // create notes of user
 router.post('/create',noteController.create);
 // read all notes of user
@@ -10,5 +12,7 @@ router.put('/update/:noteId',noteController.update);
 router.delete('/delete/:noteId',noteController.delete);
 //set reminder
 router.post('/reminder',noteController.reminder);
+
+
 
 module.exports = router;

@@ -54,7 +54,7 @@ module.exports = function(passport) {
       });
     }
   ))
-// passport local login strategy
+  // passport local login strategy
   passport.use('local-login', new LocalStrategy({
       usernameField: 'email',
       passwordField: 'password',
@@ -79,22 +79,26 @@ module.exports = function(passport) {
       })
     }
   ))
-
+  /********************************************
+   * passport facebook token startegy
+   ********************************************/
   // config for facebook
-   passport.use('facebook',new FacebookStrategy({
-     clientID:'139717613365382',
-     clientSecret:'ffb6e650208af3f1c90d31ffa39e12e4',
-     callbackURL:'http://localhost:3000/auth/facebook/callback',
+  passport.use('facebook', new FacebookStrategy({
+      clientID: config.facebook.clientId,
+      clientSecret: config.facebook.clientSecret,
+      callbackURL: 'http://localhost:3000/auth/facebook/callback',
     },
     function(accessToken, refreshToken, profile, done) {
       console.log('In the passport watch');
-      console.log(accessToken+'\n'+refreshToken+'\n');
+      console.log(accessToken + '\n' + refreshToken + '\n');
       console.log(profile);
       process.nextTick(function(res) {
-        User.findOne({'facebook.id':profile.id},function(err,user) {
-          if(err) return done(err);
-          if(user) {
-            return done(null,user);
+        User.findOne({
+          'facebook.id': profile.id
+        }, function(err, user) {
+          if (err) return done(err);
+          if (user) {
+            return done(null, user);
           } else {
             var newUser = new User();
 
@@ -102,13 +106,49 @@ module.exports = function(passport) {
             newUser.facebook.token = accessToken;
             newUser.facebook.name = profile.displayName;
             newUser.save(function(err) {
-              if(err) throw err;
-              return done(null,newUser);
+              if (err) throw err;
+              return done(null, newUser);
             })
           }
         })
       })
-    //  done(null,profile);
+      //  done(null,profile);
+    }
+  ));
+
+
+  /***************************************************
+   * passport google token startegy
+   ***************************************************/
+  passport.use('google', new GoogleStrategy({
+      clientID: config.google.clientId,
+      clientSecret: config.google.clientSecret,
+      callbackURL: config.google.callbackURL,
+      passReqToCallback: true
+    },
+    function(request, accessToken, refreshToken, profile, done) {
+      console.log(accessToken + '\n' + refreshToken)
+      console.log(profile);
+      process.nextTick(function(res) {
+        User.findOne({
+          'google.id': profile.id
+        }, function(err, user) {
+          if (err) return done(err);
+          if (user) {
+            return done(null, user);
+          } else {
+            var newUser = new User();
+
+            newUser.google.id = profile.id;
+            newUser.google.token = accessToken;
+            newUser.google.email = profile.email;
+            newUser.save(function(err) {
+              if (err) throw err;
+              return done(null, newUser);
+            })
+          }
+        })
+      })
     }
   ));
   return passport;

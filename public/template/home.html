@@ -36,6 +36,8 @@
       <div id="mySidenav" style="background-color:#e6e6e6;overflow-y: scroll; height:800px;" class="sidenav">
 
         <a ui-sref="home">Notes</a>
+        <a ui-sref="reminder">Reminders</a>
+        <a ui-sref="archieve">Archive</a>
 
       </div>
     </div>
@@ -76,24 +78,8 @@
   </div>
 
   <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
-    <!--div layout="row" style="width:240px;height:105px;background-color:green;padding:5px" ng-repeat="note in listOfNotes "  >
 
-        <div flex="90">
-        <md-card-title-text ng-click="editNote(note)" flex="auto">
-          <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>
-          <div class="md-subhead" style="word-break: break-word;" ng-bind-html="note.note |html "></div>
-          <div class="md-subhead">{{note.created_date}}</div>
-          <div class="md-subhead">{{note.edited}}</div>
-        </md-card-title-text>
-
-
-    </div>
-    <div flex=10>
-    </div-->
-
-
-
-    <div layout-wrap flex-gt-xs="30" ng-repeat="note in listOfNotes   | orderBy:'note.date':true ">
+    <div layout-wrap flex-gt-xs="30"  ng-repeat="note in listOfNotes   | orderBy:'note.date':true">
       <md-card md-theme="{{ showDarkTheme ?'dark-grey' : 'default' }}" md-theme-watch>
         <img ng-src="{{imagePath}}" class="md-card-image">
 
@@ -113,8 +99,8 @@
             <i class="material-icons">mode_edit</i>
 
           </md-button>
-          <md-button ng-click="copyNote(note)" class="md-icon-button" aria-label="copy">
-            <i class="material-icons">content_copy</i>
+          <md-button ng-click="archieveNote(note)" class="md-icon-button" aria-label="copy">
+            <i class="material-icons">archive</i>
           </md-button>
           <md-button ng-click="deleteNote(note)" class="md-icon-button" aria-label="delete">
             <i class="material-icons">delete</i>
