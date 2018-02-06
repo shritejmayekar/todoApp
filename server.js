@@ -30,16 +30,14 @@ var noteRoutes = require('./server/router/noteRoutes.js');
 var expressJwt = require('express-jwt');
 var cors = require('cors')
 
-const redis = require('redis');
+
 //const cache = redis.createClient(process.env.PORT);
 
 
-var cache = new redis.createClient( process.env.PORT);
 
 
-cache.get('Key',function(err,value) {
-  console.log(value);
-});
+
+
 
 
 // winston logger to keep logs

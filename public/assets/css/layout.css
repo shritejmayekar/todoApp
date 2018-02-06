@@ -152,3 +152,10 @@ body {
 	background-color: blanchedalmond;
 	background-repeat: repeat-x;
 }
+.avatar {
+    float: right;
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}

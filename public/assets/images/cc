@@ -1,0 +1,23 @@
+  function buildToggler(componentId) {
+    return function() {
+      document.getElementById("mySidenav").style.width = "250px";
+      document.getElementById("main").style.marginLeft = "250px";
+      $mdSidenav(componentId).toggle();
+    };
+  }
+  /***********************************
+   * Take a Note div  show / hide
+   ***********************************/
+  document.getElementById('showDiv').style.visibility = "hidden";
+  $scope.hide = function() {
+    document.getElementById('div1').style.visibility = "hidden";
+
+    document.getElementById('showDiv').style.visibility = "visible"
+  }
+
+  var show = function() {
+    document.getElementById('title').innerHTML = "";
+    document.getElementById('note').innerHTML = ""
+    document.getElementById('div1').style.visibility = "visible";
+    document.getElementById('showDiv').style.visibility = "hidden "
+  }

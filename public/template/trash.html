@@ -1,0 +1,162 @@
+<!-- nav bar -->
+<nav>
+
+  <div class="nav-wrapper" layout="row" style="overflow:hidden;position:fixed;z-index:5;width:100%;height:75px;background-color:#636363;">
+    <div flex="10">
+        <md-fab-toolbar md-open="demo.isOpen" count="demo.count" md-direction="{{demo.selectedDirection}}">
+
+        <md-button aria-label="menu" ng-click="navClick()">
+          <i class="material-icons">view_headline</i>
+        </md-button>
+
+      </md-fab-toolbar>
+    </div>
+
+    <div flex="80">
+      <div>
+      <h2><b>Trash</b>  <input type="text" ng-model="searchNotes">
+
+      </h2>
+    </div>
+    </div>
+    <div>
+      <md-menu-bar class="md-icon-button" aria-label="menu4">
+        <md-menu>
+            <img ng-click="$mdMenu.open()"       <img ng-src="{{imageSrc}}" alt="Avatar" class="avatar">
+          <md-menu-content>
+            <md-menu-item>
+              <input type="file" ng-model="imageSrc" />
+            </md-menu-item>
+            <md-menu-item>
+              <a ui-sref="logout">SignOut</a>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </md-menu-bar>
+    </div>
+    <div flex="10">
+      <md-button aria-label="menu" ng-click="listGrid()">
+        <i class="material-icons">view_quilt</i>
+      </md-button>
+
+    </div>
+  </div>
+</nav>
+
+
+
+
+<!-- Google keep all layout-->
+
+<div layout="column" flex layout-padding style="height:auto;background-color:#e6e6e6" id="main">
+
+  <div layout="auto" id="main" click-out="hide()">
+    <div flex="30">
+      <div id="mySidenav" style="background-color:#e6e6e6;overflow-y: scroll; height:800px;" class="sidenav">
+
+        <a ui-sref="home">Notes</a>
+        <a ui-sref="reminder">Reminders</a>
+        <a ui-sref="archieve">Archive</a>
+        <a ui-sref="trash">Trash</a>
+
+      </div>
+    </div>
+    <div flex="40">
+        <div id="showDiv">
+            <br><br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
+    <div layout-wrap flex-gt-xs="30"  ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:{is_deleted:true}">
+
+      <md-card md-theme="{{ showDarkTheme ?'dark-grey' : 'default' }}" md-theme-watch>
+        <div style="float:right">
+          <md-button ng-click="pinNote(note)" class="md-icon-button" aria-label="edit">
+            <i class="material-icons">person_pin_circle</i>
+          </md-button>
+
+        </div>
+        <img ng-src="{{imagePath}}" class="md-card-image">
+
+        <md-card-title>
+          <md-card-title-text ng-click="editNote(note)" flex="auto">
+            <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>
+
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content ng-click="editNote(note)">
+          <div  style="word-break: break-word;" ng-bind-html="note.note |html "></div>
+          <!--div >{{note.created_date}}</div-->
+        </md-card-content>
+
+        <md-card-actions layout="row" layout-align="end center">
+          <md-button ng-click="editNote(note)" class="md-icon-button" aria-label="edit">
+            <i class="material-icons">mode_edit</i>
+
+          </md-button>
+          <md-button ng-click="archieveNote(note)" class="md-icon-button" aria-label="copy">
+            <i class="material-icons">archive</i>
+          </md-button>
+          <md-button ng-click="deleteNote(note)" class="md-icon-button" aria-label="delete">
+            <i class="material-icons">delete</i>
+          </md-button>
+
+          <md-button ng-click="trashNote(note)" class="md-icon-button" aria-label="delete">
+            <i class="material-icons">restore</i>
+          </md-button>
+          <!--div flex-gt-xs>
+        <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"></md-datepicker>
+      </div-->
+          <!--md-button nd-click="labelAdd()" class="md-icon-button">
+            <i class="material-icons">label</i>
+          </md-button-->
+          <md-menu-bar class="md-icon-button" aria-label="menu">
+            <md-menu>
+              <md-button ng-click="$mdMenu.open()" class="md-icon-button" aria-label="menu">
+                <i class="material-icons">more_vert</i>
+              </md-button>
+              <md-menu-content>
+                <md-menu-item>
+                  <md-button ng-click="deleteNote(note)" aria-label: 'delete'>
+                    Delete a note
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="copyNote(note)" aria-label: 'copy'>
+                    Copy a note
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="ctrl.sampleAction('Open', $event)" aria-label="center">
+                    Add a label
+                  </md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </md-menu-bar>
+              <!--md-button nd-click="archieveNote(note)" class="md-icon-button" aria-label="archieve">
+            <i class="material-icons">archive</i>
+
+          </md-button-->
+
+        </md-card-actions>
+
+      </md-card>
+
+
+
+    </div>
+
+  </div>
+
+
+
+
+    </div>
+
+  </div>

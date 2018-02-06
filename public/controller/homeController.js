@@ -1,11 +1,25 @@
 var app = angular.module('todoApp');
 app.controller('homeController', function($scope, $sce, $mdDialog, $state, $timeout,
-  $mdSidenav, $http, $mdToast, httpService, $interval, $filter) {
+  $mdSidenav, $http,  $mdToast, httpService, $interval, $filter) {
 
   //  $scope.toggleLeft = buildToggler('left');
   //$scope.toggleRight = buildToggler('right');
+  $scope.options = ['transparent','#FF8A80', '#FFD180', '#FFFF8D', '#CFD8DC', '#80D8FF', '#A7FFEB', '#CCFF90'];
+  $scope.color = '#FF8A80';
 
-
+  $scope.colorChanged = function(newColor, oldColor) {
+      console.log('from ', oldColor, ' to ', newColor);
+      $scope.color = newColor;
+  }
+  $scope.upload = function(file) {
+    console.log(file);
+     Upload.upload ({
+       url:'/auth/img',
+       data:{file:file}
+     }).then(function(res) {
+       console.log(res);
+    })
+  }
 
   /************************************
    * List View / Grid View
@@ -74,6 +88,8 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     document.getElementById('div1').style.visibility = "visible";
     document.getElementById('showDiv').style.visibility = "hidden "
   }
+
+
   /**************************************
    * noteFunction to GET / READ all Notes
    ***************************************/
@@ -88,6 +104,16 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   }
 
   noteFunction();
+  $scope.readURL = function(input) {
+    if(input.files && input.files[0]) {
+      var reader = new FileReader();
+    reader.onload = function(e) {
+      $('#img_avatar').attr('src',e.target.result);
+
+      }
+    reader.readAsDataUrl('input.files[0]');
+    }
+  }
 
   /***************************************
    * saveNote function to CREATE / SAVE Notes
@@ -116,6 +142,7 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
    ************************************/
   $scope.deleteNote = function(note) {
     console.log(note._id);
+    $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     httpService.httpServiceFunction('delete', '/note/delete/' + note._id, null).then(function(res) {
       console.log(res);
       noteFunction();
@@ -127,6 +154,7 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
    *************************************/
   $scope.copyNote = function(note) {
     var get_email = JSON.parse(localStorage.Token).email;
+    $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     var new_note = note;
     console.log(new_note);
     var data = {
@@ -145,6 +173,7 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
    * reminderNote function set the Reminder
    *************************************/
   $scope.reminderNote = function(note, time) {
+    $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     console.log(time);
     var data = {
       reminder: time
@@ -232,20 +261,45 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
 
       $mdDialog.hide(answer);
     };
-    //    $scope.answer = function() {
-    //    $scope.note.title
-    //  $scope.note.note
-    //  };
   }
+  /************************************
+  * Archieve note function to make note
+  * Archieve / Unarchieve
+  *************************************/
   $scope.archieveNote = function(note) {
+    $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     var data = {
       is_archieved:note.is_archieved?'false':'true'
     }
-    httpService.httpServiceFunction('put', 'note/update/' + note._id,data).then(function(res) {
+    httpService.httpServiceFunction('put', '/note/update/' + note._id,data).then(function(res) {
       //  archieveNoteService.update(note, 'true').then(function(res) {
       console.log(res);
       noteFunction();
     })
 
   };
+  $scope.pinNote =  function(note) {
+    $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+    var data = {
+
+      is_pinned:note.is_pinned? 'false':'true'
+    }
+    httpService.httpServiceFunction('put','/note/update/'+note._id,data).then(function(res) {
+      console.log(res);
+      noteFunction();
+    })
+
+  }
+  $scope.trashNote = function(note) {
+    $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+    var data = {
+
+      is_deleted:note.is_deleted? 'false':'true'
+    }
+    httpService.httpServiceFunction('put','/note/update/'+note._id,data).then(function(res) {
+      console.log(res);
+      noteFunction();
+    })
+  }
+
 })

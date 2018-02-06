@@ -1,4 +1,4 @@
-var app = angular.module('todoApp', ['ui.router','kendo.directives' ,'ngMaterial', 'ngAnimate', 'ngSanitize', 'satellizer']);
+var app = angular.module('todoApp', ['ui.router','tb-color-picker','kendo.directives' ,'ngMaterial', 'ngAnimate', 'ngSanitize', 'satellizer']);
 app.filter('html', ['$sce', function($sce) {
   return function(text) {
     return $sce.trustAsHtml(text);
@@ -6,6 +6,12 @@ app.filter('html', ['$sce', function($sce) {
 }])
 app.run(function($trace) {
   $trace.enable('TRANSITION');
+});
+app.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
+  $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
+  $mdThemingProvider.theme('dark-purple').backgroundPalette('deep-purple').dark();
+  $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
 });
 app.config(function($authProvider) {
 
@@ -90,6 +96,23 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $auth
       url:'/dummyPage/:t',
       controller:'dummyController'
     })
+    .state('archieve',{
+      url:'/home.archieve',
+      templateUrl:'/template/archieve.html',
+      controller: 'homeController',
+      resolve: {
+       loginRequired: loginRequired
+      }
+
+    })
+    .state('trash',{
+      url:'/home.trash',
+      templateUrl:'/template/trash.html',
+      controller: 'homeController',
+      resolve: {
+       loginRequired: loginRequired
+     }
+   })
 
 
 
