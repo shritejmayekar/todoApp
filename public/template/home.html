@@ -20,13 +20,16 @@
       </div>
     </div>
     <div>
-      <md-menu-bar class="md-icon-button" aria-label="menu4">
-        <md-menu>
-          <img ng-click="$mdMenu.open()" <img ng-src="{{imageSrc}}" alt="Avatar" class="avatar">
+      <md-menu-bar class="md-icon-button" aria-label="menu4" ng-controller="UploadController">
+        <md-menu ng-model="image">
+          <img ng-click="$mdMenu.open()"  ng-src="{{imageSrc ? imageSrc: imageProfile }}"  alt="Avatar" class="avatar">
           <md-menu-content>
             <md-menu-item>
-              <button type="file" ngf-select="uploadFiles($file, $invalidFiles)" accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">
-      Select File</button>
+              <div >
+                <form>
+                  <input type="file"  ng-file-select="onFileSelect($files)"  ng-model="imageSrc">
+                </form>
+              </div>
             </md-menu-item>
             <md-menu-item>
               <a ui-sref="logout">SignOut</a>

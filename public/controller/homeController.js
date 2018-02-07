@@ -16,17 +16,19 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
         note_color: $scope.themeColor[$scope.options.indexOf(newColor)]
       }
   }
-  
-  $scope.upload = function(file) {
-    console.log(file);
-     Upload.upload ({
-       url:'/auth/img',
-       data:{file:file}
-     }).then(function(res) {
-       console.log(res);
-    })
-  }
 
+$scope.getProfile = function() {
+  $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+  httpService.httpServiceFunction('GET','/auth/authenticate').then(function(res) {
+    $scope.imageProfile =res.data.local.profile;
+  })
+
+}
+$scope.img_avatar = function() {
+    getProfile();
+}
+
+  $scope.getProfile();
   /************************************
    * List View / Grid View
    ************************************/
@@ -110,16 +112,7 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   }
 
   noteFunction();
-  $scope.readURL = function(input) {
-    if(input.files && input.files[0]) {
-      var reader = new FileReader();
-    reader.onload = function(e) {
-      $('#img_avatar').attr('src',e.target.result);
 
-      }
-    reader.readAsDataUrl('input.files[0]');
-    }
-  }
 
   /***************************************
    * saveNote function to CREATE / SAVE Notes
@@ -224,7 +217,9 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       },
       1000);
   }
-  // color check
+  /***************************************
+  * change the theme of the notes
+  ***************************************/
   $scope.changeTheme = function (note) {
     $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
 
@@ -295,6 +290,9 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     })
 
   };
+  /*********************************
+  * pinNote function to pin a note
+  **********************************/
   $scope.pinNote =  function(note) {
     $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     var data = {
@@ -307,6 +305,9 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     })
 
   }
+  /********************************************
+  * trashNote function to delete note temporary
+  **********************************************/
   $scope.trashNote = function(note) {
     $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     var data = {

@@ -48,5 +48,8 @@ router.get('/profile', function(req, res) {
   //res.json(req);
   console.log(req);
 })
+// route to get profilepic
+router.put('/profilePic',userController.profilePic);
+
 
 module.exports = router;

@@ -7,6 +7,9 @@ var userSchema = mongoose.Schema({
     password: String,
     reset_password_token:String,
     reset_password_expires:String,
+    profile: {
+      data: Buffer,
+    }
 
   },
 

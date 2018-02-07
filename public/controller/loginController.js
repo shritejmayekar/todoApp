@@ -1,15 +1,18 @@
 var app = angular.module('todoApp')
-  .controller('loginController', function($scope,$location, $auth, $mdToast, $http, $state, httpService) {
+  .controller('loginController', function($scope, $location, $auth, $mdToast, $http, $state, httpService) {
 
-      $scope.authenticate = function(provider) {
-     $auth.authenticate(provider).then(function(){
-       console.log(provider);
-       $state.go('home');
-     })
-     .catch(function(res) {
-       console.log(res);
-     });
-   };
+    $scope.authenticate = function(provider) {
+      $auth.authenticate(provider).then(function() {
+          console.log(provider);
+          $state.go('home');
+        })
+        .catch(function(res) {
+          console.log(res);
+        });
+    };
+    /*****************************
+    *Login function with an auth
+    ******************************/
     $scope.login = function() {
       if ($scope.loginForm.email == "" || $scope.loginForm.email == null ||
         $scope.loginForm.password == "" || $scope.loginForm.password == null)
@@ -39,8 +42,7 @@ var app = angular.module('todoApp')
           $state.go('home');
 
 
-        }
-        else {
+        } else {
           document.getElementById('flag').innerHTML = "<p style='color:red'>name or password is wrong</p>";
         }
       }).catch(function(res) {

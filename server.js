@@ -35,11 +35,6 @@ var cors = require('cors')
 
 
 
-
-
-
-
-
 // winston logger to keep logs
 logger.debug('overiding express logger');
 //app.use(morgan('tiny',{ "stream": logger.stream }));

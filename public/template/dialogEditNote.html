@@ -1,7 +1,7 @@
-<md-dialog>
+<md-dialog md-theme="{{ noteObj.note_color}}" md-theme-watch>
   <div layout="row">
   <form ng-cloak>
-    <md-dialog-content  layout="column" class="md-dialog-content">
+    <md-dialog-content  layout="column" class="md-dialog-content" >
       <textarea  rows="1" cols="50" style="box-shadow: none;resize: none;" ng-model="title " aria-label="title"></textarea>
       <md-divider md-inset>
       <textarea rows='10' cols="50" style="box-shadow: none;resize: none;" aria-label="note" ng-model="note">
