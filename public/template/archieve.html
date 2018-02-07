@@ -97,9 +97,8 @@
   <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
 
     <div layout-wrap flex-gt-xs="30"  ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:searchNotes |filter:{is_archieved:true}" >
-      <md-card md-theme="{{ showDarkTheme ?'dark-grey' : 'default' }}" md-theme-watch>
+      <md-card md-theme={{note.note_color}} md-theme-watch>
         <img ng-src="{{imagePath}}" class="md-card-image">
-
         <md-card-title>
           <md-card-title-text ng-click="editNote(note)" flex="auto">
             <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>

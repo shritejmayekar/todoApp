@@ -56,6 +56,9 @@ var NoteSchema = new Schema({
   edited:{
     type:Date,
     default: Date.now()
+  },
+  note_color:{
+    type:String
   }
 });
 var NoteModel = mongoose.model('Notes', NoteSchema);

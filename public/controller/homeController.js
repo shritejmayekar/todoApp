@@ -5,12 +5,18 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   //  $scope.toggleLeft = buildToggler('left');
   //$scope.toggleRight = buildToggler('right');
   $scope.options = ['transparent','#FF8A80', '#FFD180', '#FFFF8D', '#CFD8DC', '#80D8FF', '#A7FFEB', '#CCFF90'];
-  $scope.color = '#FF8A80';
-
+  //$scope.color = '#FF8A80';
+  $scope.color = 'default';
+  $scope.themeColor = [ 'default','dark-red','dark-orange','dark-yellow','dark-grey','dark-purple','dark-blue','dark-green'];
   $scope.colorChanged = function(newColor, oldColor) {
       console.log('from ', oldColor, ' to ', newColor);
-      $scope.color = newColor;
+      $scope.color = $scope.themeColor[$scope.options.indexOf(newColor)];
+      $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+      var data = {
+        note_color: $scope.themeColor[$scope.options.indexOf(newColor)]
+      }
   }
+  
   $scope.upload = function(file) {
     console.log(file);
      Upload.upload ({
@@ -219,6 +225,17 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       1000);
   }
   // color check
+  $scope.changeTheme = function (note) {
+    $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+
+    var data = {
+      note_color : $scope.color
+    }
+    httpService.httpServiceFunction('put', '/note/update/' + note._id,data).then(function(res) {
+      console.log(res);
+      noteFunction();
+    })
+  }
   /*****************************************
   * editNote function Edited / UPDATE Notes
   *****************************************/

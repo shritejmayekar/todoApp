@@ -8,6 +8,9 @@ app.run(function($trace) {
   $trace.enable('TRANSITION');
 });
 app.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('dark-red').backgroundPalette('red').dark();
+  $mdThemingProvider.theme('dark-yellow').backgroundPalette('yellow').dark();
+  $mdThemingProvider.theme('dark-green').backgroundPalette('green').dark();
   $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
   $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
   $mdThemingProvider.theme('dark-purple').backgroundPalette('deep-purple').dark();
@@ -112,6 +115,14 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $auth
       resolve: {
        loginRequired: loginRequired
      }
+   })
+   .state('reminder',{
+     url:'/home.reminders',
+     templateUrl:'/template/reminder.html',
+     controller: 'homeController',
+     resolve: {
+      loginRequired: loginRequired
+    }
    })
 
 
