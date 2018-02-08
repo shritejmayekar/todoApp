@@ -3,7 +3,7 @@
   var User = require('../model/UserModelPassport.js');
   var keys = require('../config/keys.js');
   var nodemailer = require('nodemailer');
-
+  var userService = require('../service/userService.js')
   /******************************
    * Login and signup
    ******************************/
@@ -262,7 +262,7 @@
             password: 0
           }, // projection,
           function(err, user) {
-        
+
             if (err) return res.status(500).send("There was a problem finding the user.");
             if (!user) return res.status(404).send("No user found.");
 

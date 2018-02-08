@@ -1,0 +1,18 @@
+<md-dialog md-theme="{{ noteObj1.note_color}}" md-theme-watch>
+  <div layout="row">
+  <form ng-cloak>
+    <md-card>
+    <md-dialog-content  layout="column" class="md-dialog-content" >
+      <md-card-content>{{noteObj1}}<md-card-content>
+        <md-input-container class="md-block" id="textboxsize"><label>Email</label>
+        <input required type="email" ng-model="email" ng-pattern: "/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/">
+      </md-input-container>
+        <md-card-actions>
+      <md-button style="float right" ng-click="answer({email:email})">
+       Done
+      </md-button>
+    </md-card-actions>
+  </md-card>
+  </form>
+</div>
+</md-dialog>

@@ -1,6 +1,24 @@
 var app = angular.module('todoApp')
-  .controller('loginController', function($scope, $location, $auth, $mdToast, $http, $state, httpService) {
-
+  .controller('loginController', function($scope,$interval, $location, $auth, $mdToast, $http, $state, httpService) {
+    Notification.requestPermission(function(status) {
+        console.log('Notification permission status:', status);
+    function displayNotification() {
+      if (Notification.permission == 'granted') {
+        navigator.serviceWorker.getRegistration().then(function(reg) {
+          var options = {
+            body: 'Here is a notification body!',
+            icon: 'images/example.png',
+            vibrate: [100, 50, 100],
+            data: {
+              dateOfArrival: Date.now(),
+              primaryKey: 1
+            }
+          };
+          reg.showNotification('Hello world!', options);
+        });
+      }
+    }
+    });
     $scope.authenticate = function(provider) {
       $auth.authenticate(provider).then(function() {
           console.log(provider);
@@ -52,4 +70,6 @@ var app = angular.module('todoApp')
       })
 
     }
+
+
   })

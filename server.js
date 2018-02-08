@@ -29,11 +29,10 @@ var authRoutes = require('./server/router/userRoutes.js');
 var noteRoutes = require('./server/router/noteRoutes.js');
 var expressJwt = require('express-jwt');
 var cors = require('cors')
+//const webpush = require('web-push');
 
 
 //const cache = redis.createClient(process.env.PORT);
-
-
 
 // winston logger to keep logs
 logger.debug('overiding express logger');

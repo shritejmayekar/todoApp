@@ -1,4 +1,4 @@
-<md-dialog md-theme="{{ noteObj.note_color}}" md-theme-watch>
+<md-dialog md-theme="{{ noteObject.note_color}}" md-theme-watch>
   <div layout="row">
   <form ng-cloak>
     <md-dialog-content  layout="column" class="md-dialog-content" >
@@ -15,7 +15,7 @@
     </md-dialog-content>
 
     <md-card-actions layout="5" layout-align="end center" >
-      <md-button ng-click="copyNote(note)" class="md-icon-button" aria-label="copy">
+      <md-button ng-click="copyNote({title:title,note:note})" class="md-icon-button" aria-label="copy">
         <i class="material-icons">content_copy</i>
       </md-button>
       <md-button ng-click="deleteNote(note)" class="md-icon-button" aria-label="delete">

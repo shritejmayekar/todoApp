@@ -10,24 +10,25 @@ var NoteSchema = new Schema({
   //user_id:[{
   //  type:Schema.Types.ObjectId,ref:'UserData'
   //}],
-  reminder : {
-    type:Date,
+  reminder: {
+    type: Date,
   },
-  user_id:{
-    type:String,ref:'UserData'
+  user_id: {
+    type: String,
+    ref: 'UserData'
   },
   title: {
     type: String,
     required: 'enter title',
-  //  unique: true
+    //  unique: true
   },
   note: {
     type: String,
     required: 'enter note'
   },
-  email:{
-    type:String,
-    required:'true'
+  email: {
+    type: String,
+    required: 'true'
   },
   is_pinned: {
     type: Boolean,
@@ -41,24 +42,24 @@ var NoteSchema = new Schema({
     type: Boolean,
     default: false
   },
-  label: {
+  label: [{
     type: String,
     default: null
-  },
+  }],
   reminder: {
     type: Date,
     default: null
   },
 
-  collaborator:{
-    type:String
-  },
-  edited:{
-    type:Date,
+  collaborator: [{
+    type: String
+  }],
+  edited: {
+    type: Date,
     default: Date.now()
   },
-  note_color:{
-    type:String
+  note_color: {
+    type: String
   }
 });
 var NoteModel = mongoose.model('Notes', NoteSchema);

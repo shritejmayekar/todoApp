@@ -13,6 +13,8 @@ router.delete('/delete/:noteId',noteController.delete);
 //set reminder
 router.post('/reminder',noteController.reminder);
 
+router.post('/collab/:noteId',noteController.collab);
 
+router.post('/collabsNote',noteController.collabsNote);
 
 module.exports = router;

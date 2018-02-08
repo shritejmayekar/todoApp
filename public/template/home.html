@@ -6,7 +6,7 @@
       <md-fab-toolbar md-open="demo.isOpen" count="demo.count" md-direction="{{demo.selectedDirection}}">
 
         <md-button aria-label="menu" ng-click="navClick()">
-          <i class="material-icons">view_headline</i>
+          <i class="material-icons">menu</i>
         </md-button>
 
       </md-fab-toolbar>
@@ -22,12 +22,12 @@
     <div>
       <md-menu-bar class="md-icon-button" aria-label="menu4" ng-controller="UploadController">
         <md-menu ng-model="image">
-          <img ng-click="$mdMenu.open()"  ng-src="{{imageSrc ? imageSrc: imageProfile }}"  alt="Avatar" class="avatar">
+          <img ng-click="$mdMenu.open()" ng-src="{{imageSrc ? imageSrc: imageProfile }}" alt="Avatar" class="avatar">
           <md-menu-content>
             <md-menu-item>
-              <div >
+              <div>
                 <form>
-                  <input type="file"  ng-file-select="onFileSelect($files)"  ng-model="imageSrc">
+                  <input type="file" ng-file-select="onFileSelect($files)" ng-model="imageSrc" />
                 </form>
               </div>
             </md-menu-item>
@@ -121,7 +121,7 @@
         </md-card-title>
         <md-card-content ng-click="editNote(note)">
           <div style="word-break: break-word;" ng-bind-html="note.note |html "></div>
-          <!--div >{{note.created_date}}</div-->
+          <!--div >{{note.created_date}}</div-->{{note.collaborator}}
         </md-card-content>
 
         <md-card-actions layout="row" layout-align="end center">
@@ -149,6 +149,9 @@
           <md-button ng-click="trashNote(note)" class="md-icon-button" aria-label="delete">
             <i class="material-icons">delete</i>
           </md-button>
+          <md-button ng-click="collabsNote(note)" class="md-icon-button" aria-label="collabs">
+          <i class="material-icons">person_add</i>
+        </md-button>
 
           <md-menu-bar class="md-icon-button" aria-label="menu">
             <md-menu>
@@ -160,16 +163,6 @@
                   <input kendo-date-time-picker ng-model="obj" style="width: 75%;" />
                   <md-button ng-click="reminderNote(note,obj)" class="md-icon-button" aria-label="delete">
                     SET
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="copyNote(note)" aria-label: 'copy'>
-                    Copy a note
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="ctrl.sampleAction('Open', $event)" aria-label="center">
-                    Add a label
                   </md-button>
                 </md-menu-item>
               </md-menu-content>
@@ -283,16 +276,6 @@
                   <input kendo-date-time-picker ng-model="obj" style="width: 75%;" />
                   <md-button ng-click="reminderNote(note,obj)" class="md-icon-button" aria-label="delete">
                     SET
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="copyNote(note)" aria-label: 'copy'>
-                    Copy a note
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="ctrl.sampleAction('Open', $event)" aria-label="center">
-                    Add a label
                   </md-button>
                 </md-menu-item>
               </md-menu-content>

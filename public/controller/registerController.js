@@ -50,7 +50,7 @@ var app = angular.module('todoApp')
         })
         .catch(function(res) {
           console.log(res);
-          
+
         });
     }
   });

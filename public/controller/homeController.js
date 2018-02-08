@@ -203,8 +203,8 @@ $scope.img_avatar = function() {
           $mdToast.show(
             $mdToast.simple()
             .textContent('Reminder success...')
-            .position('center')
-            .hideDelay(6000)
+            .position('bottom')
+            .hideDelay(3000)
           )
           note.reminder = null;
           var data = {
@@ -215,7 +215,7 @@ $scope.img_avatar = function() {
           })
         }
       },
-      1000);
+      10000);
   }
   /***************************************
   * change the theme of the notes
@@ -273,6 +273,17 @@ $scope.img_avatar = function() {
 
       $mdDialog.hide(answer);
     };
+    $scope.copyNote = function(data) {
+      var get_email = JSON.parse(localStorage.Token).email;
+      data.email = get_email;
+      $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+      console.log(get_email);
+      httpService.httpServiceFunction('POST', '/note/create', data).then(function(res) {
+        console.log(res);
+        noteFunction();
+
+      })
+    }
   }
   /************************************
   * Archieve note function to make note
@@ -319,5 +330,53 @@ $scope.img_avatar = function() {
       noteFunction();
     })
   }
+  var noteObj1;
+  $scope.collabsNote = function(ev) {
+    noteObj1 = ev;
+    $mdDialog.show({
+        controller: DialogControllerCollab,
+        initialValue: ev,
+        templateUrl: 'template/dialogCollabNote.html',
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        clickOutsideToClose: true
+      })
+      .then(function(answer) {
+        if(answer.email == undefined) {
+          return false;
+        }
+        answer.edited = new Date();
+        //answer.collaborator_id = answer.email;
+        console.log(answer);
+        httpService.httpServiceFunction('post','/note/collab/'+ev._id,answer).then(function(res) {
+          console.log(res);
+          noteFunction();
+        })
+
+      }, function() {
+        $scope.status = 'You cancelled the dialog.';
+      });
+  };
+  function DialogControllerCollab($scope, $rootScope, $mdDialog, $sce) {
+    $scope.title = noteObj1.title;
+    //$scope.getNote = noteObj;
+    $scope.note = noteObj1.note;
+    $scope.noteObject = noteObj1;
+    //$scope.note = $("<div/>").html(noteObj.note).text()
+    //  $scope.note =  $sce.trustAsHtml(noteObj.note);
+    console.log($scope.title);
+    $scope.hide = function() {
+      $mdDialog.hide();
+    };
+    $scope.cancel = function() {
+      $mdDialog.cancel();
+    };
+    $scope.answer = function(answer) {
+
+      $mdDialog.hide(answer);
+    };
+
+  }
+
 
 })
