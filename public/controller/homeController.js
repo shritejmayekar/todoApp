@@ -1,32 +1,32 @@
 var app = angular.module('todoApp');
 app.controller('homeController', function($scope, $sce, $mdDialog, $state, $timeout,
-  $mdSidenav, $http,  $mdToast, httpService, $interval, $filter) {
-
+  $mdSidenav, $http, $mdToast, httpService, $interval, $filter) {
+    $scope.pinNote = "";
   //  $scope.toggleLeft = buildToggler('left');
   //$scope.toggleRight = buildToggler('right');
-  $scope.options = ['transparent','#FF8A80', '#FFD180', '#FFFF8D', '#CFD8DC', '#80D8FF', '#A7FFEB', '#CCFF90'];
+  $scope.options = ['transparent', '#FF8A80', '#FFD180', '#FFFF8D', '#CFD8DC', '#80D8FF', '#A7FFEB', '#CCFF90'];
   //$scope.color = '#FF8A80';
   $scope.color = 'default';
-  $scope.themeColor = [ 'default','dark-red','dark-orange','dark-yellow','dark-grey','dark-purple','dark-blue','dark-green'];
+  $scope.themeColor = ['default', 'dark-red', 'dark-orange', 'dark-yellow', 'dark-grey', 'dark-purple', 'dark-blue', 'dark-green'];
   $scope.colorChanged = function(newColor, oldColor) {
-      console.log('from ', oldColor, ' to ', newColor);
-      $scope.color = $scope.themeColor[$scope.options.indexOf(newColor)];
-      $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
-      var data = {
-        note_color: $scope.themeColor[$scope.options.indexOf(newColor)]
-      }
+    console.log('from ', oldColor, ' to ', newColor);
+    $scope.color = $scope.themeColor[$scope.options.indexOf(newColor)];
+    $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+    var data = {
+      note_color: $scope.themeColor[$scope.options.indexOf(newColor)]
+    }
   }
 
-$scope.getProfile = function() {
-  $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
-  httpService.httpServiceFunction('GET','/auth/authenticate').then(function(res) {
-    $scope.imageProfile =res.data.local.profile;
-  })
+  $scope.getProfile = function() {
+    $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+    httpService.httpServiceFunction('GET', '/auth/authenticate').then(function(res) {
+      $scope.imageProfile = res.data.local.profile;
+    })
 
-}
-$scope.img_avatar = function() {
+  }
+  $scope.img_avatar = function() {
     getProfile();
-}
+  }
 
   $scope.getProfile();
   /************************************
@@ -107,8 +107,22 @@ $scope.img_avatar = function() {
       console.log(res.data);
       var list_notes = res.data;
       $scope.listOfNotes = res.data;
-      remind();
+
+      try {
+        httpService.httpServiceFunction('GET', '/note/collabsNote').then(function(res) {
+          console.log(res.data);
+          var list_notes = res.data;
+          $scope.collabsNotes = res.data;
+          $scope.listOfNotes = $scope.collabsNotes.concat($scope.listOfNotes);
+        });
+
+      } catch (e) {
+        $scope.listOfNotes = $scope.collabsNotes;
+
+      }
+        remind();
     });
+
   }
 
   noteFunction();
@@ -134,8 +148,11 @@ $scope.img_avatar = function() {
       noteFunction();
       show();
 
+
     })
   }
+
+
   /***********************************
    *Delete note function to DELETE notes
    ************************************/
@@ -145,6 +162,13 @@ $scope.img_avatar = function() {
     httpService.httpServiceFunction('delete', '/note/delete/' + note._id, null).then(function(res) {
       console.log(res);
       noteFunction();
+
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Note deleted permanently...')
+          .position('bottom right')
+          .hideDelay(3000)
+        );
     })
   }
   /*************************************
@@ -165,6 +189,13 @@ $scope.img_avatar = function() {
     httpService.httpServiceFunction('POST', '/note/create', data).then(function(res) {
       console.log(res);
       noteFunction();
+
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Note Copied success...')
+          .position('bottom right')
+          .hideDelay(3000)
+        );
 
     })
   }
@@ -218,22 +249,22 @@ $scope.img_avatar = function() {
       10000);
   }
   /***************************************
-  * change the theme of the notes
-  ***************************************/
-  $scope.changeTheme = function (note) {
+   * change the theme of the notes
+   ***************************************/
+  $scope.changeTheme = function(note) {
     $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
 
     var data = {
-      note_color : $scope.color
+      note_color: $scope.color
     }
-    httpService.httpServiceFunction('put', '/note/update/' + note._id,data).then(function(res) {
+    httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
       console.log(res);
       noteFunction();
     })
   }
   /*****************************************
-  * editNote function Edited / UPDATE Notes
-  *****************************************/
+   * editNote function Edited / UPDATE Notes
+   *****************************************/
   var noteObj;
   $scope.editNote = function(ev) {
     noteObj = ev;
@@ -255,6 +286,7 @@ $scope.img_avatar = function() {
         $scope.status = 'You cancelled the dialog.';
       });
   };
+
   function DialogController($scope, $rootScope, $mdDialog, $sce) {
     $scope.title = noteObj.title;
     //$scope.getNote = noteObj;
@@ -281,53 +313,81 @@ $scope.img_avatar = function() {
       httpService.httpServiceFunction('POST', '/note/create', data).then(function(res) {
         console.log(res);
         noteFunction();
+        $mdToast.show(
+        $mdToast.simple()
+        .textContent('Note Edited...')
+        .position('bottom right')
+        .hideDelay(3000)
+      );
 
       })
     }
   }
   /************************************
-  * Archieve note function to make note
-  * Archieve / Unarchieve
-  *************************************/
+   * Archieve note function to make note
+   * Archieve / Unarchieve
+   *************************************/
   $scope.archieveNote = function(note) {
     $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     var data = {
-      is_archieved:note.is_archieved?'false':'true'
+      is_archieved: note.is_archieved ? 'false' : 'true'
     }
-    httpService.httpServiceFunction('put', '/note/update/' + note._id,data).then(function(res) {
+    httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
       //  archieveNoteService.update(note, 'true').then(function(res) {
       console.log(res);
+      var noteOperation = note.is_archieved ?'Unarchieved':'Archived';
       noteFunction();
+      $mdToast.show(
+      $mdToast.simple()
+      .textContent(noteOperation)
+      .position('bottom right')
+      .hideDelay(3000)
+    );
     })
 
   };
   /*********************************
-  * pinNote function to pin a note
-  **********************************/
-  $scope.pinNote =  function(note) {
+   * pinNote function to pin a note
+   **********************************/
+  $scope.pinNote = function(note) {
     $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     var data = {
 
-      is_pinned:note.is_pinned? 'false':'true'
+      is_pinned: note.is_pinned ? 'false' : 'true'
     }
-    httpService.httpServiceFunction('put','/note/update/'+note._id,data).then(function(res) {
+    httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
       console.log(res);
       noteFunction();
+      var noteOperation = note.is_pinned ? 'Unpinned':'Pinned';
+      $mdToast.show(
+      $mdToast.simple()
+      .textContent(noteOperation)
+      .position('bottom right')
+      .hideDelay(3000)
+    );
     })
 
   }
   /********************************************
-  * trashNote function to delete note temporary
-  **********************************************/
+   * trashNote function to delete note temporary
+   **********************************************/
   $scope.trashNote = function(note) {
     $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     var data = {
 
-      is_deleted:note.is_deleted? 'false':'true'
+      is_deleted: note.is_deleted ? 'false' : 'true'
     }
-    httpService.httpServiceFunction('put','/note/update/'+note._id,data).then(function(res) {
+    httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
       console.log(res);
       noteFunction();
+      var noteOperation = note.is_deleted ? 'Restored':'Trashed';
+
+      $mdToast.show(
+      $mdToast.simple()
+      .textContent(noteOperation)
+      .position('bottom right')
+      .hideDelay(3000)
+    );
     })
   }
   var noteObj1;
@@ -342,13 +402,13 @@ $scope.img_avatar = function() {
         clickOutsideToClose: true
       })
       .then(function(answer) {
-        if(answer.email == undefined) {
+        if (answer.email == undefined) {
           return false;
         }
         answer.edited = new Date();
         //answer.collaborator_id = answer.email;
         console.log(answer);
-        httpService.httpServiceFunction('post','/note/collab/'+ev._id,answer).then(function(res) {
+        httpService.httpServiceFunction('post', '/note/collab/' + ev._id, answer).then(function(res) {
           console.log(res);
           noteFunction();
         })
@@ -357,6 +417,9 @@ $scope.img_avatar = function() {
         $scope.status = 'You cancelled the dialog.';
       });
   };
+  /*****************************************
+  * Dialog Collab Controller inside home controller
+  *******************************************/
   function DialogControllerCollab($scope, $rootScope, $mdDialog, $sce) {
     $scope.title = noteObj1.title;
     //$scope.getNote = noteObj;
@@ -371,6 +434,12 @@ $scope.img_avatar = function() {
     $scope.cancel = function() {
       $mdDialog.cancel();
     };
+    $scope.removeCollabs = function(note) {
+      httpService.httpServiceFunction('put','/note/removeCollab/'+note._id,).then(function(res) {
+        noteFunction();
+      })
+
+    }
     $scope.answer = function(answer) {
 
       $mdDialog.hide(answer);

@@ -54,6 +54,9 @@ var NoteSchema = new Schema({
   collaborator: [{
     type: String
   }],
+  shared_id:[{
+    type:String
+  }],
   edited: {
     type: Date,
     default: Date.now()

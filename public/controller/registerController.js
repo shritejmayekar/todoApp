@@ -16,23 +16,6 @@ var app = angular.module('todoApp')
         recoveryEmail: $scope.registerForm.recoveryEmail
 
       }
-      /*
-    httpService.httpServiceFunction('POST','/register',data).then(function(res) {
-        if (res == 'There was a problem registering the user') {
-          document.getElementById('flag').innerHTML = "<p style='color:red'>There was a problem registering the user</p>"
-
-        } else {
-          $mdToast.show(
-            $mdToast.simple()
-            .textContent('Register success...')
-            .position('top right')
-            .hideDelay(3000)
-          );
-          $state.go('login');
-        }
-      });
-        */
-
       $auth.signup(data).then(function(res) {
           console.log(res);
           if (res.data.authenticate) {
@@ -50,6 +33,7 @@ var app = angular.module('todoApp')
         })
         .catch(function(res) {
           console.log(res);
+          document.getElementById('flag').innerHTML = "<p style='color:red'>There was a problem registering the user</p>"
 
         });
     }

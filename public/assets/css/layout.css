@@ -64,7 +64,7 @@
     position: fixed;
 
     z-index: 1;
-    margin-top: 75px;
+    margin-top: 15px;
     top: 0;
     left: 0;
     background-color: #111;
@@ -76,14 +76,14 @@
 .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
-    font-size: 25px;
-    color: #818181;
+    font-size: 20px;
+    color: #757575;
     display: block;
     transition: 0.3s;
 }
 
 .sidenav a:hover {
-    color: #f1f1f1;
+    color: #63D107;
 }
 
 .sidenav .closebtn {

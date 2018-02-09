@@ -3,7 +3,10 @@
   var User = require('../model/UserModelPassport.js');
   var keys = require('../config/keys.js');
   var nodemailer = require('nodemailer');
-  var userService = require('../service/userService.js')
+  var userService = require('../service/userService.js');
+  var redis = require('redis');
+  var cache = new redis.createClient(process.env.PORT);
+
   /******************************
    * Login and signup
    ******************************/
@@ -52,7 +55,7 @@
   }
   // authenticate user by using token
   exports.authenticate = function(req, res) {
-    var token = req.headers['x-access-token']
+  var token = req.headers['x-access-token']
     //var token =  req.headers['Authorization'];
     token = token.replace('Bearer ', '')
     if (!token) return res.status(401).send({
@@ -142,6 +145,8 @@
           new: true
         }).exec(function(err, new_user) {
           console.log(new_user.local.email);
+          cache.set(new_user.local.email,token);
+          cache.expire(new_user.local.email, 3600);
           var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -177,7 +182,6 @@
   // reset a password
   exports.resetPassword = function(req, res, next) {
     var getToken = req.query.token;
-
     User.findOne({
       'local.reset_password_token': getToken,
       'local.reset_password_expires': {

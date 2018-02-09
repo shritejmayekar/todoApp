@@ -12,9 +12,11 @@ router.put('/update/:noteId',noteController.update);
 router.delete('/delete/:noteId',noteController.delete);
 //set reminder
 router.post('/reminder',noteController.reminder);
-
+// store collaborator notes relationship
 router.post('/collab/:noteId',noteController.collab);
-
-router.post('/collabsNote',noteController.collabsNote);
+// get the collaborated Notes
+router.get('/collabsNote',noteController.collaboratedNote);
+// remove the collabarated Notes
+router.put('/removeCollab/:noteId',noteController.collaborateRemove);
 
 module.exports = router;

@@ -49,6 +49,9 @@ exports.readNote = function(req, res) {
     //  console.log('cache'+note);
       //  res.json(JSON.parse(note));
     })
+  //  Collab.find({collaborators_id:{ "$in" : ['5a7c44b6a43bbc0afd8d0411']}},function(err,note) {
+    //  console.log(note);
+  //  })
     Note.find({
     // find by id and email
     user_id:req.user.id
@@ -63,7 +66,7 @@ exports.readNote = function(req, res) {
 exports.update = function(req, res) {
   Note.findOneAndUpdate({
     _id: req.params.noteId,
-    user_id:req.user.id
+  //  user_id:req.user.id
   }, req.body, {
     new: true
   }, function(err, note) {
@@ -103,12 +106,14 @@ try {
   var data  = {
     collaborators_id:user._id
   }
-  var dataColab = {
-    collaborator:req.body.email
+  var sharedNote = {
+    shared_id:user._id,
+    collaborator:user.local.email
   }
+
   Note.findOneAndUpdate({
     _id: req.params.noteId,
-  },{$push:dataColab},{new:true}, function(err, note) {
+  },{$push:sharedNote},{new:true}, function(err, note) {
     if (err)
       res.send(err);
       Collab.findOneAndUpdate({ note_id:req.params.noteId},{$push:data},{new:true},
@@ -124,13 +129,38 @@ try {
 
   })
 };
-
-exports.collabsNote = function(req,res) {
-User.findOne({'local.email':req.body.email}, function(err,user) {
-  console.log(user);
-    Collab.findOne({collaborators_id:user._id},{'local._id':0,'local.password':0,'collaborators_id':0},function(err,user) {
-      console.log(user);
-   })
-
+/***********************************
+* Get collaborated notes
+************************************/
+exports.collaboratedNote = function(req,res) {
+console.log(req.user.id);
+Note.find({shared_id:{ "$in" : [req.user.id]}},function(err, note) {
+  console.log(note);
+  res.json(note);
 })
+}
+
+exports.collaborateRemove = function(req,res) {
+  console.log(req);
+  User.findById({_id:req.user.id},function(err,user) {
+
+    var sharedNote = {
+        shared_id:user._id,
+        collaborator:user.local.email
+      }
+      Note.findOneAndUpdate({
+        _id: req.params.noteId,
+      //  user_id:req.user.id
+    }, {$pull:sharedNote}, {
+        new: true
+      }, function(err, note) {
+        if (err)
+          res.send(err);
+          console.log(note);
+        res.json(note);
+      });
+  })
+/*
+
+*/
 }
