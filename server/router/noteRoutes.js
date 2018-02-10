@@ -19,4 +19,11 @@ router.get('/collabsNote',noteController.collaboratedNote);
 // remove the collabarated Notes
 router.put('/removeCollab/:noteId',noteController.collaborateRemove);
 
+router.post('/addLabel',noteController.addLabel);
+
+router.get('/getLabel',noteController.getLabel);
+
+router.delete('/removeLabel',noteController.removeLabel);
+
+
 module.exports = router;

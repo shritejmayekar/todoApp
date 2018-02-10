@@ -124,7 +124,14 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $auth
       loginRequired: loginRequired
     }
    })
-
+   .state('label',{
+     url:'/home.label',
+     templateUrl:'/template/label.html',
+     controller: 'homeController',
+     resolve: {
+      loginRequired: loginRequired
+    }
+  })
 
 
 

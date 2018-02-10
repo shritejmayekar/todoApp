@@ -43,8 +43,7 @@ var NoteSchema = new Schema({
     default: false
   },
   label: [{
-    type: String,
-    default: null
+    type: String
   }],
   reminder: {
     type: Date,
@@ -65,5 +64,6 @@ var NoteSchema = new Schema({
     type: String
   }
 });
+
 var NoteModel = mongoose.model('Notes', NoteSchema);
 module.exports = NoteModel;

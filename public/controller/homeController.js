@@ -1,6 +1,8 @@
 var app = angular.module('todoApp');
 app.controller('homeController', function($scope, $sce, $mdDialog, $state, $timeout,
   $mdSidenav, $http, $mdToast, httpService, $interval, $filter) {
+
+
     $scope.pinNote = "";
   //  $scope.toggleLeft = buildToggler('left');
   //$scope.toggleRight = buildToggler('right');
@@ -29,6 +31,27 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   }
 
   $scope.getProfile();
+
+
+
+
+  //label
+  var self = this;
+  var getLabel =  function() {
+    httpService.httpServiceFunction('get','/note/getLabel').then(function(res) {
+      $scope.listLabel = res.data;
+      console.log(res.data);
+      self = $scope.listLabel;
+    })
+  }
+  getLabel();
+
+
+      self.remove = function(chip) {
+        alert(chip);
+        self.selected = chip;
+      }
+
   /************************************
    * List View / Grid View
    ************************************/
@@ -231,12 +254,22 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
         //console.log($filter('date')(note.reminder, "short") + '\n' +
         //$filter('date')(date, "short"));
         if ($filter('date')(note.reminder, "short") == $filter('date')(date, "short")) {
-          $mdToast.show(
+      /*    $mdToast.show(
             $mdToast.simple()
             .textContent('Reminder success...')
             .position('bottom')
             .hideDelay(3000)
-          )
+          )*/
+          Push.create("Reminder!", {
+            body: note.note,
+          //  icon: '/icon.png',
+            icon :$scope.imageProfile,
+            timeout: 4000,
+            onClick: function () {
+                window.focus();
+                this.close();
+            }
+        });
           note.reminder = null;
           var data = {
             reminder: null
@@ -435,6 +468,8 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       $mdDialog.cancel();
     };
     $scope.removeCollabs = function(note) {
+      $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+
       httpService.httpServiceFunction('put','/note/removeCollab/'+note._id,).then(function(res) {
         noteFunction();
       })
@@ -446,6 +481,124 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     };
 
   }
+  /*****************************************
+   * Label function to add labels
+   *****************************************/
+  var labelObj;
+  var listLabelObj = $scope.listLabel;
+  $scope.addLabel = function(ev) {
+    labelObj = ev;
+    $mdDialog.show({
+        controller: dialogLabelController,
+        initialValue: ev,
+        templateUrl: 'template/dialogLabel.html',
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        clickOutsideToClose: true
+      })
+      .then(function(answer) {
+        //answer.edited = new Date();
+        if(answer == undefined || answer == null) return false;
+        console.log(answer);
+        $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+
+        httpService.httpServiceFunction('post', '/note/addLabel', {answer}).then(function(res) {
+          noteFunction();
+          console.log(res);
+          getLabel();
+        })
+      }, function() {
+        $scope.status = 'You cancelled the dialog.';
+      });
+  };
+
+  function dialogLabelController($scope, $rootScope, $mdDialog, $sce) {
+  //  $scope.title = labelObj.title;
+    //$scope.getNote = noteObj;
+  //  $scope.note = labelObj.note;
+    $scope.noteObject = listLabelObj;
+    //$scope.note = $("<div/>").html(noteObj.note).text()
+    //  $scope.note =  $sce.trustAsHtml(noteObj.note);
+    console.log($scope.title);
+    $scope.hide = function() {
+      $mdDialog.hide();
+    };
+    $scope.cancel = function() {
+      $mdDialog.cancel();
+    };
+    $scope.answer = function(answer) {
+
+      $mdDialog.hide(answer);
+    };
+
+  }
+
+
+  var labelNoteObj;
+  $scope.labelAdd = function(ev) {
+    labelNoteObj = ev;
+    $mdDialog.show({
+        controller: dialogAddLabelController,
+        initialValue: ev,
+        templateUrl: 'template/dialogLabelAdd.html',
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        clickOutsideToClose: true
+      })
+      .then(function(answer) {
+        //answer.edited = new Date();
+        if(answer == undefined || answer == null) return false;
+        console.log(answer,labelNoteObj._id);
+        $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+
+          httpService.httpServiceFunction('put','/note/update/'+ labelNoteObj._id,{$push:answer}).then(function(res){
+              noteFunction();
+          })
+          $mdDialog.hide();
+
+
+      }, function() {
+        $scope.status = 'You cancelled the dialog.';
+      });
+  };
+
+  function dialogAddLabelController($scope, $rootScope, $mdDialog, $sce) {
+    $scope.note = labelNoteObj;
+    //$scope.getNote = noteObj;
+  //  $scope.note = labelObj.note;
+  //  $scope.noteObject = listLabelObj;
+    //$scope.note = $("<div/>").html(noteObj.note).text()
+    //  $scope.note =  $sce.trustAsHtml(noteObj.note);var getLabel =  function() {
+
+      httpService.httpServiceFunction('get','/note/getLabel').then(function(res) {
+        $scope.listLabel = res.data;
+        console.log(res.data);  noteFunction();
+      })
+
+    console.log($scope.title);
+    $scope.hide = function() {
+      $mdDialog.hide();
+    };
+    $scope.cancel = function() {
+      $mdDialog.cancel();
+    };
+    $scope.answer = function(answer) {
+
+      $mdDialog.hide(answer);
+    };
+    $scope.removeLabel = function(answer) {
+      console.log(answer);
+      httpService.httpServiceFunction('put','/note/update/'+ labelNoteObj._id,{$pull:{label:answer}}).then(function(res){
+        console.log(res);
+      noteFunction();
+      })
+      $mdDialog.hide();
+    }
+
+
+
+  }
+
 
 
 })

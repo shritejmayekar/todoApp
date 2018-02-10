@@ -2,6 +2,7 @@
 var jwt = require('jsonwebtoken');
 var Note = require('../model/NoteModel.js');
 var User = require('../model/UserModelPassport.js')
+var Label = require('../model/LabelModel.js')
 const redis = require('redis');
 var Collab =require('../model/CollaboratorModel.js');
 var cache = new redis.createClient( process.env.PORT);
@@ -160,7 +161,42 @@ exports.collaborateRemove = function(req,res) {
         res.json(note);
       });
   })
-/*
+}
 
-*/
+exports.addLabel = function(req, res) {
+  var new_label = new Label();
+//  console.log(req.body.answer);
+  new_label.user_id =(req.user.id);
+  new_label.note_id = (req.user.note_id);
+  new_label.label   = (req.body.answer);
+  new_label.save(function(err, user) {
+    if (err)
+      res.send(err);
+    res.json(user);
+  });
+}
+
+exports.removeLabel = function(req, res) {
+  Label.remove({
+    _id: req.params.labelId
+  }, function(err, note) {
+    if (err)
+      res.send(err);
+    res.json({
+      message: 'Label successfully deleted'
+    });
+  });
+}
+
+exports.getLabel = function(req, res) {
+  Label.find({
+  // find by id and email
+  user_id:req.user.id
+  }, function(err, note) {
+    if (err)
+      res.send(err);
+    //  console.log(note );
+    //  cache.set(req.user.id,3600,note);
+    res.json(note);
+  });
 }

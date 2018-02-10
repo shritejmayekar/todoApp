@@ -1,0 +1,35 @@
+<md-dialog md-theme="{{ noteObj1.note_color}}" md-theme-watch>
+  <div layout="row">
+    <form ng-cloak>
+      <md-card>
+        <md-card-title>
+            <md-card-title-text>
+          <h3>Add Label</h3>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-title layout="column" class="md-dialog-content">
+            <md-card-title-text><div  ng-repeat="labels in listLabel">
+
+              <md-card-content>
+                {{labels.label}}
+                    <md-button aria-label="removecollab" ng-click="answer({label:labels.label})"> <img src="./assets/images/tick.png" />
+                    </md-button>
+                <md-button  aria-label="removecollab" ng-click="removeLabel(labels.label)"> <img src="./assets/images/remove.svg" />
+                </md-button>  </md-card-title-text>
+                </md-card-title>
+              </div>
+          <!--md-input-container class="md-block" id="textboxsize"><label>Label</label>
+            <input  type="text" ng-model="label">
+          </md-input-container-->
+          <md-card-actions>
+            <md-button style="float right" ng-click="cancel()">
+            Cancel
+            </md-button>
+            <!--md-button style="float right" ng-click="answer(label)">
+             Add Label
+           </md-button-->
+          </md-card-actions>
+      </md-card>
+    </form>
+  </div>
+</md-dialog>
