@@ -1,4 +1,4 @@
-var app = angular.module('todoApp', ['ui.router','tb-color-picker','kendo.directives' ,'ngMaterial', 'ngAnimate', 'ngSanitize', 'satellizer']);
+var app = angular.module('todoApp', ['ui.router','ngImgCrop','tb-color-picker','kendo.directives' ,'ngMaterial', 'ngAnimate', 'ngSanitize', 'satellizer']);
 app.filter('html', ['$sce', function($sce) {
   return function(text) {
     return $sce.trustAsHtml(text);

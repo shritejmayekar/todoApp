@@ -34,7 +34,16 @@ exports.create = function(req, res) {
   new_note.save(function(err, user) {
     if (err)
       res.send(err);
-      console.log(user);
+    //  console.log(user);
+      cache.get(req.user.id,function(err,note) {
+        //console.log('cache'+ note);
+      var noteCache =  JSON.parse(note);
+      noteCache = noteCache.push(user)
+      console.log(noteCache);
+      //cache.set(req.user.id, JSON.stringify(noteCache), redis.print);
+
+      })
+    //cache.set(req.user.id, JSON.stringify(note), redis.print);
     collab.user_id = (req.user.id);
     collab.note_id = user._id;
     collab.collaborator_id = req.user.id;
@@ -46,10 +55,14 @@ exports.create = function(req, res) {
 }
 // readNote function to read specific user all notes
 exports.readNote = function(req, res) {
+  if(!cache.exists(req.user.id)) {
+  //  console.log('from cache');
     cache.get(req.user.id,function(err,note) {
-    //  console.log('cache'+note);
-      //  res.json(JSON.parse(note));
+    //  console.log('cache'+ note);
+       res.json(JSON.parse(note));
     })
+  }
+  else {
   //  Collab.find({collaborators_id:{ "$in" : ['5a7c44b6a43bbc0afd8d0411']}},function(err,note) {
     //  console.log(note);
   //  })
@@ -59,9 +72,14 @@ exports.readNote = function(req, res) {
     }, function(err, note) {
       if (err)
         res.send(err);
-      //  cache.set(req.user.id,3600,note);
+          console.log('in model');
+        cache.set(req.user.id, JSON.stringify(note), redis.print);
+
+        //cache.HMSET(req.user.id,note);
+
       res.json(note);
     });
+  }
 }
 // update function to update a current note
 exports.update = function(req, res) {
@@ -177,11 +195,14 @@ exports.addLabel = function(req, res) {
 }
 
 exports.removeLabel = function(req, res) {
+    console.log(req.params.label+'\n'+req.user.id);
   Label.remove({
-    _id: req.params.labelId
+    user_id:req.user.id,
+    label:req.params.label
   }, function(err, note) {
     if (err)
       res.send(err);
+      if(!note) return res.send('not found');
     res.json({
       message: 'Label successfully deleted'
     });

@@ -13,11 +13,12 @@ var app = angular.module('todoApp');
         ngModel: '='
       },
       link: function($scope, el) {
-        function getFile(file) {
+        function getFile(file,note) {
           fileReader.readAsDataUrl(file, $scope)
             .then(function(result) {
               $timeout(function() {
                 $scope.ngModel = result;
+
               });
             });
         }
@@ -30,7 +31,7 @@ var app = angular.module('todoApp');
     };
   });
 
-app.factory("fileReader", function($q, $log,httpService,$http) {
+app.factory("fileReader", function($q, $log,httpService,$http,$scope) {
   var onLoad = function(reader, deferred, scope) {
     return function() {
       scope.$apply(function() {
@@ -72,13 +73,14 @@ app.factory("fileReader", function($q, $log,httpService,$http) {
     reader.readAsDataURL(file);
     return deferred.promise;
   };
+
   var fileUpload = function(profilePic) {
   //  console.log('click'+profilePic);
     var data =  {
      'local.profile':profilePic
    }
    $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
-   httpService.httpServiceFunction('PUT','/auth/profilePic',data).then(function(res) {
+   httpService.httpServiceFunction('PUT','/note/profilePic',data).then(function(res) {
 
 
     })

@@ -62,6 +62,9 @@ var NoteSchema = new Schema({
   },
   note_color: {
     type: String
+  },
+  picture:{
+    data:Buffer,
   }
 });
 

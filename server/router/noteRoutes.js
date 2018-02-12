@@ -23,7 +23,7 @@ router.post('/addLabel',noteController.addLabel);
 
 router.get('/getLabel',noteController.getLabel);
 
-router.delete('/removeLabel',noteController.removeLabel);
+router.delete('/removeLabel/:label',noteController.removeLabel);
 
 
 module.exports = router;

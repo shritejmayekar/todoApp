@@ -3,7 +3,7 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   $mdSidenav, $http, $mdToast, httpService, $interval, $filter) {
 
 
-    $scope.pinNote = "";
+  $scope.pinNote = "";
   //  $scope.toggleLeft = buildToggler('left');
   //$scope.toggleRight = buildToggler('right');
   $scope.options = ['transparent', '#FF8A80', '#FFD180', '#FFFF8D', '#CFD8DC', '#80D8FF', '#A7FFEB', '#CCFF90'];
@@ -18,7 +18,9 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       note_color: $scope.themeColor[$scope.options.indexOf(newColor)]
     }
   }
-
+  /*************************************
+   * set myCroppedImage Profile pics
+   ************************************/
   $scope.getProfile = function() {
     $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     httpService.httpServiceFunction('GET', '/auth/authenticate').then(function(res) {
@@ -31,14 +33,44 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   }
 
   $scope.getProfile();
+  $scope.myImage = '';
+  $scope.myCroppedImage = '';
+  // handle image cropping
+  var handleFileSelect = function(evt) {
+    var file = evt.currentTarget.files[0];
+    var reader = new FileReader();
+    reader.onload = function(evt) {
+      $scope.$apply(function($scope) {
+        $scope.myImage = evt.target.result;
 
+      });
+    };
+    console.log($scope.myImage);
+    reader.readAsDataURL(file);
+  };
+  angular.element(document.querySelector('#fileInput')).on('change', handleFileSelect);
+  $scope.setProfile = function(profilePic) {
 
+    var data = {
+      'local.profile': profilePic
+    }
 
+    $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+    httpService.httpServiceFunction('PUT', '/auth/profilePic', data).then(function(res) {
+      $scope.getProfile();
+      $scope.myImage = '';
+      $scope.myCroppedImage = '';
 
-  //label
+    })
+  }
+  /**********************************************
+   * Label function to set labels
+   ***********************************************/
+
   var self = this;
-  var getLabel =  function() {
-    httpService.httpServiceFunction('get','/note/getLabel').then(function(res) {
+  // get the user labels
+  var getLabel = function() {
+    httpService.httpServiceFunction('get', '/note/getLabel').then(function(res) {
       $scope.listLabel = res.data;
       console.log(res.data);
       self = $scope.listLabel;
@@ -46,11 +78,40 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   }
   getLabel();
 
-
-      self.remove = function(chip) {
-        alert(chip);
-        self.selected = chip;
+  // remove the label form the notes
+  $scope.labelClick = function(note, label) {
+    httpService.httpServiceFunction('put', '/note/update/' + note._id, {
+      $pull: {
+        label: label
       }
+    }).then(function(res) {
+      console.log(res);
+      noteFunction();
+    })
+  }
+  // remove the user labels from user
+  $scope.removeLabel = function(label) {
+
+
+    httpService.httpServiceFunction('delete', '/note/removeLabel/' + label).then(function(res) {
+      getLabel();
+      for (var i = 0; i < $scope.listOfNotes.length; i++) {
+
+        httpService.httpServiceFunction('put', '/note/update/' + $scope.listOfNotes[i]._id, {
+          $pull: {
+            label: label
+          }
+        }).then(function(res) {
+
+        })
+      }
+
+      noteFunction();
+    })
+  }
+
+
+
 
   /************************************
    * List View / Grid View
@@ -120,7 +181,10 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     document.getElementById('showDiv').style.visibility = "hidden "
   }
 
+  $scope.noteID = function(note) {
+    $scope.imageURL = note;
 
+  }
   /**************************************
    * noteFunction to GET / READ all Notes
    ***************************************/
@@ -143,7 +207,7 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
         $scope.listOfNotes = $scope.collabsNotes;
 
       }
-        remind();
+      remind();
     });
 
   }
@@ -186,12 +250,12 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       console.log(res);
       noteFunction();
 
-        $mdToast.show(
-          $mdToast.simple()
-          .textContent('Note deleted permanently...')
-          .position('bottom right')
-          .hideDelay(3000)
-        );
+      $mdToast.show(
+        $mdToast.simple()
+        .textContent('Note deleted permanently...')
+        .position('bottom right')
+        .hideDelay(3000)
+      );
     })
   }
   /*************************************
@@ -213,12 +277,12 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       console.log(res);
       noteFunction();
 
-        $mdToast.show(
-          $mdToast.simple()
-          .textContent('Note Copied success...')
-          .position('bottom right')
-          .hideDelay(3000)
-        );
+      $mdToast.show(
+        $mdToast.simple()
+        .textContent('Note Copied success...')
+        .position('bottom right')
+        .hideDelay(3000)
+      );
 
     })
   }
@@ -254,22 +318,22 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
         //console.log($filter('date')(note.reminder, "short") + '\n' +
         //$filter('date')(date, "short"));
         if ($filter('date')(note.reminder, "short") == $filter('date')(date, "short")) {
-      /*    $mdToast.show(
-            $mdToast.simple()
-            .textContent('Reminder success...')
-            .position('bottom')
-            .hideDelay(3000)
-          )*/
+          /*    $mdToast.show(
+                $mdToast.simple()
+                .textContent('Reminder success...')
+                .position('bottom')
+                .hideDelay(3000)
+              )*/
           Push.create("Reminder!", {
             body: note.note,
-          //  icon: '/icon.png',
-            icon :$scope.imageProfile,
+            //  icon: '/icon.png',
+            icon: $scope.imageProfile,
             timeout: 4000,
-            onClick: function () {
-                window.focus();
-                this.close();
+            onClick: function() {
+              window.focus();
+              this.close();
             }
-        });
+          });
           note.reminder = null;
           var data = {
             reminder: null
@@ -347,11 +411,11 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
         console.log(res);
         noteFunction();
         $mdToast.show(
-        $mdToast.simple()
-        .textContent('Note Edited...')
-        .position('bottom right')
-        .hideDelay(3000)
-      );
+          $mdToast.simple()
+          .textContent('Note Edited...')
+          .position('bottom right')
+          .hideDelay(3000)
+        );
 
       })
     }
@@ -368,14 +432,14 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
       //  archieveNoteService.update(note, 'true').then(function(res) {
       console.log(res);
-      var noteOperation = note.is_archieved ?'Unarchieved':'Archived';
+      var noteOperation = note.is_archieved ? 'Unarchieved' : 'Archived';
       noteFunction();
       $mdToast.show(
-      $mdToast.simple()
-      .textContent(noteOperation)
-      .position('bottom right')
-      .hideDelay(3000)
-    );
+        $mdToast.simple()
+        .textContent(noteOperation)
+        .position('bottom right')
+        .hideDelay(3000)
+      );
     })
 
   };
@@ -391,13 +455,13 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
       console.log(res);
       noteFunction();
-      var noteOperation = note.is_pinned ? 'Unpinned':'Pinned';
+      var noteOperation = note.is_pinned ? 'Unpinned' : 'Pinned';
       $mdToast.show(
-      $mdToast.simple()
-      .textContent(noteOperation)
-      .position('bottom right')
-      .hideDelay(3000)
-    );
+        $mdToast.simple()
+        .textContent(noteOperation)
+        .position('bottom right')
+        .hideDelay(3000)
+      );
     })
 
   }
@@ -413,14 +477,14 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
       console.log(res);
       noteFunction();
-      var noteOperation = note.is_deleted ? 'Restored':'Trashed';
+      var noteOperation = note.is_deleted ? 'Restored' : 'Trashed';
 
       $mdToast.show(
-      $mdToast.simple()
-      .textContent(noteOperation)
-      .position('bottom right')
-      .hideDelay(3000)
-    );
+        $mdToast.simple()
+        .textContent(noteOperation)
+        .position('bottom right')
+        .hideDelay(3000)
+      );
     })
   }
   var noteObj1;
@@ -451,8 +515,8 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       });
   };
   /*****************************************
-  * Dialog Collab Controller inside home controller
-  *******************************************/
+   * Dialog Collab Controller inside home controller
+   *******************************************/
   function DialogControllerCollab($scope, $rootScope, $mdDialog, $sce) {
     $scope.title = noteObj1.title;
     //$scope.getNote = noteObj;
@@ -470,7 +534,7 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     $scope.removeCollabs = function(note) {
       $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
 
-      httpService.httpServiceFunction('put','/note/removeCollab/'+note._id,).then(function(res) {
+      httpService.httpServiceFunction('put', '/note/removeCollab/' + note._id, ).then(function(res) {
         noteFunction();
       })
 
@@ -498,11 +562,13 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       })
       .then(function(answer) {
         //answer.edited = new Date();
-        if(answer == undefined || answer == null) return false;
+        if (answer == undefined || answer == null) return false;
         console.log(answer);
         $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
 
-        httpService.httpServiceFunction('post', '/note/addLabel', {answer}).then(function(res) {
+        httpService.httpServiceFunction('post', '/note/addLabel', {
+          answer
+        }).then(function(res) {
           noteFunction();
           console.log(res);
           getLabel();
@@ -513,9 +579,9 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   };
 
   function dialogLabelController($scope, $rootScope, $mdDialog, $sce) {
-  //  $scope.title = labelObj.title;
+    //  $scope.title = labelObj.title;
     //$scope.getNote = noteObj;
-  //  $scope.note = labelObj.note;
+    //  $scope.note = labelObj.note;
     $scope.noteObject = listLabelObj;
     //$scope.note = $("<div/>").html(noteObj.note).text()
     //  $scope.note =  $sce.trustAsHtml(noteObj.note);
@@ -547,14 +613,16 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       })
       .then(function(answer) {
         //answer.edited = new Date();
-        if(answer == undefined || answer == null) return false;
-        console.log(answer,labelNoteObj._id);
+        if (answer == undefined || answer == null) return false;
+        console.log(answer, labelNoteObj._id);
         $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
 
-          httpService.httpServiceFunction('put','/note/update/'+ labelNoteObj._id,{$push:answer}).then(function(res){
-              noteFunction();
-          })
-          $mdDialog.hide();
+        httpService.httpServiceFunction('put', '/note/update/' + labelNoteObj._id, {
+          $push: answer
+        }).then(function(res) {
+          noteFunction();
+        })
+        $mdDialog.hide();
 
 
       }, function() {
@@ -565,15 +633,16 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   function dialogAddLabelController($scope, $rootScope, $mdDialog, $sce) {
     $scope.note = labelNoteObj;
     //$scope.getNote = noteObj;
-  //  $scope.note = labelObj.note;
-  //  $scope.noteObject = listLabelObj;
+    //  $scope.note = labelObj.note;
+    //  $scope.noteObject = listLabelObj;
     //$scope.note = $("<div/>").html(noteObj.note).text()
     //  $scope.note =  $sce.trustAsHtml(noteObj.note);var getLabel =  function() {
 
-      httpService.httpServiceFunction('get','/note/getLabel').then(function(res) {
-        $scope.listLabel = res.data;
-        console.log(res.data);  noteFunction();
-      })
+    httpService.httpServiceFunction('get', '/note/getLabel').then(function(res) {
+      $scope.listLabel = res.data;
+      console.log(res.data);
+      noteFunction();
+    })
 
     console.log($scope.title);
     $scope.hide = function() {
@@ -588,9 +657,13 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     };
     $scope.removeLabel = function(answer) {
       console.log(answer);
-      httpService.httpServiceFunction('put','/note/update/'+ labelNoteObj._id,{$pull:{label:answer}}).then(function(res){
+      httpService.httpServiceFunction('put', '/note/update/' + labelNoteObj._id, {
+        $pull: {
+          label: answer
+        }
+      }).then(function(res) {
         console.log(res);
-      noteFunction();
+        noteFunction();
       })
       $mdDialog.hide();
     }
@@ -598,6 +671,8 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
 
 
   }
+
+
 
 
 
