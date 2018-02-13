@@ -6,24 +6,41 @@
       <md-fab-toolbar md-open="demo.isOpen" count="demo.count" md-direction="{{demo.selectedDirection}}">
 
         <md-button aria-label="menu" ng-click="navClick()">
-          <i class="material-icons">view_headline</i>
+          <i class="material-icons">menu</i>
         </md-button>
 
       </md-fab-toolbar>
     </div>
-
     <div flex="80">
       <div>
-      <h2><b>Trash</b>
-
-      </h2>
-    </div>
+        <h2><b>Trash</b>   <input type="text" ng-model="searchNotes">
+      </div>
     </div>
     <div>
-      <md-menu-bar class="md-icon-button" aria-label="menu4">
-        <md-menu>
-            <img ng-click="$mdMenu.open()" src="/assets/images/img_avatar.png" alt="Avatar" class="avatar">
+      <md-menu-bar class="md-icon-button" aria-label="menu4" ng-controller="UploadController">
+        <!-- Image Upload of Profile pics  -->
+        <md-menu ng-model="image">
+          <img ng-click="$mdMenu.open()" ng-src="{{ imageProfile }}" alt="Avatar" class="avatar">
           <md-menu-content>
+              <md-menu-bar class="md-icon-button" aria-label="menu">
+                <md-menu>
+                    <i ng-click="$mdMenu.open()"  aria-label="menu" class="material-icons">add_a_photo</i>
+                  <md-menu-content>
+                    <div>
+                      <!--form>
+                        <input type="file" ng-file-select="onFileSelect($files)" ng-model="imageSrc" />
+                      </form-->
+                      <div>Select an image file: <input type="file" id="fileInput" /></div>
+                      <div class="cropArea">
+                        <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+                        <md-button ng-click="setProfile(myCroppedImage)">Submit</md-button>
+                      </div>
+                     <div>Cropped Image:</div>
+                     <div><img ng-src="{{myCroppedImage}}" /></div>
+                   </div>
+                  </md-menu-content>
+                </md-menu>
+              </md-menu-bar>
             <md-menu-item>
               <a ui-sref="logout">SignOut</a>
             </md-menu-item>
@@ -41,8 +58,6 @@
 </nav>
 
 
-
-
 <!-- Google keep all layout-->
 
 <div layout="column" flex layout-padding style="height:auto;background-color:#e6e6e6" id="main">
@@ -52,13 +67,12 @@
       <div id="mySidenav" style="background-color:#e6e6e6;overflow-y: scroll; height:800px;" class="sidenav">
 
         <a ui-sref="home">Notes</a>
-        <!--a ui-sref="reminder">Reminders</a-->
         <a ui-sref="archieve">Archive</a>
         <a ui-sref="trash">Trash</a>
 
       </div>
     </div>
-    <div flex="40">
+    <div flex="auto">
 
       <!--div contenteditable="true" style="text-align:center" >Title</div-->
       <!--div class='editable' contentEditable="true" id = 'div1'>Click and edit the text</div-->
@@ -96,7 +110,7 @@
 
   <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
 
-    <div layout-wrap flex-gt-xs="30"  ng-repeat="note in listOfNotes   | orderBy:'note.date':true  |filter:{is_deleted:true}" >
+    <div layout-wrap flex-gt-xs="30"  ng-repeat="note in listOfNotes   | orderBy:'note.date':true  |filter:{is_deleted:true} |filter:searchNotes" >
       <md-card md-theme={{note.note_color}}  md-theme-watch>
         <img ng-src="{{imagePath}}" class="md-card-image">
 
@@ -116,7 +130,7 @@
             <i class="material-icons">mode_edit</i>
           </md-button>
           <md-button ng-click="archieveNote(note)" class="md-icon-button" aria-label="copy">
-            <i class="material-icons">unarchive</i>
+            <i class="material-icons">archive</i>
           </md-button>
           <md-button ng-click="trashNote(note)" class="md-icon-button" aria-label="delete">
             <i class="material-icons">restore</i>
@@ -169,11 +183,7 @@
                     Copy a note
                   </md-button>
                 </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="ctrl.sampleAction('Open', $event)" aria-label="center">
-                    Add a label
-                  </md-button>
-                </md-menu-item>
+
               </md-menu-content>
             </md-menu>
           </md-menu-bar>

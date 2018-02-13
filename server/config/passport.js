@@ -3,7 +3,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var User = require('../model/UserModelPassport.js');
 var FacebookStrategy = require('passport-facebook').Strategy;
-var config = require('../config/keys.js')
+var config = require('./keys.js')
 /**********************************************
  * Local passport strategy for login and signup
  ***********************************************/

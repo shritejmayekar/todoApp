@@ -12,7 +12,7 @@ var dbConfig = require('./server/config');
 var express = require('express');
 var session = require('express-session');
 var app = express();
-var http = require('http').Server(app);
+var http = require('http').createServer(app);
 var mongoose = require('mongoose');
 var Task = require('./server/model');
 var bodyParser = require('body-parser');
@@ -22,13 +22,14 @@ var logger = require('./server/logger/logger');
 var config = require("./config.json");
 const winston = require('winston');
 const fs = require('fs');
+var io = require('socket.io')(http);
 var User = require('./server/model/UserSocialModel.js');
-//var passport = require('./server/socialLogin/authentictaion.js');
 var passport = require('passport');
 var authRoutes = require('./server/router/userRoutes.js');
 var noteRoutes = require('./server/router/noteRoutes.js');
 var expressJwt = require('express-jwt');
 var cors = require('cors')
+
 //const webpush = require('web-push');
 
 
@@ -48,6 +49,31 @@ app.use(bodyParser.urlencoded({
 app.use(passport.initialize());
 app.use(bodyParser.json());
 app.use(cors());
+/*io.on('connection', function(socket){
+  console.log('user connected');
+  socket.on('reminder check',function(note) {
+    setInterval(function () {
+      date = new Date();
+      console.log(note);
+      //console.log($filter('date')(note.reminder, "short") + '\n' +
+      //$filter('date')(date, "short"));
+    /*  if (filter('date')(note.reminder, "short") == filter('date')(date, "short")) {
+        note.reminder = null;
+        var data = {
+          reminder: null
+        }
+        httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
+
+        })
+      }
+
+    }, 10000);
+  })
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+});*/
+
 
 /*****************************
 * Routes for todoApp
@@ -69,6 +95,6 @@ app.use(function(req, res) {
 });
 
 // running serverport
-app.listen(port);
+http.listen(port);
 console.log("Rest api started on :" + port);
 module.exports = app;

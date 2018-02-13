@@ -112,7 +112,8 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
 
 
 
-
+  $('#pinned').hide();
+  $('#other').hide();
   /************************************
    * List View / Grid View
    ************************************/
@@ -185,6 +186,8 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     $scope.imageURL = note;
 
   }
+
+
   /**************************************
    * noteFunction to GET / READ all Notes
    ***************************************/
@@ -208,6 +211,17 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
 
       }
       remind();
+      for (var i = 0; i < $scope.listOfNotes.length; i++) {
+          if($scope.listOfNotes[i].is_pinned) {
+            $('#pinned').show();
+            $('#other').show();
+            break;
+          }
+          else {
+            $('#pinned').hide();
+            $('#other').hide();
+          }
+      }
     });
 
   }
@@ -306,7 +320,8 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   var remind = function() {
     console.log($scope.listOfNotes);
     for (var i = 0; i < $scope.listOfNotes.length; i++) {
-      remainderCheck($scope.listOfNotes[i]);
+    remainderCheck($scope.listOfNotes[i]);
+      //reminderBackend($scope.listOfNotes[i]);
     }
   }
   /*******************************
@@ -378,6 +393,13 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
         console.log(answer);
         httpService.httpServiceFunction('put', '/note/update/' + ev._id, answer).then(function(res) {
           noteFunction();
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('Note Edited...')
+            .position('bottom right')
+            .hideDelay(3000)
+          );
+
         })
       }, function() {
         $scope.status = 'You cancelled the dialog.';
@@ -412,11 +434,56 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
         noteFunction();
         $mdToast.show(
           $mdToast.simple()
-          .textContent('Note Edited...')
+          .textContent('Note Copied...')
           .position('bottom right')
           .hideDelay(3000)
         );
 
+      })
+    }
+    /************************************
+     * Archieve note function to make note
+     * Archieve / Unarchieve
+     *************************************/
+    $scope.archieveNote = function(note) {
+      $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+      var data = {
+        is_archieved: note.is_archieved ? 'false' : 'true'
+      }
+      httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
+        //  archieveNoteService.update(note, 'true').then(function(res) {
+        console.log(res);
+        var noteOperation = note.is_archieved ? 'Unarchieved' : 'Archived';
+        noteFunction();
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent(noteOperation)
+          .position('bottom right')
+          .hideDelay(3000)
+        );
+      })
+
+    };
+    /********************************************
+     * trashNote function to delete note temporary
+     **********************************************/
+    $scope.trashNote = function(note) {
+      $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
+      var data = {
+
+        is_deleted: note.is_deleted ? 'false' : 'true'
+      }
+      httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
+        console.log(res);
+        noteFunction();
+        var noteOperation = note.is_deleted ? 'Restored' : 'Trashed';
+
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent(noteOperation)
+          .position('bottom right')
+          .hideDelay(3000)
+        );
       })
     }
   }
@@ -671,9 +738,24 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
 
 
   }
+/*
+  var socket = io.connect();
+  var reminderBackend = function(note) {
+  socket.emit('reminder check',note,function() {
 
+  });
+  socket.on('get reminder',note,function(){
 
-
-
-
+        Push.create("Reminder!", {
+        body: note.note,
+        //  icon: '/icon.png',
+        icon: $scope.imageProfile,
+        timeout: 4000,
+        onClick: function() {
+          window.focus();
+          this.close();
+        }
+        });
+  })
+}*/
 })

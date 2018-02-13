@@ -2,9 +2,9 @@
   <div layout="row">
   <form ng-cloak>
     <md-dialog-content  layout="column" class="md-dialog-content" >
-      <textarea  rows="1" cols="50" style="box-shadow: none;resize: none;" ng-model="title " aria-label="title"></textarea>
-      <md-divider md-inset>
-      <textarea rows='10' cols="50" style="box-shadow: none;resize: none;" aria-label="note" ng-model="note">
+      <textarea  rows="1" cols="30" style="box-shadow: none;resize: none;" ng-model="title " aria-label="title"></textarea>
+      <md-divider >
+      <textarea rows='10' cols="30" style="box-shadow: none;resize: none;" aria-label="note" ng-model="note">
 
       </textarea>
       </md-divider>
@@ -15,11 +15,14 @@
     </md-dialog-content>
 
     <md-card-actions layout="5" layout-align="end center" >
+      <md-button ng-click="archieveNote(note)" class="md-icon-button" aria-label="copy">
+       <md-tooltip md-direction="bottom">Archieve</md-tooltip>  <i class="material-icons">archive</i>
+     </md-button>
       <md-button ng-click="copyNote({title:title,note:note})" class="md-icon-button" aria-label="copy">
-        <i class="material-icons">content_copy</i>
+         <md-tooltip md-direction="bottom">Copy Note</md-tooltip>  <i class="material-icons">content_copy</i>
       </md-button>
-      <md-button ng-click="deleteNote(note)" class="md-icon-button" aria-label="delete">
-        <i class="material-icons">delete</i>
+      <md-button  ng-click="trashNote(note)"  class="md-icon-button" aria-label="delete">
+         <md-tooltip md-direction="bottom">Trash Note</md-tooltip>  <i class="material-icons">delete</i>
       </md-button>
       <md-button style="float right" ng-click="answer({title:title,note:note})">
        Done

@@ -7,6 +7,7 @@ const redis = require('redis');
 var Collab =require('../model/CollaboratorModel.js');
 var cache = new redis.createClient( process.env.PORT);
 
+
 //cache.get('Key',function(err,value) {
   //console.log(value);
 //});
@@ -20,8 +21,15 @@ eventEmitter.on('passwordReset', myEventHandler);*/
 /******************************
 * CRUD operation of Notes
 ******************************/
-
-
+var redisSet =  function(user_id,user) {
+  cache.get(user_id,function(err,note) {
+  var noteCache = [];
+  noteCache =JSON.parse(note);
+  console.log("note cache \n"+noteCache);
+  console.log("user cache \n"+ user);
+  cache. set(user_id,JSON.stringify(noteCache.concat(user)), redis.print);
+  })
+}
 // create note function for note creation of user
 exports.create = function(req, res) {
   var new_note = new Note();
@@ -34,16 +42,7 @@ exports.create = function(req, res) {
   new_note.save(function(err, user) {
     if (err)
       res.send(err);
-    //  console.log(user);
-      cache.get(req.user.id,function(err,note) {
-        //console.log('cache'+ note);
-      var noteCache =  JSON.parse(note);
-      noteCache = noteCache.push(user)
-      console.log(noteCache);
-      //cache.set(req.user.id, JSON.stringify(noteCache), redis.print);
-
-      })
-    //cache.set(req.user.id, JSON.stringify(note), redis.print);
+      redisSet(req.user.id,user);
     collab.user_id = (req.user.id);
     collab.note_id = user._id;
     collab.collaborator_id = req.user.id;
@@ -55,17 +54,12 @@ exports.create = function(req, res) {
 }
 // readNote function to read specific user all notes
 exports.readNote = function(req, res) {
-  if(!cache.exists(req.user.id)) {
-  //  console.log('from cache');
+  if(!cache.get(req.user.id)) {
     cache.get(req.user.id,function(err,note) {
-    //  console.log('cache'+ note);
        res.json(JSON.parse(note));
-    })
+   })
   }
   else {
-  //  Collab.find({collaborators_id:{ "$in" : ['5a7c44b6a43bbc0afd8d0411']}},function(err,note) {
-    //  console.log(note);
-  //  })
     Note.find({
     // find by id and email
     user_id:req.user.id
@@ -73,10 +67,7 @@ exports.readNote = function(req, res) {
       if (err)
         res.send(err);
           console.log('in model');
-        cache.set(req.user.id, JSON.stringify(note), redis.print);
-
-        //cache.HMSET(req.user.id,note);
-
+            cache.set(req.user.id, JSON.stringify(note), redis.print);
       res.json(note);
     });
   }
@@ -91,7 +82,7 @@ exports.update = function(req, res) {
   }, function(err, note) {
     if (err)
       res.send(err);
-
+      cache. set(req.user.id,JSON.stringify(note), redis.print);
     res.json(note);
   });
 };
@@ -102,6 +93,26 @@ exports.delete = function(req, res) {
   }, function(err, note) {
     if (err)
       res.send(err);
+      cache.get(req.user.id,function(err,redisNote) {
+      var noteCache = [];
+      noteCache =JSON.parse(redisNote);
+      console.log("note cache \n"+noteCache);
+      console.log("user cache \n"+redisNote);
+      var pos = -1;
+      for (var i = 0; i < noteCache.length; i++) {
+        if(noteCache[i]._id == req.params.noteId ) {
+            pos = i;
+            break;
+        }
+      }
+      console.log(pos);
+    //  var index = redisNote.indexOf(JSON.parse(note));
+      //if(index != -1) {
+	      noteCache= noteCache.splice(pos, 1);
+       //}
+      console.log(JSON.stringify(noteCache));
+      cache. set(req.user.id,JSON.stringify(noteCache), redis.print);
+      })
     res.json({
       message: 'Note successfully deleted'
     });
@@ -139,6 +150,8 @@ try {
         function(err,res) {
           console.log(res);
       })
+      redisSet(req.user.id,note);
+
     res.json(note);
   });
 
@@ -190,6 +203,7 @@ exports.addLabel = function(req, res) {
   new_label.save(function(err, user) {
     if (err)
       res.send(err);
+      redisSet(req.user.id,user);
     res.json(user);
   });
 }

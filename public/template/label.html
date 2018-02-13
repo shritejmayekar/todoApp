@@ -1,7 +1,7 @@
 <!-- nav bar -->
 <nav>
 
-  <div class="nav-wrapper" layout="row" style="overflow:hidden;position:fixed;z-index:5;width:100%;height:75px;background-color:#f3bb02;">
+  <div class="nav-wrapper" layout="row" style="overflow:hidden;position:fixed;z-index:5;width:100%;height:75px;background-color:#607d8b;">
     <div flex="10">
       <md-fab-toolbar md-open="demo.isOpen" count="demo.count" md-direction="{{demo.selectedDirection}}">
 
@@ -11,26 +11,36 @@
 
       </md-fab-toolbar>
     </div>
-
     <div flex="80">
       <div>
-        <h2><b>Google</b> Keep  <input type="text" ng-model="searchNotes">
-
-      </h2>
+        <h2><b>Archieve</b>  <input type="text" ng-model="searchNotes">
       </div>
     </div>
     <div>
       <md-menu-bar class="md-icon-button" aria-label="menu4" ng-controller="UploadController">
+        <!-- Image Upload of Profile pics  -->
         <md-menu ng-model="image">
-          <img ng-click="$mdMenu.open()" ng-src="{{imageSrc ? imageSrc: imageProfile }}" alt="Avatar" class="avatar">
+          <img ng-click="$mdMenu.open()" ng-src="{{ imageProfile }}" alt="Avatar" class="avatar">
           <md-menu-content>
-            <md-menu-item>
-              <div>
-                <form>
-                  <input type="file" ng-file-select="onFileSelect($files)" ng-model="imageSrc" />
-                </form>
-              </div>
-            </md-menu-item>
+              <md-menu-bar class="md-icon-button" aria-label="menu">
+                <md-menu>
+                    <i ng-click="$mdMenu.open()"  aria-label="menu" class="material-icons">add_a_photo</i>
+                  <md-menu-content>
+                    <div>
+                      <!--form>
+                        <input type="file" ng-file-select="onFileSelect($files)" ng-model="imageSrc" />
+                      </form-->
+                      <div>Select an image file: <input type="file" id="fileInput" /></div>
+                      <div class="cropArea">
+                        <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+                        <md-button ng-click="setProfile(myCroppedImage)">Submit</md-button>
+                      </div>
+                     <div>Cropped Image:</div>
+                     <div><img ng-src="{{myCroppedImage}}" /></div>
+                   </div>
+                  </md-menu-content>
+                </md-menu>
+              </md-menu-bar>
             <md-menu-item>
               <a ui-sref="logout">SignOut</a>
             </md-menu-item>
@@ -48,8 +58,6 @@
 </nav>
 
 
-
-
 <!-- Google keep all layout-->
 
 <div layout="column" flex layout-padding style="height:auto;background-color:#e6e6e6" id="main">
@@ -59,15 +67,9 @@
       <div id="mySidenav" style="background-color:#e6e6e6;overflow-y: scroll; height:800px;" class="sidenav">
 
         <a ui-sref="home">Notes</a>
+        <!--a ui-sref="reminder">Reminders</a-->
         <a ui-sref="archieve">Archive</a>
         <a ui-sref="trash">Trash</a>
-        <div>
-        <md-button ng-click="addLabel()"><b>Add Label</b></md-button>
-          <div ng-repeat="labels in listLabel">
-            <i class="material-icons">label</i>{{labels.label}}
-
-          </div>
-        </div>
 
       </div>
     </div>
@@ -76,70 +78,69 @@
       <!--div contenteditable="true" style="text-align:center" >Title</div-->
       <!--div class='editable' contentEditable="true" id = 'div1'>Click and edit the text</div-->
 
+
       <div md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch layout="column">
-        <div class='editable' contentEditable="true" id='div1' style="margin-top:55px;width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
-    box-shadow: 5px 10px #888888;" layout="column" ng-click="hide()">
+        <div class='editable' contentEditable="true" id='div1' style="margin-top:55px;width:600px;height:auto;background-color:#C8C8C8;padding: 10px;
+    box-shadow: 5px 10px #888888;
+" layout="column" ng-click="hide()">
           <div flex="50"></div>
           <div style="margin-left:15px">Take a Note</div>
         </div>
 
 
         <div id="showDiv">
-          <div class='editable' contentEditable="true" id='title' style="width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
+          <div class='editable' contentEditable="true" id='title' style="width:600px;height:auto;background-color:#C8C8C8;padding: 10px;
       box-shadow: 5px 10px #888888;
   " layout="column" placeholder="Title"></div>
 
-          <div class='editable' contentEditable="true" id='note' style="width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
+          <div class='editable' contentEditable="true" id='note' style="width:600px;height:auto;background-color:#C8C8C8;padding: 10px;
   box-shadow: 5px 10px #888888;
 " layout="column" placeholder="Take a Note"></div>
           <div style="background-color:#C8C8C8;padding: 10px;
-  box-shadow: 5px 10px #888888;width:auto">
+  box-shadow: 5px 10px #888888;width:580px">
             <md-card-actions layout="row" layout-align="end center">
               <md-button ng-click="saveNote()" id="showButton"><b>Done</b></md-button>
             </md-card-actions>
           </div>
         </div>
+
+
       </div>
     </div>
   </div>
-  <!-- pinned view-->
-  <div>Pinned </div>
+
   <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
 
-
-    <div layout-wrap flex-gt-xs="30" ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:{is_pinned:true} | filter:{is_deleted:false}">
+    <div layout-wrap flex-gt-xs="30"  ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:searchNotes |filter:{is_label:}" >
       <md-card md-theme={{note.note_color}} md-theme-watch>
-        <div style="float:right">
-          <md-button ng-click="pinNote(note)" class="md-icon-button" aria-label="edit">
-            <img src="./assets/images/pinup.png">
-          </md-button>
-        </div>
         <img ng-src="{{imagePath}}" class="md-card-image">
-
         <md-card-title>
           <md-card-title-text ng-click="editNote(note)" flex="auto">
             <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>
+
           </md-card-title-text>
         </md-card-title>
         <md-card-content ng-click="editNote(note)">
-          <div style="word-break: break-word;" ng-bind-html="note.note |html "></div>
+          <div  style="word-break: break-word;" ng-bind-html="note.note |html "></div>
+          <!--div >{{note.created_date}}</div-->
         </md-card-content>
+        <div layout="row" ng-repeat="getLabel in note.label">
+          <div class="chip">
+            {{getLabel}}
+            <span class="closebtn" ng-click="labelClick(note,getLabel)" onclick="this.parentElement.style.display='none'">&times;</span>
+          </div>
+        </div>
 
         <md-card-actions layout="row" layout-align="end center">
-          <color-picker color="color" ng-click="changeTheme(note)" options="options" on-color-changed="colorChanged(newColor, oldColor)"></color-picker>
+          <md-button ng-click="editNote(note)" class="md-icon-button" aria-label="edit">
+            <i class="material-icons">mode_edit</i>
+          </md-button>
           <md-button ng-click="archieveNote(note)" class="md-icon-button" aria-label="copy">
-            <i class="material-icons">archive</i>
+            <i class="material-icons">unarchive</i>
           </md-button>
-          <!--md-button ng-click="trashNote(note)" class="md-icon-button" aria-label="delete">
+          <md-button ng-click="deleteNote(note)" class="md-icon-button" aria-label="delete">
             <i class="material-icons">delete</i>
-          </md-button-->
-          <md-button ng-click="collabsNote(note)" class="md-icon-button" aria-label="collabs">
-            <i class="material-icons">person_add</i>
           </md-button>
-
-          <!--i class="material-icons">add_a_photo</i-->
-          <!--input type="file" ng-file-select="onFileSelect($files)" ng-model="imagePath" /-->
-
 
           <md-menu-bar class="md-icon-button" aria-label="menu">
             <md-menu>
@@ -148,29 +149,9 @@
               </md-button>
               <md-menu-content>
                 <md-menu-item>
-                  <input kendo-date-time-picker ng-model="obj" style="width: 75%;" />
+                  <input kendo-date-time-picker  ng-model="obj" style="width: 75%;" />
                   <md-button ng-click="reminderNote(note,obj)" class="md-icon-button" aria-label="delete">
                     SET
-                  </md-button>
-                </md-menu-item>
-              </md-menu-content>
-            </md-menu>
-          </md-menu-bar>
-          <!--div flex-gt-xs>
-        <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"></md-datepicker>
-      </div-->
-          <!--md-button nd-click="labelAdd()" class="md-icon-button">
-            <i class="material-icons">label</i>
-          </md-button-->
-          <md-menu-bar class="md-icon-button" aria-label="menu">
-            <md-menu>
-              <md-button ng-click="$mdMenu.open()" class="md-icon-button" aria-label="menu">
-                <i class="material-icons">more_vert</i>
-              </md-button>
-              <md-menu-content>
-                <md-menu-item>
-                  <md-button ng-click="trashNote(note)" aria-label: 'delete'>
-                    Delete a note
                   </md-button>
                 </md-menu-item>
                 <md-menu-item>
@@ -179,86 +160,8 @@
                   </md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="ctrl.sampleAction('Open', $event)" aria-label="center">
+                  <md-button ng-click="labelAdd(note)" aria-label="center">
                     Add a label
-                  </md-button>
-                </md-menu-item>
-              </md-menu-content>
-            </md-menu>
-          </md-menu-bar>
-          <!--md-button nd-click="archieveNote(note)" class="md-icon-button" aria-label="archieve">
-            <i class="material-icons">archive</i>
-
-          </md-button-->
-
-        </md-card-actions>
-
-      </md-card>
-
-
-
-    </div>
-
-  </div>
-  <!--others-->
-  <div>Other notes</div>
-
-  <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
-
-    <div layout-wrap flex-gt-xs="30" ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:searchNotes |
-     filter:{is_archieved:false} | filter:{is_pinned:false} | filter:{is_deleted:false}">
-      <md-card md-theme="{{note.note_color}}" md-theme-watch>
-        <div style="float:right">
-          <md-button ng-click="pinNote(note)" class="md-icon-button" aria-label="edit">
-            <img src="./assets/images/pinme.png">
-          </md-button>
-
-        </div>
-        <img ng-src="{{imagePath}}" class="md-card-image">
-
-        <md-card-title>
-          <md-card-title-text ng-click="editNote(note)" flex="auto">
-            <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>
-
-          </md-card-title-text>
-        </md-card-title>
-        <md-card-content ng-click="editNote(note)">
-          <div style="word-break: break-word;" ng-bind-html="note.note |html "></div>
-          <!--div >{{note.created_date}}</div-->
-
-        </md-card-content>
-        <md-chips ng-model="note.label" readonly="ctrl.readonly($chip)"
-        md-removable="ctrl.removable($chip)"></md-chips>
-        <!--div layout="row" ng-repeat="labels in note.label">
-          <div class="chip">
-            {{labels}}
-            <i class="close material-icons" >close</i>
-              </div>
-        </div-->
-
-        <md-card-actions layout="row" layout-align="end center">
-
-          <color-picker color="color" ng-click="changeTheme(note)" options="options" on-color-changed="colorChanged(newColor, oldColor)"></color-picker>
-          <md-button ng-click="archieveNote(note)" class="md-icon-button" aria-label="copy">
-            <i class="material-icons">archive</i>
-          </md-button>
-          <!--md-button ng-click="trashNote(note)" class="md-icon-button" aria-label="delete">
-            <i class="material-icons">delete</i>
-          </md-button-->
-          <md-button ng-click="collabsNote(note)" class="md-icon-button" aria-label="collabs">
-            <i class="material-icons">person_add</i>
-          </md-button>
-
-          <md-menu-bar class="md-icon-button" aria-label="menu">
-            <md-menu>
-              <md-button ng-click="$mdMenu.open()" class="md-icon-button" aria-label="menu">
-                <i class="material-icons">add_alert</i>
-              </md-button>
-              <md-menu-content>
-                <md-menu-item>
-                  <input kendo-date-time-picker ng-model="obj" style="width: 75%;" />
-                  <md-button ng-click="reminderNote(note,obj)" class="md-icon-button" aria-label="delete">
-                    SET
                   </md-button>
                 </md-menu-item>
               </md-menu-content>
@@ -277,7 +180,7 @@
               </md-button>
               <md-menu-content>
                 <md-menu-item>
-                  <md-button ng-click="trashNote(note)" aria-label: 'delete'>
+                  <md-button ng-click="deleteNote(note)" aria-label: 'delete'>
                     Delete a note
                   </md-button>
                 </md-menu-item>
@@ -290,13 +193,11 @@
                   <md-button ng-click="labelAdd(note)" aria-label="center">
                     Add a label
                   </md-button>
-
-                  </md-menu-bar>
                 </md-menu-item>
               </md-menu-content>
             </md-menu>
           </md-menu-bar>
-          <!--md-button nd-click="archieveNote(note)" class="md-icon-button" aria-label="archieve">
+              <!--md-button nd-click="archieveNote(note)" class="md-icon-button" aria-label="archieve">
             <i class="material-icons">archive</i>
 
           </md-button-->

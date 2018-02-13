@@ -94,7 +94,7 @@
     var token = jwt.sign({
       id: req.user._id
     }, 'secret', {
-      expiresIn: '43200'
+      expiresIn: '86400'
     });
     res.redirect('/#!/dummyPage/' + token);
   }
@@ -103,7 +103,7 @@
     var token = jwt.sign({
       id: req.user._id
     }, 'secret', {
-      expiresIn: '43200'
+      expiresIn: '86400'
     });
     res.redirect('/#!/dummyPage/' + token);
 

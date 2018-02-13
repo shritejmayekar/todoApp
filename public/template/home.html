@@ -87,7 +87,7 @@
       <!--div class='editable' contentEditable="true" id = 'div1'>Click and edit the text</div-->
 
       <div md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch layout="column">
-        <div class='editable' contentEditable="true" id='div1' style="margin-top:55px;width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
+        <div class='editable' contentEditable="true" id='div1' style="margin-top:55px;width:auto;outline:none;height:auto;background-color:#C8C8C8;padding: 10px;
     box-shadow: 5px 10px #888888;" layout="column" ng-click="hide()">
           <div flex="50"></div>
           <div style="margin-left:15px">Take a Note</div>
@@ -95,11 +95,11 @@
 
 
         <div id="showDiv">
-          <div class='editable' contentEditable="true" id='title' style="width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
+          <div class='editable' contentEditable="true" id='title' style="outline:none;width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
       box-shadow: 5px 10px #888888;
   " layout="column" placeholder="Title"></div>
 
-          <div class='editable' contentEditable="true" id='note' style="width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
+          <div class='editable' contentEditable="true" id='note' style="outline:none;width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
   box-shadow: 5px 10px #888888;
 " layout="column" placeholder="Take a Note"></div>
           <div style="background-color:#C8C8C8;padding: 10px;
@@ -113,13 +113,14 @@
     </div>
   </div>
 
-</h2>
+
   <!-- pinned view-->
-  <div>Pinned </div>
+  <div id="pinned"><div style="margin-left:100px">Pinned </div></div>
+
   <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
 
 
-    <div layout-wrap flex-gt-xs="30" ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:{is_pinned:true} | filter:{is_deleted:false} |filter:searchNotes">
+    <div layout-wrap flex-gt-xs="30" ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:{is_archieved:false} | filter:{is_pinned:true} | filter:{is_deleted:false} |filter:searchNotes">
       <md-card md-theme={{note.note_color}} md-theme-watch>
         <div style="float:right">
         <md-button ng-click="pinNote(note)" class="md-icon-button" aria-label="edit">
@@ -200,7 +201,7 @@
     </div>
   </div>
   <!--others-->
-  <div>Other notes</div>
+  <div id="other"><div style="margin-left:100px">Other</div></div>
 
   <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
 
@@ -245,24 +246,24 @@
 
           <color-picker color="color" ng-click="changeTheme(note)" options="options" on-color-changed="colorChanged(newColor, oldColor)"></color-picker>
           <md-button ng-click="archieveNote(note)" class="md-icon-button" aria-label="copy">
-            <i class="material-icons">archive</i>
+            <md-tooltip md-direction="bottom">Archive Note</md-tooltip><i class="material-icons">archive</i>
           </md-button>
           <!--md-button ng-click="trashNote(note)" class="md-icon-button" aria-label="delete">
             <i class="material-icons">delete</i>
           </md-button-->
           <md-button ng-click="collabsNote(note)" class="md-icon-button" aria-label="collabs">
-            <i class="material-icons">person_add</i>
+            <md-tooltip md-direction="bottom">Collaborate Notes</md-tooltip><i class="material-icons">person_add</i>
           </md-button>
 
           <md-menu-bar class="md-icon-button" aria-label="menu">
             <md-menu>
               <md-button ng-click="$mdMenu.open()" class="md-icon-button" aria-label="menu">
-                <i class="material-icons">add_alert</i>
+              <md-tooltip md-direction="bottom">Add Reminder</md-tooltip>  <i class="material-icons">add_alert</i>
               </md-button>
               <md-menu-content>
                 <md-menu-item>
                   <input kendo-date-time-picker ng-model="obj" style="width: 75%;" />
-                  <md-button ng-click="reminderNote(note,obj)" class="md-icon-button" aria-label="delete">
+                    <md-button ng-click="reminderNote(note,obj)" class="md-icon-button" aria-label="delete">
                     SET
                   </md-button>
                 </md-menu-item>
@@ -278,7 +279,7 @@
           <md-menu-bar class="md-icon-button" aria-label="menu">
             <md-menu>
               <md-button ng-click="$mdMenu.open()" class="md-icon-button" aria-label="menu">
-                <i class="material-icons">more_vert</i>
+              <md-tooltip md-direction="bottom">More</md-tooltip>  <i class="material-icons">more_vert</i>
               </md-button>
               <md-menu-content>
                 <md-menu-item>
