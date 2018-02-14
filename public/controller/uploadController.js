@@ -31,7 +31,7 @@ var app = angular.module('todoApp');
     };
   });
 
-app.factory("fileReader", function($q, $log,httpService,$http,$scope) {
+app.factory("fileReader", function($q, $log,httpService,$http) {
   var onLoad = function(reader, deferred, scope) {
     return function() {
       scope.$apply(function() {

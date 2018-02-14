@@ -2,8 +2,11 @@ var app = angular.module('todoApp')
   .controller('registerController', function($scope, $auth, $mdToast, httpService, $state, $http) {
 
     $scope.register = function() {
-      if ($scope.registerForm.fname == "" || $scope.registerForm.email == "" ||
-        $scope.registerForm.password == "" || $scope.registerForm.confirmPassword == "" || $scope.registerForm.recoveryEmail == "") {
+      if ($scope.registerForm.fname == "" || $scope.registerForm.fname == null ||
+        $scope.registerForm.email == "" ||   $scope.registerForm.email == null ||
+        $scope.registerForm.password == "" || $scope.registerForm.password == null
+        || $scope.registerForm.confirmPassword ==""  || $scope.registerForm.confirmPassword ==null
+        || $scope.registerForm.recoveryEmail == "" || $scope.registerForm.recoveryEmail== null) {
         return false;
       }
       if ($scope.registerForm.password != $scope.registerForm.confirmPassword) {

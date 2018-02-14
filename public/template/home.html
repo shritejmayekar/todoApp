@@ -17,7 +17,7 @@
       </div>
     </div>
     <div>
-      <md-menu-bar class="md-icon-button" aria-label="menu4" ng-controller="UploadController">
+      <md-menu-bar class="md-icon-button" aria-label="menu4" >
         <!-- Image Upload of Profile pics  -->
         <md-menu ng-model="image">
           <img ng-click="$mdMenu.open()" ng-src="{{ imageProfile }}" alt="Avatar" class="avatar">
@@ -105,7 +105,10 @@
           <div style="background-color:#C8C8C8;padding: 10px;
   box-shadow: 5px 10px #888888;width:auto">
             <md-card-actions layout="row" layout-align="end center">
-              <md-button ng-click="saveNote()" id="showButton"><b>Done</b></md-button>
+              <form>
+                <input type="file" ng-file-select="onFileSelect($files)" ng-model="imageSrc" />
+              </form>
+              <md-button ng-click="saveNote(imageSrc)" id="showButton"><b>Done</b></md-button>
             </md-card-actions>
           </div>
         </div>
@@ -127,7 +130,7 @@
             <md-tooltip md-direction="bottom">Unpinned Note</md-tooltip>  <img src="./assets/images/pinup.png">
           </md-button>
         </div>
-        <img ng-src="{{imageSrc}}" class="md-card-image" />
+        <img ng-src="{{note.picture}}" class="md-card-image" />
 
         <md-card-title>
           <md-card-title-text ng-click="editNote(note)" flex="auto">
@@ -145,6 +148,12 @@
         </div>
 
         <md-card-actions layout="row" layout-align="end center">
+
+
+
+
+
+
           <color-picker color="color" ng-click="changeTheme(note)" options="options" on-color-changed="colorChanged(newColor, oldColor)"></color-picker>
           <md-button ng-click="archieveNote(note)" class="md-icon-button" aria-label="copy">
            <md-tooltip md-direction="bottom">Archieve</md-tooltip>  <i class="material-icons">archive</i>
@@ -214,11 +223,11 @@
           </md-button>
 
         </div>
-        <img ng-src="{{imagePath}}" class="md-card-image">
+        <img ng-src="{{imageSrc}}" class="md-card-image">
 
         <md-card-title>
           <md-card-title-text ng-click="editNote(note)" flex="auto">
-            <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>
+            <div class="md-headline" style="word-break: break-word;" ng-bind-html="note.titile | html"></div>
 
           </md-card-title-text>
         </md-card-title>

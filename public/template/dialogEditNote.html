@@ -2,7 +2,7 @@
   <div layout="row">
   <form ng-cloak>
     <md-dialog-content  layout="column" class="md-dialog-content" >
-      <textarea  rows="1" cols="30" style="box-shadow: none;resize: none;" ng-model="title " aria-label="title"></textarea>
+      <textarea  rows="1" cols="30" style="box-shadow: none;resize: none;" ng-model="title" aria-label="title"></textarea>
       <md-divider >
       <textarea rows='10' cols="30" style="box-shadow: none;resize: none;" aria-label="note" ng-model="note">
 
@@ -11,7 +11,13 @@
       <md-input-container class="md-block" style="float:right">
         Edited :{{noteObject.edited | date:'MMM dd h:mm a'}}
       </md-input-container>
+      <!--div class='editable' contentEditable="true" class="titleN" id='title1' style="outline:none;width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
+  box-shadow: 5px 10px #888888;
+" layout="column" ng-bind-html="title" ng-model="title1"></div>
 
+      <div class='editable' contentEditable="true" id='note1'  style="outline:none;width:auto;height:auto;background-color:#C8C8C8;padding: 10px;
+box-shadow: 5px 10px #888888;
+" layout="column" ng-bind-html="note" class="description" ng-model="note1"></div-->
     </md-dialog-content>
 
     <md-card-actions layout="5" layout-align="end center" >

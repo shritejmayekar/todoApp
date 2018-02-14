@@ -6,13 +6,7 @@ var Label = require('../model/LabelModel.js')
 const redis = require('redis');
 var Collab =require('../model/CollaboratorModel.js');
 var cache = new redis.createClient( process.env.PORT);
-
-
-//cache.get('Key',function(err,value) {
-  //console.log(value);
-//});
-/*
-var events = require('events');
+/*var events = require('events');
 var eventEmitter = new events.EventEmitter();
 var myEventHandler =function() {
   console.log('listening');
@@ -21,6 +15,10 @@ eventEmitter.on('passwordReset', myEventHandler);*/
 /******************************
 * CRUD operation of Notes
 ******************************/
+
+/*********************************
+* Redis SET/CREATE Notes
+**********************************/
 var redisSet =  function(user_id,user) {
   cache.get(user_id,function(err,note) {
   var noteCache = [];
@@ -30,7 +28,29 @@ var redisSet =  function(user_id,user) {
   cache. set(user_id,JSON.stringify(noteCache.concat(user)), redis.print);
   })
 }
-// create note function for note creation of user
+/*************************************
+* Redis SET/UPDATE Notes
+*************************************/
+var redisSetUp =  function(user_id,user,noteId) {
+  cache.get(user_id,function(err,note) {
+  var noteCache = [];
+  noteCache =JSON.parse(note);
+  console.log("note cache \n"+noteCache);
+  console.log("user cache \n"+ user);
+  var pos = -1;
+  for (var i = 0; i < noteCache.length; i++) {
+    if(noteCache[i]._id == noteId ) {
+      noteCache[i] = user;
+        break;
+    }
+  }
+  cache. set(user_id,JSON.stringify(noteCache), redis.print);
+  })
+}
+/******************************************
+ * Create note function for note
+ *    creation of user
+ ****************************************/
 exports.create = function(req, res) {
   var new_note = new Note();
   var collab = new Collab();
@@ -52,27 +72,38 @@ exports.create = function(req, res) {
     res.json(user);
   });
 }
-// readNote function to read specific user all notes
+/**************************************
+* readNote function to read specific user all notes
+**************************************/
 exports.readNote = function(req, res) {
-  if(!cache.get(req.user.id)) {
-    cache.get(req.user.id,function(err,note) {
-       res.json(JSON.parse(note));
-   })
-  }
-  else {
-    Note.find({
-    // find by id and email
-    user_id:req.user.id
-    }, function(err, note) {
-      if (err)
-        res.send(err);
-          console.log('in model');
-            cache.set(req.user.id, JSON.stringify(note), redis.print);
-      res.json(note);
-    });
-  }
+  var flag = 0;
+  cache.exists(req.user.id,function(err,reply) {
+    if(reply == 1) {
+      console.log('redis cache exists');
+      flag = 1;
+      cache.get(req.user.id,function(err,redisNote) {
+        res.json(JSON.parse(redisNote));
+      })
+    } else {
+      console.log('redis cache not exists');
+      Note.find({
+      // find by id and email
+      user_id:req.user.id
+      }, function(err, note) {
+        if (err)
+          res.send(err);
+            console.log('in model');
+              cache.setex(req.user.id,180, JSON.stringify(note), redis.print);
+              //cache.expires(180);
+        res.json(note);
+      });
+    }
+  })
 }
-// update function to update a current note
+
+/*****************************************
+* update function to update a current note
+*****************************************/
 exports.update = function(req, res) {
   Note.findOneAndUpdate({
     _id: req.params.noteId,
@@ -82,11 +113,13 @@ exports.update = function(req, res) {
   }, function(err, note) {
     if (err)
       res.send(err);
-      cache. set(req.user.id,JSON.stringify(note), redis.print);
+    redisSetUp(req.user.id,note,req.params.noteId);
     res.json(note);
   });
 };
-// delete function to delete notes of specific user
+/*******************************************
+* delete function to delete notes of specific user
+******************************************/
 exports.delete = function(req, res) {
   Note.remove({
     _id: req.params.noteId
@@ -105,11 +138,7 @@ exports.delete = function(req, res) {
             break;
         }
       }
-      console.log(pos);
-    //  var index = redisNote.indexOf(JSON.parse(note));
-      //if(index != -1) {
-	      noteCache= noteCache.splice(pos, 1);
-       //}
+	     noteCache.splice(pos, 1);
       console.log(JSON.stringify(noteCache));
       cache. set(req.user.id,JSON.stringify(noteCache), redis.print);
       })
@@ -124,7 +153,9 @@ exports.reminder = function(req,res) {
     res.json('');
   } )
 }
-// update function to update a current note
+/*******************************************
+*  update function to update a current note
+********************************************/
 exports.collab = function(req, res) {
   console.log(req.body.email);
   User.findOne({'local.email':req.body.email},{'local.password':0,'local.profile':0},function(err,user) {
@@ -193,7 +224,9 @@ exports.collaborateRemove = function(req,res) {
       });
   })
 }
-
+/*****************************************
+* addLabel function Add label to the notes
+*****************************************/
 exports.addLabel = function(req, res) {
   var new_label = new Label();
 //  console.log(req.body.answer);
@@ -207,7 +240,9 @@ exports.addLabel = function(req, res) {
     res.json(user);
   });
 }
-
+/******************************************
+* removeLabel function Remove label from notes
+******************************************/
 exports.removeLabel = function(req, res) {
     console.log(req.params.label+'\n'+req.user.id);
   Label.remove({
@@ -222,7 +257,9 @@ exports.removeLabel = function(req, res) {
     });
   });
 }
-
+/******************************************
+* getLabel function display user labels
+******************************************/
 exports.getLabel = function(req, res) {
   Label.find({
   // find by id and email
@@ -230,8 +267,6 @@ exports.getLabel = function(req, res) {
   }, function(err, note) {
     if (err)
       res.send(err);
-    //  console.log(note );
-    //  cache.set(req.user.id,3600,note);
     res.json(note);
   });
 }

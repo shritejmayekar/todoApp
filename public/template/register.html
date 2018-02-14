@@ -36,14 +36,14 @@
         </md-input-container>
         <md-input-container class="md-block"><label>Confirm Password</label>
           <input  type="password" ng-model="registerForm.confirmPassword" required minlength="8">
-          <div ng-messages="registerForm.password.$error">
+          <div ng-messages="registerForm.confirmPassword.$error">
             <div ng-message="required">Please confirm Password</div>
             <div ng-show="confirm">Please enter the same password</div>
           </div>
         </md-input-container>
         <md-input-container class="md-block"><label>Recovery Email</label>
           <input required name="registerForm.recoveryEmail" type="email" ng-model="registerForm.recoveryEmail" ng-pattern: "/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/">
-          <div ng-messages="registerForm.email.$error">
+          <div ng-messages="registerForm.recoveryEmail.$error">
 
             <div ng-message="ng-pattern">email should be xyz@example.com</div>
           </div>

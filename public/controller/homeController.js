@@ -2,7 +2,9 @@ var app = angular.module('todoApp');
 app.controller('homeController', function($scope, $sce, $mdDialog, $state, $timeout,
   $mdSidenav, $http, $mdToast, httpService, $interval, $filter) {
 
-
+  /**********************
+   * Set Note color
+   **********************/
   $scope.pinNote = "";
   //  $scope.toggleLeft = buildToggler('left');
   //$scope.toggleRight = buildToggler('right');
@@ -54,7 +56,6 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     var data = {
       'local.profile': profilePic
     }
-
     $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     httpService.httpServiceFunction('PUT', '/auth/profilePic', data).then(function(res) {
       $scope.getProfile();
@@ -77,7 +78,6 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     })
   }
   getLabel();
-
   // remove the label form the notes
   $scope.labelClick = function(note, label) {
     httpService.httpServiceFunction('put', '/note/update/' + note._id, {
@@ -91,8 +91,6 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   }
   // remove the user labels from user
   $scope.removeLabel = function(label) {
-
-
     httpService.httpServiceFunction('delete', '/note/removeLabel/' + label).then(function(res) {
       getLabel();
       for (var i = 0; i < $scope.listOfNotes.length; i++) {
@@ -109,11 +107,11 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       noteFunction();
     })
   }
-
-
-
   $('#pinned').hide();
   $('#other').hide();
+
+
+
   /************************************
    * List View / Grid View
    ************************************/
@@ -174,20 +172,15 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
 
     document.getElementById('showDiv').style.visibility = "visible"
   }
-
   var show = function() {
     document.getElementById('title').innerHTML = "";
     document.getElementById('note').innerHTML = ""
     document.getElementById('div1').style.visibility = "visible";
     document.getElementById('showDiv').style.visibility = "hidden "
   }
-
   $scope.noteID = function(note) {
     $scope.imageURL = note;
-
   }
-
-
   /**************************************
    * noteFunction to GET / READ all Notes
    ***************************************/
@@ -197,7 +190,6 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       console.log(res.data);
       var list_notes = res.data;
       $scope.listOfNotes = res.data;
-
       try {
         httpService.httpServiceFunction('GET', '/note/collabsNote').then(function(res) {
           console.log(res.data);
@@ -212,44 +204,41 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       }
       remind();
       for (var i = 0; i < $scope.listOfNotes.length; i++) {
-          if($scope.listOfNotes[i].is_pinned) {
-            $('#pinned').show();
-            $('#other').show();
-            break;
-          }
-          else {
-            $('#pinned').hide();
-            $('#other').hide();
-          }
+        if ($scope.listOfNotes[i].is_pinned) {
+          $('#pinned').show();
+          $('#other').show();
+          break;
+        } else {
+          $('#pinned').hide();
+          $('#other').hide();
+        }
       }
     });
-
   }
-
   noteFunction();
 
 
   /***************************************
    * saveNote function to CREATE / SAVE Notes
    ****************************************/
-  $scope.saveNote = function() {
+  $scope.saveNote = function(image) {
     var get_email = JSON.parse(localStorage.Token).email;
     $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     console.log(document.getElementById('div1').innerHTML);
     var title = document.getElementById('title').innerHTML;
     var note = document.getElementById('note').innerHTML;
+
     var data = {
       title: title,
       note: note,
-      email: get_email
+      email: get_email,
+      picture: image
     }
     httpService.httpServiceFunction('POST', '/note/create', data).then(function(res) {
       console.log(res);
       console.log(get_email);
       noteFunction();
       show();
-
-
     })
   }
 
@@ -263,7 +252,6 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     httpService.httpServiceFunction('delete', '/note/delete/' + note._id, null).then(function(res) {
       console.log(res);
       noteFunction();
-
       $mdToast.show(
         $mdToast.simple()
         .textContent('Note deleted permanently...')
@@ -320,7 +308,7 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   var remind = function() {
     console.log($scope.listOfNotes);
     for (var i = 0; i < $scope.listOfNotes.length; i++) {
-    remainderCheck($scope.listOfNotes[i]);
+      remainderCheck($scope.listOfNotes[i]);
       //reminderBackend($scope.listOfNotes[i]);
     }
   }
@@ -408,9 +396,16 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
 
   function DialogController($scope, $rootScope, $mdDialog, $sce) {
     $scope.title = noteObj.title;
+    $scope.title1 = noteObj.title;
     //$scope.getNote = noteObj;
-    $scope.note = noteObj.note;
+    $scope.note = $("<div/>").html(noteObj.note).text();
+    $scope.note1 = noteObj.note;
     $scope.noteObject = noteObj;
+
+
+    //$scope.title.titleNote =  noteObj.title;
+    //  $scope.note.description= noteObj.note;
+
     //$scope.note = $("<div/>").html(noteObj.note).text()
     //  $scope.note =  $sce.trustAsHtml(noteObj.note);
     console.log($scope.title);
@@ -738,24 +733,24 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
 
 
   }
-/*
-  var socket = io.connect();
-  var reminderBackend = function(note) {
-  socket.emit('reminder check',note,function() {
+  /*
+    var socket = io.connect();
+    var reminderBackend = function(note) {
+    socket.emit('reminder check',note,function() {
 
-  });
-  socket.on('get reminder',note,function(){
+    });
+    socket.on('get reminder',note,function(){
 
-        Push.create("Reminder!", {
-        body: note.note,
-        //  icon: '/icon.png',
-        icon: $scope.imageProfile,
-        timeout: 4000,
-        onClick: function() {
-          window.focus();
-          this.close();
-        }
-        });
-  })
-}*/
+          Push.create("Reminder!", {
+          body: note.note,
+          //  icon: '/icon.png',
+          icon: $scope.imageProfile,
+          timeout: 4000,
+          onClick: function() {
+            window.focus();
+            this.close();
+          }
+          });
+    })
+  }*/
 })
