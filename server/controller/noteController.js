@@ -78,6 +78,11 @@ exports.create = function(req, res) {
 exports.readNote = function(req, res) {
   var flag = 0;
   cache.exists(req.user.id,function(err,reply) {
+    if(err) {
+      cache.del(req.user.id,function(err,redisNote) {
+        res.redirect('/');
+      })
+    }
     if(reply == 1) {
       console.log('redis cache exists');
       flag = 1;

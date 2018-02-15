@@ -65,6 +65,10 @@ var NoteSchema = new Schema({
   },
   picture:{
     data:Buffer,
+  },
+  is_labeled:{
+    type:Boolean,
+    default:false
   }
 });
 

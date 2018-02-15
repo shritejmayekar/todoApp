@@ -1,10 +1,12 @@
 var app = angular.module('todoApp');
 app.controller('homeController', function($scope, $sce, $mdDialog, $state, $timeout,
-  $mdSidenav, $http, $mdToast, httpService, $interval, $filter) {
+  $mdSidenav, $http, $mdToast, httpService, $interval, $filter,$stateParams,$location) {
 
   /**********************
    * Set Note color
    **********************/
+   //console.log( $location.absUrl().split('home.label/')[1]);
+   $scope.paramOfLabel = $location.absUrl().split('home.label/')[1];
   $scope.pinNote = "";
   //  $scope.toggleLeft = buildToggler('left');
   //$scope.toggleRight = buildToggler('right');
@@ -221,13 +223,13 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
   /***************************************
    * saveNote function to CREATE / SAVE Notes
    ****************************************/
-  $scope.saveNote = function(image) {
+  $scope.saveNote = function() {
+    var image;
     var get_email = JSON.parse(localStorage.Token).email;
     $http.defaults.headers.common['x-access-token'] = "Bearer " + JSON.parse(localStorage.Token).token;
     console.log(document.getElementById('div1').innerHTML);
     var title = document.getElementById('title').innerHTML;
     var note = document.getElementById('note').innerHTML;
-
     var data = {
       title: title,
       note: note,
@@ -237,6 +239,12 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
     httpService.httpServiceFunction('POST', '/note/create', data).then(function(res) {
       console.log(res);
       console.log(get_email);
+      var data = {
+        picture:$scope.imageSrc
+      }
+        httpService.httpServiceFunction('PUT', '/note/update/'+res.data._id, data).then(function(res) {
+          console.log(res);
+        })
       noteFunction();
       show();
     })

@@ -125,9 +125,11 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $auth
     }
    })
    .state('label',{
-     url:'/home.label',
+     url:'/home.label/:label',
      templateUrl:'/template/label.html',
-     controller: 'homeController',
+     controller: 'homeController',function($scope,$stateParams) {
+       $scope.label = $stateParams.label;
+     },
      resolve: {
       loginRequired: loginRequired
     }

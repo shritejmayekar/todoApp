@@ -1,7 +1,7 @@
 <!-- nav bar -->
 <nav>
 
-  <div class="nav-wrapper" layout="row" style="overflow:hidden;position:fixed;z-index:5;width:100%;height:75px;background-color:#607d8b;">
+  <div class="nav-wrapper" layout="row" style="overflow:hidden;position:fixed;z-index:5;width:100%;height:75px;background-color:#f3bb02;">
     <div flex="10">
       <md-fab-toolbar md-open="demo.isOpen" count="demo.count" md-direction="{{demo.selectedDirection}}">
 
@@ -13,11 +13,11 @@
     </div>
     <div flex="80">
       <div>
-        <h2><b>Archieve</b>  <input type="text" ng-model="searchNotes">
+        <h2><b>Google</b> Keep  <input type="text" ng-model="searchNotes">
       </div>
     </div>
     <div>
-      <md-menu-bar class="md-icon-button" aria-label="menu4" ng-controller="UploadController">
+      <md-menu-bar class="md-icon-button" aria-label="menu4" >
         <!-- Image Upload of Profile pics  -->
         <md-menu ng-model="image">
           <img ng-click="$mdMenu.open()" ng-src="{{ imageProfile }}" alt="Avatar" class="avatar">
@@ -67,9 +67,16 @@
       <div id="mySidenav" style="background-color:#e6e6e6;overflow-y: scroll; height:800px;" class="sidenav">
 
         <a ui-sref="home">Notes</a>
-        <!--a ui-sref="reminder">Reminders</a-->
         <a ui-sref="archieve">Archive</a>
         <a ui-sref="trash">Trash</a>
+        <div>
+          <md-button ng-click="addLabel()"><b>Add Label</b></md-button>
+          <div ng-repeat="labels in listLabel">
+            <a ui-sref="label({label:labels.label})"><i class="material-icons">label</i>{{labels.label}}</a>
+            <!--md-button   ng-click="removeLabel(labels.label)">x</md-button-->
+
+          </div>
+        </div>
 
       </div>
     </div>
@@ -111,7 +118,7 @@
 
   <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
 
-    <div layout-wrap flex-gt-xs="30"  ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:searchNotes |filter:{is_label:}" >
+    <div layout-wrap flex-gt-xs="30"  ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:searchNotes | filter:paramOfLabel" >
       <md-card md-theme={{note.note_color}} md-theme-watch>
         <img ng-src="{{imagePath}}" class="md-card-image">
         <md-card-title>

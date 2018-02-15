@@ -17,7 +17,7 @@
       </div>
     </div>
     <div>
-      <md-menu-bar class="md-icon-button" aria-label="menu4" ng-controller="UploadController">
+      <md-menu-bar class="md-icon-button" aria-label="menu4" >
         <!-- Image Upload of Profile pics  -->
         <md-menu ng-model="image">
           <img ng-click="$mdMenu.open()" ng-src="{{ imageProfile }}" alt="Avatar" class="avatar">
@@ -67,9 +67,16 @@
       <div id="mySidenav" style="background-color:#e6e6e6;overflow-y: scroll; height:800px;" class="sidenav">
 
         <a ui-sref="home">Notes</a>
-        <!--a ui-sref="reminder">Reminders</a-->
         <a ui-sref="archieve">Archive</a>
         <a ui-sref="trash">Trash</a>
+        <div>
+          <md-button ng-click="addLabel()"><b>Add Label</b></md-button>
+          <div ng-repeat="labels in listLabel">
+            <a ui-sref="label({label:labels.label})"><i class="material-icons">label</i>{{labels.label}}</a>
+            <!--md-button   ng-click="removeLabel(labels.label)">x</md-button-->
+
+          </div>
+        </div>
 
       </div>
     </div>
@@ -113,7 +120,7 @@
 
     <div layout-wrap flex-gt-xs="30"  ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:searchNotes |filter:{is_archieved:true}" >
       <md-card md-theme={{note.note_color}} md-theme-watch>
-        <img ng-src="{{imagePath}}" class="md-card-image">
+        <img ng-src="{{note.picture}}" class="md-card-image">
         <md-card-title>
           <md-card-title-text ng-click="editNote(note)" flex="auto">
             <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>

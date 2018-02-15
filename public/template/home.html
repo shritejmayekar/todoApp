@@ -57,9 +57,6 @@
   </div>
 </nav>
 
-
-
-
 <!-- Google keep all layout-->
 
 <div layout="column" flex layout-padding style="height:auto;background-color:#e6e6e6" id="main">
@@ -74,8 +71,9 @@
         <div>
           <md-button ng-click="addLabel()"><b>Add Label</b></md-button>
           <div ng-repeat="labels in listLabel">
-            <i class="material-icons">label</i>{{labels.label}}
-            <md-button  ng-click="removeLabel(labels.label)">X</md-button>
+            <a ui-sref="label({label:labels.label})"><i class="material-icons">label</i>{{labels.label}}</a>
+            <!--md-button   ng-click="removeLabel(labels.label)">x</md-button-->
+
           </div>
         </div>
 
@@ -105,10 +103,11 @@
           <div style="background-color:#C8C8C8;padding: 10px;
   box-shadow: 5px 10px #888888;width:auto">
             <md-card-actions layout="row" layout-align="end center">
+
               <form>
-                <input type="file" ng-file-select="onFileSelect($files)" ng-model="imageSrc" />
+                <input type="file" result-image="resultImage" ng-file-select="onFileSelect($files)" ng-model="imageSrc" />
               </form>
-              <md-button ng-click="saveNote(imageSrc)" id="showButton"><b>Done</b></md-button>
+              <md-button ng-click="saveNote()" id="showButton"><b>Done</b></md-button>
             </md-card-actions>
           </div>
         </div>
@@ -125,18 +124,24 @@
 
     <div layout-wrap flex-gt-xs="30" ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:{is_archieved:false} | filter:{is_pinned:true} | filter:{is_deleted:false} |filter:searchNotes">
       <md-card md-theme={{note.note_color}} md-theme-watch>
-        <div style="float:right">
-        <md-button ng-click="pinNote(note)" class="md-icon-button" aria-label="edit">
-            <md-tooltip md-direction="bottom">Unpinned Note</md-tooltip>  <img src="./assets/images/pinup.png">
-          </md-button>
-        </div>
-        <img ng-src="{{note.picture}}" class="md-card-image" />
-
-        <md-card-title>
+<md-content layout-padding="" class="autoScroll">
+      <div class="md-icon-float md-button-right width70">
+        <md-card-subtitle>
           <md-card-title-text ng-click="editNote(note)" flex="auto">
             <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>
           </md-card-title-text>
-        </md-card-title>
+        </md-card-subtitle>
+      <div class="button-group">
+        <md-button ng-click="pinNote(note)" class="md-icon-button" aria-label="edit">
+            <md-tooltip md-direction="bottom">Unpinned Note</md-tooltip>
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="#0D47A1" d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" />
+            </svg>
+          </md-button>
+      </div>
+    </div>
+</md-content>
+        <img ng-src="{{note.picture}}" class="md-card-image"/>
         <md-card-content ng-click="editNote(note)">
           <div style="word-break: break-word;" ng-bind-html="note.note |html "></div>
         </md-card-content>
@@ -146,22 +151,22 @@
             <span class="closebtn" ng-click="labelClick(note,getLabel)" onclick="this.parentElement.style.display='none'">&times;</span>
           </div>
         </div>
-
         <md-card-actions layout="row" layout-align="end center">
-
-
-
-
-
+          <div fxFlex></div>
 
           <color-picker color="color" ng-click="changeTheme(note)" options="options" on-color-changed="colorChanged(newColor, oldColor)"></color-picker>
+          <div fxFlex></div>
+
           <md-button ng-click="archieveNote(note)" class="md-icon-button" aria-label="copy">
            <md-tooltip md-direction="bottom">Archieve</md-tooltip>  <i class="material-icons">archive</i>
           </md-button>
+          <div fxFlex></div>
 
           <md-button ng-click="collabsNote(note)" class="md-icon-button" aria-label="collabs">
           <md-tooltip md-direction="bottom">collaborate Notes</md-tooltip>  <i class="material-icons">person_add</i>
           </md-button>
+          <div fxFlex></div>
+
           <md-menu-bar class="md-icon-button" aria-label="menu">
             <md-menu>
               <md-button ng-click="$mdMenu.open()" class="md-icon-button" aria-label="menu">
@@ -197,11 +202,7 @@
                   <md-button ng-click="labelAdd(note)" aria-label="center">
                     Add a label
                   </md-button>
-
                 </md-menu-item>
-
-
-
               </md-menu-content>
             </md-menu>
           </md-menu-bar>
@@ -217,18 +218,28 @@
     <div layout-wrap flex-gt-xs="30" ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:searchNotes |
      filter:{is_archieved:false} | filter:{is_pinned:false} | filter:{is_deleted:false}">
       <md-card md-theme="{{note.note_color}}" md-theme-watch>
-        <div style="float:right">
-          <md-button ng-click="pinNote(note)" class="md-icon-button" aria-label="edit">
-            <img src="./assets/images/pinme.png">
-          </md-button>
-
-        </div>
-        <img ng-src="{{imageSrc}}" class="md-card-image">
-
+        <md-content layout-padding="" class="autoScroll">
+              <div class="md-icon-float md-button-right width70">
+                <md-card-subtitle>
+                  <md-card-title-text ng-click="editNote(note)" flex="auto">
+                    <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>
+                  </md-card-title-text>
+                </md-card-subtitle>
+              <div class="button-group">
+                <md-button ng-click="pinNote(note)" class="md-icon-button" aria-label="edit">
+                    <md-tooltip md-direction="bottom">Pin Note</md-tooltip>
+                    <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                      <path fill="#000000" d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" />
+                    </svg>
+                  </md-button>
+              </div>
+            </div>
+        </md-content>
+        </md-card-title>
+        <img ng-src="{{note.picture}}" class="md-card-image">
         <md-card-title>
           <md-card-title-text ng-click="editNote(note)" flex="auto">
             <div class="md-headline" style="word-break: break-word;" ng-bind-html="note.titile | html"></div>
-
           </md-card-title-text>
         </md-card-title>
         <md-card-content ng-click="editNote(note)">
@@ -254,6 +265,7 @@
         <md-card-actions layout="row" layout-align="end center">
 
           <color-picker color="color" ng-click="changeTheme(note)" options="options" on-color-changed="colorChanged(newColor, oldColor)"></color-picker>
+
           <md-button ng-click="archieveNote(note)" class="md-icon-button" aria-label="copy">
             <md-tooltip md-direction="bottom">Archive Note</md-tooltip><i class="material-icons">archive</i>
           </md-button>
