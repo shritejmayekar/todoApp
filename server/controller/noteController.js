@@ -23,8 +23,8 @@ var redisSet =  function(user_id,user) {
   cache.get(user_id,function(err,note) {
   var noteCache = [];
   noteCache =JSON.parse(note);
-  console.log("note cache \n"+noteCache);
-  console.log("user cache \n"+ user);
+//  console.log("note cache \n"+noteCache);
+//  console.log("user cache \n"+ user);
   cache. set(user_id,JSON.stringify(noteCache.concat(user)), redis.print);
   })
 }
@@ -35,8 +35,8 @@ var redisSetUp =  function(user_id,user,noteId) {
   cache.get(user_id,function(err,note) {
   var noteCache = [];
   noteCache =JSON.parse(note);
-  console.log("note cache \n"+noteCache);
-  console.log("user cache \n"+ user);
+//  console.log("note cache \n"+noteCache);
+//  console.log("user cache \n"+ user);
   var pos = -1;
   for (var i = 0; i < noteCache.length; i++) {
     if(noteCache[i]._id == noteId ) {

@@ -2,10 +2,22 @@
   var jwt = require('jsonwebtoken');
   var User = require('../model/UserModelPassport.js');
   var keys = require('../config/keys.js');
+  var config = require('../config/config');
   var nodemailer = require('nodemailer');
   var userService = require('../service/userService.js');
   var redis = require('redis');
   var cache = new redis.createClient(process.env.PORT);
+  var RedisSMQ = new require('rsmq');
+  var rsmq = new RedisSMQ( {host: "127.0.0.1", port: 6379, ns: "rsmq"} );
+  /****************************************
+  * CREATE Message Queue
+  ***************************************/
+
+  rsmq.createQueue({qname:'redisActiveUserSMQ'},function(err,resp){
+      if(resp == 1) {
+        console.log('Queue created');
+      }
+  })
 
   /******************************
    * Login and signup
@@ -13,6 +25,12 @@
   // sigup function for register user in db
   exports.signup = function(req, res) {
     if (typeof(req.body) == 'object') {
+      rsmq.sendMessage({qname:'redisActiveUserSMQ',message:req.body.email+' Activated'}, function(err,resp) {
+          if(resp) {
+            console.log('Message sent:'+resp);
+            mailSend(req.body.email);
+          }
+      })
       res.status(200).send({
         authenticate: true,
         message: 'Register success',
@@ -28,10 +46,10 @@
   exports.login = function(req, res) {
     if (typeof(req.body) == 'object') {
       User.findOne({
-        'local.email': req.body.email
+        'local.email': req.body.email,
+        'local.is_activated':true
       }, function(err, user) {
-        console.log(user);
-
+        if(!user) res.status(401).json('user not found');
         var token = jwt.sign({
           id: user._id, // payload
           password: user.local.password
@@ -87,6 +105,31 @@
       });
 
     }
+  }
+  /******************************************
+  * Activate the user Account after Register
+  ****************************************/
+  exports.activateUser = function(req,res) {
+    var email = req.params.data;
+    var userToken = req.params.token;
+
+    cache.get(email,function(err,token) {
+
+      if(err) return res.json({message:'No valid token'})
+      if(!token) return res.json({message:'No token provided'})
+       var data = {
+         'local.is_activated':true
+       }
+       cache.del(email);
+      User.findOneAndUpdate({'local.email':email},data,{new:true},function(err,user) {
+        console.log(user);
+         res.redirect('/');
+        //  res.json({token:token,Message:'User is Activated'})
+
+      })
+
+    })
+      //res.redirect('/#!/register');
   }
   exports.authenticateFB = function(req, res) {
     //res.json(req.user)
@@ -160,7 +203,7 @@
             subject: 'Password recovery',
             text: 'The help for password has arrived',
             html: '<h3>Dear ' + new_user.local.email + ',</h3>' + '<p>You requested for a password reset, ' +
-              'kindly use this <a href=' + 'http://localhost:3000/#!/resetPassword?token=' + token + ' >link</a>' +
+              'kindly use this <a href=' + config.baseUrl+'/#!/resetPassword?token=' + token + ' >link</a>' +
               ' to reset your password</p>'
 
           };
@@ -170,7 +213,7 @@
               status: info.response,
               messages: 'message send to email',
               context: {
-                url: 'http://localhost:3000/auth/resetPassword?token=' + token
+                url: config.baseUrl+'/auth/resetPassword?token=' + token
               }
             })
           });
@@ -281,4 +324,58 @@
 
     }
 
+  }
+
+  var mailSend = function(user) {
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: keys.emailKey,
+        pass: keys.passwordKey
+      }
+    });
+
+    var token = jwt.sign({
+      email: user
+    }, 'secret', {
+      expiresIn: 86400 // expires in 24 hours
+    });
+    cache.del(user);
+    cache.set(user,token);
+    var mailOptions = {
+      from: keys.emailKey,
+      to: user,
+      subject: 'Authenticated User',
+      text: 'Register to todoApp Success',
+      html: '<h3>Dear ' + user + ',</h3>' + '<p>Your Registered successfully, ' +
+        'kindly use this <a href=' + config.baseUrl+'/auth/activateUser/' +user+'/'+ token + ' >link</a>' +
+        ' to Activate the Account</p>'
+
+    };
+    transporter.sendMail(mailOptions, function(error, info) {
+      if (error) return res.send(error);
+      rsmq.receiveMessage({qname:'redisActiveUserSMQ'}, function(err,resp) {
+        if(resp.id) {
+          console.log('Message Received:' +resp);
+          rsmq.deleteMessage({qname:'redisActiveUserSMQ',id:resp.id},function(err,resp) {
+            if(resp == 1) {
+              console.log('Message sent');
+            }
+            else {
+              console.log("Message not Found");
+            }
+          })
+        }
+        else {
+          console.log('No message for me');
+        }
+      })
+      res.json({
+        status: info.response,
+        messages: 'message send to email',
+        context: {
+          url: config.baseUrl+'/auth/activateUser/' + user+'/'+token
+        }
+      })
+    });
   }

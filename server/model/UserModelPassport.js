@@ -3,12 +3,18 @@ var bcrypt = require('bcrypt');
 
 var userSchema = mongoose.Schema({
   local: {
+    name:String,
     email: String,
     password: String,
     reset_password_token:String,
     reset_password_expires:String,
     profile: {
       data: Buffer,
+    },
+    recovery_email:String,
+    is_activated:{
+      type:Boolean,
+      default:false
     }
 
   },

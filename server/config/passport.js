@@ -10,12 +10,12 @@ var config = require('./keys.js')
 module.exports = function(passport) {
   // serialize and deserialize
   passport.serializeUser(function(user, done) {
-    console.log('serializeUser:' + user._id);
+  //  console.log('serializeUser:' + user._id);
     done(null, user._id)
   });
   passport.deserializeUser(function(_id, done) {
     User.findById(_id, function(err, user) {
-      console.log(user);
+    //  console.log(user);
       if (!err) done(null, user);
       else {
         done(err, null)
@@ -41,6 +41,8 @@ module.exports = function(passport) {
             // create new user
             var newUser = new User();
             // set creadiantial
+            newUser.local.name = req.body.name;
+            newUser.local.recovery_email = req.body.recovery_email;
             newUser.local.email = email;
             newUser.local.password = newUser.generateHash(password);
             // save new user
@@ -90,8 +92,8 @@ module.exports = function(passport) {
     },
     function(accessToken, refreshToken, profile, done) {
       console.log('In the passport watch');
-      console.log(accessToken + '\n' + refreshToken + '\n');
-      console.log(profile);
+    //  console.log(accessToken + '\n' + refreshToken + '\n');
+      //console.log(profile);
       process.nextTick(function(res) {
         User.findOne({
           'facebook.id': profile.id

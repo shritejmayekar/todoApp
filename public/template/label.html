@@ -120,7 +120,7 @@
 
     <div layout-wrap flex-gt-xs="30"  ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:searchNotes | filter:paramOfLabel" >
       <md-card md-theme={{note.note_color}} md-theme-watch>
-        <img ng-src="{{imagePath}}" class="md-card-image">
+        <img ng-src="{{note.picture}}" class="md-card-image">
         <md-card-title>
           <md-card-title-text ng-click="editNote(note)" flex="auto">
             <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>

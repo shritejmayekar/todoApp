@@ -133,6 +133,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $auth
      resolve: {
       loginRequired: loginRequired
     }
+
   })
 
 

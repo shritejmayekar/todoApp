@@ -22,6 +22,10 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       note_color: $scope.themeColor[$scope.options.indexOf(newColor)]
     }
   }
+
+
+
+
   /*************************************
    * set myCroppedImage Profile pics
    ************************************/
@@ -329,12 +333,6 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
         //console.log($filter('date')(note.reminder, "short") + '\n' +
         //$filter('date')(date, "short"));
         if ($filter('date')(note.reminder, "short") == $filter('date')(date, "short")) {
-          /*    $mdToast.show(
-                $mdToast.simple()
-                .textContent('Reminder success...')
-                .position('bottom')
-                .hideDelay(3000)
-              )*/
           Push.create("Reminder!", {
             body: note.note,
             //  icon: '/icon.png',

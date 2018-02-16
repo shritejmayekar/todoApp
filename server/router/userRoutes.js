@@ -11,6 +11,8 @@ router.post('/signup', passport.authenticate('local-signup', {
 router.post('/login', passport.authenticate('local-login', {
   session: false
 }), userController.login);
+// route to activate user after registration
+router.get('/activateUser/:data/:token', userController.activateUser);
 
 // authenticate middleware
 router.get('/authenticate', userController.authenticate);
@@ -41,7 +43,8 @@ router.get('/google',
 // route to get google callback
 router.get('/google/callback',
   passport.authenticate('google', {
-    session: false,  failureRedirect: '/'
+    session: false,
+    failureRedirect: '/'
   }), userController.authenticateGoogle);
 
 router.get('/profile', function(req, res) {
@@ -49,7 +52,7 @@ router.get('/profile', function(req, res) {
   console.log(req);
 })
 // route to get profilepic
-router.put('/profilePic',userController.profilePic);
+router.put('/profilePic', userController.profilePic);
 
 
 module.exports = router;

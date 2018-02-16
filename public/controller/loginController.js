@@ -48,7 +48,7 @@ var app = angular.module('todoApp')
         }
       }).catch(function(res) {
         console.log(res);
-        document.getElementById('flag').innerHTML = "<p style='color:red'>user not found</p>";
+        document.getElementById('flag').innerHTML = "<p style='color:red'>name or password is wrong or Account is not activated  </p>";
 
       })
 

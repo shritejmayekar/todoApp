@@ -1,8 +1,9 @@
 var app = angular.module('todoApp')
-  .controller('registerController', function($scope, $auth, $mdToast, httpService, $state, $http) {
+  .controller('registerController', function($scope,$location, $auth, $mdToast, httpService, $state, $http) {
 
     $scope.register = function() {
       if ($scope.registerForm.fname == "" || $scope.registerForm.fname == null ||
+      $scope.registerForm.lname == "" || $scope.registerForm.lname == null ||
         $scope.registerForm.email == "" ||   $scope.registerForm.email == null ||
         $scope.registerForm.password == "" || $scope.registerForm.password == null
         || $scope.registerForm.confirmPassword ==""  || $scope.registerForm.confirmPassword ==null
@@ -13,10 +14,10 @@ var app = angular.module('todoApp')
         return false;
       }
       var data = {
-        name: $scope.registerForm.fname,
+        name: $scope.registerForm.fname+ ' '+$scope.registerForm.lname,
         email: $scope.registerForm.email,
         password: $scope.registerForm.password,
-        recoveryEmail: $scope.registerForm.recoveryEmail
+        recovery_email: $scope.registerForm.recoveryEmail
 
       }
       $auth.signup(data).then(function(res) {
@@ -28,6 +29,16 @@ var app = angular.module('todoApp')
               .position('top right')
               .hideDelay(3000)
             );
+            Push.create("Register Success!", {
+              body: 'Please verify Email by clicking Link',
+              //  icon: '/icon.png',
+            //  icon: $scope.imageProfile,
+              timeout: 4000,
+              onClick: function() {
+                window.focus();
+                this.close();
+              }
+            });
             $state.go('home');
           } else {
             document.getElementById('flag').innerHTML = "<p style='color:red'>There was a problem registering the user</p>"
@@ -40,4 +51,6 @@ var app = angular.module('todoApp')
 
         });
     }
+    console.log($location.url());
+
   });
