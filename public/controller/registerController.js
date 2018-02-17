@@ -1,6 +1,7 @@
 var app = angular.module('todoApp')
   .controller('registerController', function($scope,$location, $auth, $mdToast, httpService, $state, $http) {
 
+    $('#spinner').hide();
     $scope.register = function() {
       if ($scope.registerForm.fname == "" || $scope.registerForm.fname == null ||
       $scope.registerForm.lname == "" || $scope.registerForm.lname == null ||
@@ -13,6 +14,7 @@ var app = angular.module('todoApp')
       if ($scope.registerForm.password != $scope.registerForm.confirmPassword) {
         return false;
       }
+      $('#spinner').show();
       var data = {
         name: $scope.registerForm.fname+ ' '+$scope.registerForm.lname,
         email: $scope.registerForm.email,
@@ -42,12 +44,14 @@ var app = angular.module('todoApp')
             $state.go('home');
           } else {
             document.getElementById('flag').innerHTML = "<p style='color:red'>There was a problem registering the user</p>"
+            $('#spinner').hide();
 
           }
         })
         .catch(function(res) {
           console.log(res);
           document.getElementById('flag').innerHTML = "<p style='color:red'>There was a problem registering the user</p>"
+          $('#spinner').hide();
 
         });
     }

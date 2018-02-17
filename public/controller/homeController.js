@@ -319,10 +319,12 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
    *******************************/
   var remind = function() {
     console.log($scope.listOfNotes);
-    for (var i = 0; i < $scope.listOfNotes.length; i++) {
-      remainderCheck($scope.listOfNotes[i]);
-      //reminderBackend($scope.listOfNotes[i]);
-    }
+    //for (var i = 0; i < $scope.listOfNotes.length; i++) {
+      //remainderCheck($scope.listOfNotes[i]);
+    //  reminderBackend($scope.listOfNotes[i]);
+      reminderBackend($scope.listOfNotes);
+
+    //}
   }
   /*******************************
    * Check the Each Note Reminder
@@ -735,17 +737,14 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
       })
       $mdDialog.hide();
     }
-
-
-
   }
-  /*
+
     var socket = io.connect();
     var reminderBackend = function(note) {
     socket.emit('reminder check',note,function() {
 
     });
-    socket.on('get reminder',note,function(){
+    socket.on('get reminder',function(note){
 
           Push.create("Reminder!", {
           body: note.note,
@@ -757,6 +756,10 @@ app.controller('homeController', function($scope, $sce, $mdDialog, $state, $time
             this.close();
           }
           });
+          httpService.httpServiceFunction('put','/note/update/'+note._id,{reminder:null}).then(function(res) {
+
+          })
+
     })
-  }*/
+  }
 })

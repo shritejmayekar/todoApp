@@ -3,7 +3,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var User = require('../model/UserModelPassport.js');
 var FacebookStrategy = require('passport-facebook').Strategy;
-var config = require('./keys.js')
+var config = require('../config/keys.js')
 /**********************************************
  * Local passport strategy for login and signup
  ***********************************************/
@@ -93,7 +93,7 @@ module.exports = function(passport) {
     function(accessToken, refreshToken, profile, done) {
       console.log('In the passport watch');
     //  console.log(accessToken + '\n' + refreshToken + '\n');
-      //console.log(profile);
+    //  console.log(profile);
       process.nextTick(function(res) {
         User.findOne({
           'facebook.id': profile.id

@@ -11,6 +11,11 @@ var app = angular.module('todoApp')
           console.log(res);
         });
     };
+    $scope.google = function() {
+      $('#spinner').show();
+
+    }
+    $('#spinner').hide();
     /*****************************
     *Login function with an auth
     ******************************/
@@ -18,6 +23,7 @@ var app = angular.module('todoApp')
       if ($scope.loginForm.email == "" || $scope.loginForm.email == null ||
         $scope.loginForm.password == "" || $scope.loginForm.password == null)
         return false;
+        $('#spinner').show();
       var email = $scope.loginForm.email;
       var data = {
         email: $scope.loginForm.email,
@@ -44,11 +50,14 @@ var app = angular.module('todoApp')
 
 
         } else {
+          $('#spinner').hide();
+
           document.getElementById('flag').innerHTML = "<p style='color:red'>name or password is wrong</p>";
         }
       }).catch(function(res) {
         console.log(res);
         document.getElementById('flag').innerHTML = "<p style='color:red'>name or password is wrong or Account is not activated  </p>";
+        $('#spinner').hide();
 
       })
 

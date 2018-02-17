@@ -1,5 +1,6 @@
 angular.module('todoApp')
   .controller('resetController', function($scope, $location, $state, $mdToast, $http, httpService) {
+      $('#spinner').hide();
       $scope.resetPassword = function() {
         if ($scope.resetPasswordForm.newPassword == null ||
           $scope.resetPasswordForm.newPassword == "" ||
@@ -10,6 +11,8 @@ angular.module('todoApp')
           document.getElementById('flag').innerHTML = '<p style="color:red">enter same password</p>';
           return false;
         }
+        $('#spinner').show();
+
         var data = {
           newPassword: $scope.resetPasswordForm.newPassword,
           verifyPassword: $scope.verifyPasswordForm.newPassword
@@ -26,9 +29,10 @@ angular.module('todoApp')
           );
           $state.go('login');
         } else {
+          $('#spinner').hide();
           $mdToast.show(
             $mdToast.simple()
-            .textContent('Something went wron...')
+            .textContent('Something went wrong...')
             .position('top right')
             .hideDelay(3000)
           );

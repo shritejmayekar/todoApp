@@ -45,10 +45,7 @@
   // login function to find user in db
   exports.login = function(req, res) {
     if (typeof(req.body) == 'object') {
-      User.findOne({
-        'local.email': req.body.email,
-        'local.is_activated':true
-      }, function(err, user) {
+      User.findOneUser(req.body.email).then(function(user) {
         if(!user) res.status(401).json('user not found');
         var token = jwt.sign({
           id: user._id, // payload
@@ -116,7 +113,9 @@
     cache.get(email,function(err,token) {
 
       if(err) return res.json({message:'No valid token'})
-      if(!token) return res.json({message:'No token provided'})
+      if(!token) return       res.redirect('/#!/register');
+
+      //res.json({message:'No token provided'})
        var data = {
          'local.is_activated':true
        }

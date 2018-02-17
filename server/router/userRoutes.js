@@ -1,6 +1,6 @@
 var router = require('express').Router();
 var userController = require('../controller/userController');
-var passport = require("../config/passport")(require('passport'));
+var passport = require("../Authentication/passport")(require('passport'));
 
 //route signup with local-passport strategy
 router.post('/signup', passport.authenticate('local-signup', {

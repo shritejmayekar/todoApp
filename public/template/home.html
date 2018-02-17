@@ -1,24 +1,87 @@
 <!-- nav bar -->
-<nav>
+<div class="navbar-fixed ">
+  <nav>
+    <div class="nav-wrapper blue-grey">
+      <a ng-click="navClick()" href="#!" class="brand-logo" style="text-decoration:none"><i class="material-icons">menu</i></a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        <li>
+          <a href="#">
+            <md-menu-bar class="md-icon-button" aria-label="menu4">
 
-  <div class="nav-wrapper" layout="row" style="overflow:hidden;position:fixed;z-index:5;width:100%;height:75px;background-color:#f3bb02;">
-    <div flex="10">
-      <md-fab-toolbar md-open="demo.isOpen" count="demo.count" md-direction="{{demo.selectedDirection}}">
+              <md-menu ng-model="image">
+                <img ng-click="$mdMenu.open()" ng-src="{{ imageProfile }}" alt="Avatar" class="avatar">
+                <md-menu-content>
+                  <md-menu-bar class="md-icon-button" aria-label="menu">
+                    <md-menu>
+                      <i ng-click="$mdMenu.open()" aria-label="menu" class="material-icons">add_a_photo</i>
+                      <md-menu-content>
+                        <div>
+                          <div class="cropArea">
+                            <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+                            <div>Select an image file: <input type="file" id="fileInput" /></div>
 
-        <md-button aria-label="menu" ng-click="navClick()">
-          <i class="material-icons">menu</i>
-        </md-button>
+                            <md-button ng-click="setProfile(myCroppedImage)">Submit</md-button>
+                          </div>
+                          <div>Cropped Image:</div>
+                          <div><img ng-src="{{myCroppedImage}}" /></div>
+                        </div>
+                      </md-menu-content>
+                    </md-menu>
+                  </md-menu-bar>
 
-      </md-fab-toolbar>
+
+
+                </md-menu-content>
+              </md-menu>
+            </md-menu-bar>
+
+          </a>
+        </li>
+        <li> <a class="btn waves-effect waves-light deep-orange lighten-2" ui-sref="logout">Sign Out</a>
+        </li>
+        <li>
+
+
+          <a href="#" class="btn waves-effect waves-light deep-orange lighten-2" ng-click="listGrid()">  <i class="material-icons">view_quilt</i></a></li>
+
+      </ul>
+      <form class=" hide-on-med-and-down" id="form1">
+        <div class="input-field" style="max-width: 400pt;">
+          <input id="search" type="search" ng-model="searchNotes" required onkeyup="getBlogs(this.value,0);">
+          <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+          <i class="material-icons">close</i>
+          <div id="searchResults"></div>
+        </div>
+      </form>
+      <ul class="side-nav" id="mobile-demo">
+        <li><a href="signup.php">Sign Up</a></li>
+        <li><a href="login.php">Login</a></li>
+        <li><a href="conactUs.php">Contact Us</a></li>
+        <li class="search">
+          <div class="search-wrapper card input-field">
+            <input type="search" required onkeyup="getBlogs(this.value,1);">
+            <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+            <i class="material-icons">close</i>
+            <div id="searchResults2"></div>
+          </div>
+        </li>
+      </ul>
     </div>
-    <div flex="80">
-      <div>
-        <h2><b>Google</b> Keep  <input type="text" ng-model="searchNotes">
-      </div>
-    </div>
-    <div>
+  </nav>
+</div>
+
+<!--div class="topnav">
+  <a aria-label="menu" ng-click="navClick()">
+    <i class="material-icons">menu</i>
+  </a>
+  <a href="#keep"><div>Google Keep</div></a>
+  <a href="#input"><input type="text" ng-model="searchNotes">
+</a>
+  <div class="topnav-right">
+    <a href="#profilePic">
       <md-menu-bar class="md-icon-button" aria-label="menu4" >
-        <!-- Image Upload of Profile pics  -->
+
         <md-menu ng-model="image">
           <img ng-click="$mdMenu.open()" ng-src="{{ imageProfile }}" alt="Avatar" class="avatar">
           <md-menu-content>
@@ -27,9 +90,104 @@
                     <i ng-click="$mdMenu.open()"  aria-label="menu" class="material-icons">add_a_photo</i>
                   <md-menu-content>
                     <div>
-                      <!--form>
+                      <div>Select an image file: <input type="file" id="fileInput" /></div>
+                      <div class="cropArea">
+                        <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+                        <md-button ng-click="setProfile(myCroppedImage)">Submit</md-button>
+                      </div>
+                     <div>Cropped Image:</div>
+                     <div><img ng-src="{{myCroppedImage}}" /></div>
+                   </div>
+                  </md-menu-content>
+                </md-menu>
+              </md-menu-bar>
+
+
+
+          </md-menu-content>
+        </md-menu>
+      </md-menu-bar>
+    </a>
+    <a ui-sref="logout">Sign Out</a>
+    <a href="#listGrid">
+      <md-button aria-label="menu" ng-click="listGrid()">
+        <i class="material-icons">view_quilt</i>
+      </md-button>
+    </a>
+  </div>
+</div-->
+
+<!--div class="topnav" id="myTopnav" layout="row">
+
+
+<h2>Google Keep</h2>
+<span>&emsp;
+<input type="text" ng-model="searchNotes">
+</span>
+<div class="topnav-right">
+  <md-menu-bar class="md-icon-button" aria-label="menu4" >
+
+    <md-menu ng-model="image">
+      <img ng-click="$mdMenu.open()" ng-src="{{ imageProfile }}" alt="Avatar" class="avatar">
+      <md-menu-content>
+          <md-menu-bar class="md-icon-button" aria-label="menu">
+            <md-menu>
+                <i ng-click="$mdMenu.open()"  aria-label="menu" class="material-icons">add_a_photo</i>
+              <md-menu-content>
+                <div>
+                  <div>Select an image file: <input type="file" id="fileInput" /></div>
+                  <div class="cropArea">
+                    <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+                    <md-button ng-click="setProfile(myCroppedImage)">Submit</md-button>
+                  </div>
+                 <div>Cropped Image:</div>
+                 <div><img ng-src="{{myCroppedImage}}" /></div>
+               </div>
+              </md-menu-content>
+            </md-menu>
+          </md-menu-bar>
+        <md-menu-item>
+          <a ui-sref="logout">SignOut</a>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+  </md-menu-bar>
+
+  <md-button aria-label="menu" ng-click="listGrid()">
+    <i class="material-icons">view_quilt</i>
+  </md-button>
+</div>
+
+</div-->
+<!--nav>
+
+  <div class="nav-wrapper" layout="row" style="overflow:hidden;position:fixed;z-index:5;width:100%;height:75px;background-color:#f3bb02;">
+    <div flex="10">
+
+        <md-button aria-label="menu" ng-click="navClick()">
+          <i class="material-icons">menu</i>
+        </md-button>
+
+    </div>
+    <div flex="80">
+      <div>
+        <h2><b>Google</b> Keep  <input type="text" ng-model="searchNotes">
+      </div>
+    </div>
+    <div>
+      <md-menu-bar class="md-icon-button" aria-label="menu4" >
+        < Image Upload of Profile pics>
+        <md-menu ng-model="image">
+          <img ng-click="$mdMenu.open()" ng-src="{{ imageProfile }}" alt="Avatar" class="avatar">
+          <md-menu-content>
+              <md-menu-bar class="md-icon-button" aria-label="menu">
+                <md-menu>
+                    <i ng-click="$mdMenu.open()"  aria-label="menu" class="material-icons">add_a_photo</i>
+                  <md-menu-content>
+                    <div>
+                      <form>
                         <input type="file" ng-file-select="onFileSelect($files)" ng-model="imageSrc" />
-                      </form-->
+                      </form>
                       <div>Select an image file: <input type="file" id="fileInput" /></div>
                       <div class="cropArea">
                         <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
@@ -55,7 +213,7 @@
 
     </div>
   </div>
-</nav>
+</nav-->
 
 <!-- Google keep all layout-->
 
@@ -117,31 +275,33 @@
 
 
   <!-- pinned view-->
-  <div id="pinned"><div style="margin-left:100px">Pinned </div></div>
+  <div id="pinned">
+    <div style="margin-left:100px">Pinned </div>
+  </div>
 
   <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
 
 
     <div layout-wrap flex-gt-xs="30" ng-repeat="note in listOfNotes   | orderBy:'note.date':true | filter:{is_archieved:false} | filter:{is_pinned:true} | filter:{is_deleted:false} |filter:searchNotes">
       <md-card md-theme={{note.note_color}} md-theme-watch>
-<md-content layout-padding="" class="autoScroll">
-      <div class="md-icon-float md-button-right width70">
-        <md-card-subtitle>
-          <md-card-title-text ng-click="editNote(note)" flex="auto">
-            <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>
-          </md-card-title-text>
-        </md-card-subtitle>
-      <div class="button-group">
-        <md-button ng-click="pinNote(note)" class="md-icon-button" aria-label="edit">
-            <md-tooltip md-direction="bottom">Unpinned Note</md-tooltip>
-            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+        <md-content layout-padding="" class="autoScroll">
+          <div class="md-icon-float md-button-right width70">
+            <md-card-subtitle>
+              <md-card-title-text ng-click="editNote(note)" flex="auto">
+                <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>
+              </md-card-title-text>
+            </md-card-subtitle>
+            <div class="button-group">
+              <md-button ng-click="pinNote(note)" class="md-icon-button" aria-label="edit">
+                <md-tooltip md-direction="bottom">Unpinned Note</md-tooltip>
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
                 <path fill="#0D47A1" d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" />
             </svg>
-          </md-button>
-      </div>
-    </div>
-</md-content>
-        <img ng-src="{{note.picture}}" class="md-card-image"/>
+              </md-button>
+            </div>
+          </div>
+        </md-content>
+        <img ng-src="{{note.picture}}" class="md-card-image" />
         <md-card-content ng-click="editNote(note)">
           <div style="word-break: break-word;" ng-bind-html="note.note |html "></div>
         </md-card-content>
@@ -158,25 +318,29 @@
           <div fxFlex></div>
 
           <md-button ng-click="archieveNote(note)" class="md-icon-button" aria-label="copy">
-           <md-tooltip md-direction="bottom">Archieve</md-tooltip>  <i class="material-icons">archive</i>
+            <md-tooltip md-direction="bottom">Archieve</md-tooltip> <i class="material-icons">archive</i>
           </md-button>
 
           <md-button ng-click="collabsNote(note)" class="md-icon-button" aria-label="collabs">
-          <md-tooltip md-direction="bottom">collaborate Notes</md-tooltip>  <i class="material-icons">person_add</i>
+            <md-tooltip md-direction="bottom">collaborate Notes</md-tooltip> <i class="material-icons">person_add</i>
           </md-button>
 
           <md-menu-bar class="md-icon-button" aria-label="menu">
             <md-menu>
 
               <md-button ng-click="$mdMenu.open()" class="md-icon-button" aria-label="menu">
-              <md-tooltip md-direction="bottom">Add Reminder</md-tooltip>  <i class="material-icons">add_alert</i>
+                <md-tooltip md-direction="bottom">Add Reminder</md-tooltip> <i class="material-icons">add_alert</i>
               </md-button>
               <md-menu-content>
                 <md-menu-item>
-                  <input kendo-date-time-picker ng-model="obj" style="width: 75%;" />
-                  <md-button ng-click="reminderNote(note,obj)" class="md-icon-button" aria-label="delete">
+                  <input moment-picker="myDate" ng-model="obj">
+                  <md-button ng-click="reminderNote(note,myDate)" class="md-icon-button" aria-label="delete">
                     SET
                   </md-button>
+                  <!--input kendo-date-time-picker ng-model="obj" style="width: 75%;" />
+                  <md-button ng-click="reminderNote(note,obj)" class="md-icon-button" aria-label="delete">
+                    SET
+                  </md-button-->
                 </md-menu-item>
               </md-menu-content>
             </md-menu>
@@ -210,7 +374,9 @@
     </div>
   </div>
   <!--others-->
-  <div id="other"><div style="margin-left:100px">Other</div></div>
+  <div id="other">
+    <div style="margin-left:100px">Other</div>
+  </div>
 
   <div layout={{setView}} layout-wrap flex-gt-xs="50" style="background-color:#e6e6e6;height:auto;width:70%;margin:0 auto">
 
@@ -218,21 +384,21 @@
      filter:{is_archieved:false} | filter:{is_pinned:false} | filter:{is_deleted:false}">
       <md-card md-theme="{{note.note_color}}" md-theme-watch>
         <md-content layout-padding="" class="autoScroll">
-              <div class="md-icon-float md-button-right width70">
-                <md-card-subtitle>
-                  <md-card-title-text ng-click="editNote(note)" flex="auto">
-                    <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>
-                  </md-card-title-text>
-                </md-card-subtitle>
-              <div class="button-group">
-                <md-button ng-click="pinNote(note)" class="md-icon-button" aria-label="edit">
-                    <md-tooltip md-direction="bottom">Pin Note</md-tooltip>
-                    <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+          <div class="md-icon-float md-button-right width70">
+            <md-card-subtitle>
+              <md-card-title-text ng-click="editNote(note)" flex="auto">
+                <div class="md-headline" style="word-break: break-word;">{{note.title}}</div>
+              </md-card-title-text>
+            </md-card-subtitle>
+            <div class="button-group">
+              <md-button ng-click="pinNote(note)" class="md-icon-button" aria-label="edit">
+                <md-tooltip md-direction="bottom">Pin Note</md-tooltip>
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
                       <path fill="#000000" d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" />
                     </svg>
-                  </md-button>
-              </div>
+              </md-button>
             </div>
+          </div>
         </md-content>
         </md-card-title>
         <img ng-src="{{note.picture}}" class="md-card-image">
@@ -278,12 +444,12 @@
           <md-menu-bar class="md-icon-button" aria-label="menu">
             <md-menu>
               <md-button ng-click="$mdMenu.open()" class="md-icon-button" aria-label="menu">
-              <md-tooltip md-direction="bottom">Add Reminder</md-tooltip>  <i class="material-icons">add_alert</i>
+                <md-tooltip md-direction="bottom">Add Reminder</md-tooltip> <i class="material-icons">add_alert</i>
               </md-button>
               <md-menu-content>
                 <md-menu-item>
                   <input kendo-date-time-picker ng-model="obj" style="width: 75%;" />
-                    <md-button ng-click="reminderNote(note,obj)" class="md-icon-button" aria-label="delete">
+                  <md-button ng-click="reminderNote(note,obj)" class="md-icon-button" aria-label="delete">
                     SET
                   </md-button>
                 </md-menu-item>
@@ -299,7 +465,7 @@
           <md-menu-bar class="md-icon-button" aria-label="menu">
             <md-menu>
               <md-button ng-click="$mdMenu.open()" class="md-icon-button" aria-label="menu">
-              <md-tooltip md-direction="bottom">More</md-tooltip>  <i class="material-icons">more_vert</i>
+                <md-tooltip md-direction="bottom">More</md-tooltip> <i class="material-icons">more_vert</i>
               </md-button>
               <md-menu-content>
                 <md-menu-item>

@@ -40,6 +40,10 @@ userSchema.methods.generateHash = function(password) {
 userSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.local.password);
 };
+// check user is activated
+userSchema.statics.findOneUser = function(email) {
+  return this.findOne({'local.email':email,'local.is_activated':true});
+}
 
 // create model and exported for user
 var UserDataModel = mongoose.model('UserData', userSchema);

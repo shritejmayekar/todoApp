@@ -1,4 +1,4 @@
-var app = angular.module('todoApp', ['ui.router','ngImgCrop','tb-color-picker','kendo.directives' ,'ngMaterial', 'ngAnimate', 'ngSanitize', 'satellizer']);
+var app = angular.module('todoApp', ['ui.router','moment-picker','ngImgCrop','tb-color-picker','kendo.directives' ,'ngMaterial', 'ngAnimate', 'ngSanitize', 'satellizer']);
 app.filter('html', ['$sce', function($sce) {
   return function(text) {
     return $sce.trustAsHtml(text);
@@ -16,21 +16,10 @@ app.config(function($mdThemingProvider) {
   $mdThemingProvider.theme('dark-purple').backgroundPalette('deep-purple').dark();
   $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
 });
-/*app.config(function($authProvider) {
-
-  $authProvider.facebook({
-    clientId: '139717613365382',
-    responseType: 'token'
-  });
-  $authProvider.google({
-    clientId: '920690214427-ruo8tp6479ksl0f7sqb53ro6fg11e477.apps.googleusercontent.com'
-  });
-})*/
 app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $authProvider) {
   /**
     helper function
   */
-
   var skipIfLoggedIn = ['$q', '$auth', function($q, $auth) {
 
     var deferred = $q.defer();

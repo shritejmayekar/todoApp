@@ -62,10 +62,9 @@
     height: 100%;
     width: 0;
     position: fixed;
-
-    z-index: 1;
-    margin-top: 15px;
-    top: 0;
+    z-index:1
+    margin-top: 0px;
+    top: 55px;
     left: 0;
     background-color: #111;
     overflow-x: hidden;
@@ -227,4 +226,20 @@ div.md-button-right > md-card-title + input, div.md-button-right > md-icon + tex
 .fa-facebook {
   background: #3B5998;
   color: white;
+}
+#form1{
+  margin-left:200px;
+}
+.side-nav li a {
+  text-decoration:none;
+}
+#searchResults2{
+  background-color:#666666;
+}
+#searchResults{
+  background-color:#666666;
+}
+.right li a{
+  padding-right:2em;
+  text-decoration:none
 }

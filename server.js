@@ -28,12 +28,8 @@ var passport = require('passport');
 var authRoutes = require('./server/router/userRoutes.js');
 var noteRoutes = require('./server/router/noteRoutes.js');
 var expressJwt = require('express-jwt');
-var cors = require('cors')
-
-//const webpush = require('web-push');
-
-
-//const cache = redis.createClient(process.env.PORT);
+var cors = require('cors');
+var dateFormat = require('dateformat');
 
 // winston logger to keep logs
 logger.debug('overiding express logger');
@@ -45,48 +41,54 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
+// initialize passport
 app.use(passport.initialize());
 app.use(bodyParser.json());
 app.use(cors());
-/*io.on('connection', function(socket){
+
+// Websocket connection connected
+io.on('connection', function(socket) {
   console.log('user connected');
-  socket.on('reminder check',function(note) {
-    setInterval(function () {
-      date = new Date();
-      console.log(note);
-      //console.log($filter('date')(note.reminder, "short") + '\n' +
-      //$filter('date')(date, "short"));
-    /*  if (filter('date')(note.reminder, "short") == filter('date')(date, "short")) {
-        note.reminder = null;
-        var data = {
-          reminder: null
-        }
-        httpService.httpServiceFunction('put', '/note/update/' + note._id, data).then(function(res) {
-
-        })
-      }
-
-    }, 10000);
+  // Listening reminder check event from client
+  socket.on('reminder check', function(note) {
+    for (var i = 0; i < note.length; i++) {
+      reminderInterval(note[i]);
+    }
   })
-  socket.on('disconnect', function(){
+  // Websocket disconnected or client/user left
+  socket.on('disconnect', function() {
     console.log('user disconnected');
   });
-});*/
+});
+// reminderInterval to check the note reminder
+var reminderInterval = function(note) {
+  if (note.reminder == null || note.reminder == undefined) return null;
+  var myInterval = setInterval(function() {
+    if (note.reminder != undefined)
+      if (dateFormat(note.reminder, "shortDate") == dateFormat("shortDate"))
+        if (dateFormat("shortTime") == dateFormat(note.reminder, "shortTime")) {
+          io.emit('get reminder', note);
+          console.log(note.id + ' reminder');
+          clearInterval(myInterval);
+        }
+  }, 6000);
+}
 
 
 /*****************************
-* Routes for todoApp
-*****************************/
+ * Routes for todoApp
+ *****************************/
 
 /*******************************
-* auth routes for user
-*******************************/
-app.use('/auth',authRoutes);
+ * auth routes for user
+ *******************************/
+app.use('/auth', authRoutes);
 /*******************************
-* note routes for user notes
-*******************************/
-app.use('/note',expressJwt({secret:'secret'}),noteRoutes);
+ * note routes for user notes
+ *******************************/
+app.use('/note', expressJwt({
+  secret: 'secret'
+}), noteRoutes);
 // if any not found url send url not found
 app.use(function(req, res) {
   res.status(404).send({
