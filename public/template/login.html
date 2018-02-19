@@ -25,18 +25,22 @@
 
           <div ng-message="minlength">Password minimum length is 8</div>
         </div>
+        <div layout="column">
+
+          <md-input-container style="float: left">
+            <div>
+            <a ui-sref="forgotPassword">Forgot password?</a>
+          </div>
+            <div >
+            <a ui-sref="register">Create account</a>
+          </div>
+          </md-input-container>
+
+
+
+        </div>
       </md-input-container>
-      <div layout="column">
 
-        <md-input-container style="float: left">
-          <a ui-sref="forgotPassword">Forgot password?</a>
-        </md-input-container>
-
-        <md-input-container style="float: left">
-          <a ui-sref="register">Create account</a>
-        </md-input-container>
-
-      </div>
       <md-input-container>
 
         <md-button href="/auth/google" ng-click="google()" class="btn btn-block btn-social btn-google">

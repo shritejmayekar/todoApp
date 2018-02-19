@@ -2,7 +2,10 @@
 <div class="navbar-fixed ">
   <nav>
     <div class="nav-wrapper blue-grey">
-      <a ng-click="navClick()" href="#!" class="brand-logo" style="text-decoration:none"><i class="material-icons">menu</i></a>
+      <a ng-click="navClick()" href="#!" class="brand-logo" style="text-decoration:none"><i class="material-icons">menu</i>Keep</a>
+
+
+
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
         <li>
@@ -71,149 +74,6 @@
   </nav>
 </div>
 
-<!--div class="topnav">
-  <a aria-label="menu" ng-click="navClick()">
-    <i class="material-icons">menu</i>
-  </a>
-  <a href="#keep"><div>Google Keep</div></a>
-  <a href="#input"><input type="text" ng-model="searchNotes">
-</a>
-  <div class="topnav-right">
-    <a href="#profilePic">
-      <md-menu-bar class="md-icon-button" aria-label="menu4" >
-
-        <md-menu ng-model="image">
-          <img ng-click="$mdMenu.open()" ng-src="{{ imageProfile }}" alt="Avatar" class="avatar">
-          <md-menu-content>
-              <md-menu-bar class="md-icon-button" aria-label="menu">
-                <md-menu>
-                    <i ng-click="$mdMenu.open()"  aria-label="menu" class="material-icons">add_a_photo</i>
-                  <md-menu-content>
-                    <div>
-                      <div>Select an image file: <input type="file" id="fileInput" /></div>
-                      <div class="cropArea">
-                        <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
-                        <md-button ng-click="setProfile(myCroppedImage)">Submit</md-button>
-                      </div>
-                     <div>Cropped Image:</div>
-                     <div><img ng-src="{{myCroppedImage}}" /></div>
-                   </div>
-                  </md-menu-content>
-                </md-menu>
-              </md-menu-bar>
-
-
-
-          </md-menu-content>
-        </md-menu>
-      </md-menu-bar>
-    </a>
-    <a ui-sref="logout">Sign Out</a>
-    <a href="#listGrid">
-      <md-button aria-label="menu" ng-click="listGrid()">
-        <i class="material-icons">view_quilt</i>
-      </md-button>
-    </a>
-  </div>
-</div-->
-
-<!--div class="topnav" id="myTopnav" layout="row">
-
-
-<h2>Google Keep</h2>
-<span>&emsp;
-<input type="text" ng-model="searchNotes">
-</span>
-<div class="topnav-right">
-  <md-menu-bar class="md-icon-button" aria-label="menu4" >
-
-    <md-menu ng-model="image">
-      <img ng-click="$mdMenu.open()" ng-src="{{ imageProfile }}" alt="Avatar" class="avatar">
-      <md-menu-content>
-          <md-menu-bar class="md-icon-button" aria-label="menu">
-            <md-menu>
-                <i ng-click="$mdMenu.open()"  aria-label="menu" class="material-icons">add_a_photo</i>
-              <md-menu-content>
-                <div>
-                  <div>Select an image file: <input type="file" id="fileInput" /></div>
-                  <div class="cropArea">
-                    <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
-                    <md-button ng-click="setProfile(myCroppedImage)">Submit</md-button>
-                  </div>
-                 <div>Cropped Image:</div>
-                 <div><img ng-src="{{myCroppedImage}}" /></div>
-               </div>
-              </md-menu-content>
-            </md-menu>
-          </md-menu-bar>
-        <md-menu-item>
-          <a ui-sref="logout">SignOut</a>
-        </md-menu-item>
-      </md-menu-content>
-    </md-menu>
-  </md-menu-bar>
-
-  <md-button aria-label="menu" ng-click="listGrid()">
-    <i class="material-icons">view_quilt</i>
-  </md-button>
-</div>
-
-</div-->
-<!--nav>
-
-  <div class="nav-wrapper" layout="row" style="overflow:hidden;position:fixed;z-index:5;width:100%;height:75px;background-color:#f3bb02;">
-    <div flex="10">
-
-        <md-button aria-label="menu" ng-click="navClick()">
-          <i class="material-icons">menu</i>
-        </md-button>
-
-    </div>
-    <div flex="80">
-      <div>
-        <h2><b>Google</b> Keep  <input type="text" ng-model="searchNotes">
-      </div>
-    </div>
-    <div>
-      <md-menu-bar class="md-icon-button" aria-label="menu4" >
-        < Image Upload of Profile pics>
-        <md-menu ng-model="image">
-          <img ng-click="$mdMenu.open()" ng-src="{{ imageProfile }}" alt="Avatar" class="avatar">
-          <md-menu-content>
-              <md-menu-bar class="md-icon-button" aria-label="menu">
-                <md-menu>
-                    <i ng-click="$mdMenu.open()"  aria-label="menu" class="material-icons">add_a_photo</i>
-                  <md-menu-content>
-                    <div>
-                      <form>
-                        <input type="file" ng-file-select="onFileSelect($files)" ng-model="imageSrc" />
-                      </form>
-                      <div>Select an image file: <input type="file" id="fileInput" /></div>
-                      <div class="cropArea">
-                        <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
-                        <md-button ng-click="setProfile(myCroppedImage)">Submit</md-button>
-                      </div>
-                     <div>Cropped Image:</div>
-                     <div><img ng-src="{{myCroppedImage}}" /></div>
-                   </div>
-                  </md-menu-content>
-                </md-menu>
-              </md-menu-bar>
-            <md-menu-item>
-              <a ui-sref="logout">SignOut</a>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
-      </md-menu-bar>
-    </div>
-    <div flex="10">
-      <md-button aria-label="menu" ng-click="listGrid()">
-        <i class="material-icons">view_quilt</i>
-      </md-button>
-
-    </div>
-  </div>
-</nav-->
 
 <!-- Google keep all layout-->
 
