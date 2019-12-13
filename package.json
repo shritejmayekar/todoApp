@@ -31,7 +31,7 @@
     "node-gcm": "^0.14.10",
     "node-mailer": "^0.1.1",
     "nodemailer-express-handlebars": "^2.0.0",
-    "npm": "^5.6.0",
+    "npm": "^6.13.4",
     "parse-reminder": "^1.2.0",
     "passport": "^0.4.0",
     "passport-facebook": "^2.0.0",
