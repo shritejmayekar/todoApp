@@ -21,7 +21,7 @@
     "express-jwt": "^6.0.0",
     "express-session": "^1.15.6",
     "install": "^0.10.4",
-    "jsonwebtoken": "^8.1.0",
+    "jsonwebtoken": "^9.0.0",
     "jwt-simple": "^0.5.1",
     "l": "^0.6.0",
     "logger-winston": "0.0.9",
